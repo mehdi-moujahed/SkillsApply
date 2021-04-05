@@ -1,0 +1,41 @@
+.main_container {
+  background-image: url("../../assets/svg/background-login-big.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+}
+
+.title {
+  color: white;
+  margin-top: 30px !important;
+}
+
+.input_container {
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+  max-width: 45vw;
+  margin-top: 115px;
+}
+
+.first_input_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textfield {
+  margin-bottom: 100px;
+}
+
+.button {
+  margin-top: 90px !important;
+  border-radius: 15px !important;
+  width: 170px;
+  height: 45px;
+}
