@@ -13,12 +13,10 @@ const styles = {
 };
 
 function CustomizedTextField(props) {
-  const { classes, label, type } = props;
+  const { classes, ...rest } = props;
 
   return (
     <TextField
-      label={label}
-      type={type}
       className={classes.root}
       variant="outlined"
       InputProps={{
@@ -26,6 +24,8 @@ function CustomizedTextField(props) {
       }}
       color="secondary"
       style={{ width: 250 }}
+      {...rest}
+      // onChange={onChange}
     />
   );
 }
