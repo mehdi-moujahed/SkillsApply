@@ -39,11 +39,18 @@
   width: 170px;
   height: 45px;
 }
+
 .signin_button {
   border-radius: 15px !important;
   width: 170px;
   height: 45px;
 }
+
+#login_link {
+  height: 25px;
+  cursor: pointer;
+}
+
 #logo {
   display: "flex";
   flex: 1;

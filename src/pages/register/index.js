@@ -91,11 +91,7 @@ export default function Register() {
           >
             Vous avez déja un compte ?
           </Typography>
-          <Link
-            color="primary"
-            style={{ height: 25 }}
-            onClick={handleClickLogin}
-          >
+          <Link color="primary" id="login_link" onClick={handleClickLogin}>
             Se Connecter
           </Link>
         </div>

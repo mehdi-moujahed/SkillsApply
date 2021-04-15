@@ -1,0 +1,12 @@
+/* .about_us2 {
+  background-image: url("../../assets/svg/background-home.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+} */
+@import "react-alice-carousel/lib/alice-carousel.css";

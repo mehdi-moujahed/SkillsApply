@@ -1,0 +1,19 @@
+#first_circle {
+  height: 90%;
+  width: 90%;
+  border-radius: 140px;
+  background-image: linear-gradient(#151515, #008288);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+#second_circle {
+  height: 120px;
+  width: 120px;
+  border-radius: 75px;
+  position: absolute;
+  margin-top: 62px;
+  margin-left: 206px;
+  background-image: linear-gradient(#008288, #151515);
+}

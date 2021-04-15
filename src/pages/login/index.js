@@ -10,7 +10,7 @@ export default function Index() {
   let history = useHistory();
 
   function handleClick() {
-    history.push("/");
+    history.push("/home");
   }
   return (
     <div className="main_container">
