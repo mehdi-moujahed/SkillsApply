@@ -1,19 +1,24 @@
-.main_container_home {
-  background-image: url("../../assets/svg/background-home.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
-  display: flex;
-  flex: 1;
-  height: 100vh;
-  justify-content: center;
-}
-
 .main_container_ {
   display: flex;
   flex: 1;
 }
-
+.seperator_container {
+  display: flex;
+  align-items: center;
+  width: 90vw;
+  justify-content: space-around;
+  margin-left: 40px;
+}
+#seperator_title {
+  color: #008288;
+  font-size: xxx-large;
+}
+#seperator_line {
+  height: 1px;
+  background-color: #008288;
+  margin-top: 17px;
+  width: 60vw;
+}
 .about_us {
   background-image: url("../../assets/svg/background-about-us.svg");
   background-repeat: no-repeat;
@@ -25,32 +30,34 @@
   /* justify-content: space-around; */
   align-items: center;
 }
-
+#about_us_container {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+  margin-bottom: 221px;
+}
+#about_us_text {
+  color: white;
+  font-size: 40px;
+  margin-right: 80px;
+  margin-top: 92px;
+}
+.achievements_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-self: center;
+}
+.sponsors_container {
+  display: flex;
+  flex-wrap: wrap;
+}
 #button {
   border-radius: 15px;
   width: 200px;
   height: 45px;
   font-size: 17px;
 }
-
-#logo {
-  display: "flex";
-  flex: 1;
-  position: absolute;
-  left: 35px;
-  top: 25px;
-}
-
 #about_us_logo {
   padding-top: 89px;
 }
-
-/* #home_logo {
-  position: absolute;
-  top: 120px;
-  right: 150px;
-} */
-/* 
-#svg {
-  width: 110px;
-} */

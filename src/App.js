@@ -7,6 +7,8 @@ import ConfirmRegister from "./pages/register/confirmRegister";
 import Login from "./pages/login";
 import Home from "./pages/home";
 import Test from "./pages/test";
+import Pricing from "./pages/price";
+import Features from "./pages/features";
 function App() {
   return (
     <Router>
@@ -17,6 +19,8 @@ function App() {
           <Route path="/login" exact component={Login} />
           <Route path="/home" exact component={Home} />
           <Route path="/test" exact component={Test} />
+          <Route path="/prices" exact component={Pricing} />
+          <Route path="/features" exact component={Features} />
         </Switch>
       </ThemeProvider>
     </Router>

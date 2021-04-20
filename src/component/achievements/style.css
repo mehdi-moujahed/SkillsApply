@@ -1,3 +1,8 @@
+.achievements {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .numbers_container {
   height: 220px;
   width: 220px;
@@ -8,10 +13,18 @@
   align-items: center;
   background-image: linear-gradient(#151515, #008288);
 }
-
+.achievements_text_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .achievements_text {
-  font-size: medium;
   color: #008288;
   height: 0px;
-  font-size: 25px;
+  font-size: 28px;
+  font-weight: bold;
+}
+#img_achievements {
+  height: 130px;
+  width: 130px;
 }

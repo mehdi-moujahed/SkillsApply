@@ -40,6 +40,13 @@
   height: 45px;
 }
 
+.register_footer {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+  align-items: center;
+}
+
 .signin_button {
   border-radius: 15px !important;
   width: 170px;

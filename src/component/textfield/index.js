@@ -25,7 +25,6 @@ function CustomizedTextField(props) {
       color="secondary"
       style={{ width: 250 }}
       {...rest}
-      // onChange={onChange}
     />
   );
 }

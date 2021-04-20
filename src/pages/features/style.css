@@ -1,0 +1,32 @@
+.features_title_container {
+  display: flex;
+  align-items: center;
+  width: 90vw;
+  justify-content: space-around;
+  margin-left: 40px;
+}
+
+.features_title {
+  color: #008288;
+  font-size: xxx-large;
+}
+#features_line {
+  height: 1px;
+  background-color: #008288;
+  width: 60vw;
+}
+.titleAndLine {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+#features_img {
+  height: 58vh;
+}
+#img_description {
+  font-size: 32px;
+  display: flex;
+  white-space: pre-wrap;
+}

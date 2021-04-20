@@ -1,3 +1,8 @@
+.sponsors_main_container {
+  display: flex;
+  height: 280px;
+  width: 280px;
+}
 #first_circle {
   height: 90%;
   width: 90%;
@@ -16,4 +21,8 @@
   margin-top: 62px;
   margin-left: 206px;
   background-image: linear-gradient(#008288, #151515);
+}
+#sponsors_logo {
+  height: 42px;
+  width: 250px;
 }

@@ -12,6 +12,10 @@ export default function Index() {
   function handleClick() {
     history.push("/home");
   }
+
+  function handleClick2() {
+    history.push("/");
+  }
   return (
     <div className="main_container">
       <div id="logo">
@@ -51,7 +55,7 @@ export default function Index() {
           <Typography variant="subtitle2" id="login_label">
             Vous n'êtes pas encore inscrit ?
           </Typography>
-          <Link color="primary" id="login_link" onClick={handleClick}>
+          <Link color="primary" id="login_link" onClick={handleClick2}>
             S'inscrire
           </Link>
         </div>

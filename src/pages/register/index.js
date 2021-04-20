@@ -65,9 +65,6 @@ export default function Register() {
             </div>
           </div>
         </div>
-        {/* <Link to="/confirmRegister" className="button">
-          Confirmer
-        </Link> */}
         <Button
           className="button"
           variant="contained"
@@ -76,15 +73,7 @@ export default function Register() {
         >
           confirmer
         </Button>
-        <div
-          style={{
-            display: "flex",
-            // flex: 1,
-            flexDirection: "row",
-            marginTop: 40,
-            alignItems: "center",
-          }}
-        >
+        <div className="register_footer">
           <Typography
             variant="subtitle2"
             style={{ color: "white", marginRight: 30 }}

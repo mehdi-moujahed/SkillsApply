@@ -6,17 +6,10 @@ import InstagramIcon from "@material-ui/icons/Instagram";
 import "./style.css";
 export default function Footer() {
   return (
-    <div className="footer_container">
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          justifyContent: "space-around",
-          marginTop: 200,
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="h4" style={{ color: "white" }}>
+    <div className="footer_main_container">
+      <div className="footer_container">
+        <div className="footer_titles">
+          <Typography variant="h4" id="footer_title">
             Produits
           </Typography>
           <div className="footer_underline"></div>
@@ -30,8 +23,8 @@ export default function Footer() {
             &gt; Prix
           </Link>
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="h4" style={{ color: "white" }}>
+        <div className="footer_titles">
+          <Typography variant="h4" id="footer_title">
             Légal
           </Typography>
           <div className="footer_underline2"></div>
@@ -46,8 +39,8 @@ export default function Footer() {
             &gt; Politique de condifentialité
           </Link>
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <Typography variant="h4" style={{ color: "white" }}>
+        <div className="footer_titles">
+          <Typography variant="h4" id="footer_title">
             Contactez-nous
           </Typography>
           <div className="footer_underline3"></div>
@@ -55,54 +48,31 @@ export default function Footer() {
           <Link
             variant="inherit"
             id="first_menu"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "default",
-              textDecoration: "none",
-            }}
+            style={{ cursor: "default", textDecoration: "none" }}
           >
-            <PhoneIcon
-              style={{ color: "white", fontSize: 23, paddingRight: 10 }}
-            />
+            <PhoneIcon id="footer_icon" />
             +216 55.287.186
           </Link>
           <Link
             variant="inherit"
             id="second_menu"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "default",
-              textDecoration: "none",
-            }}
+            style={{ textDecoration: "none" }}
           >
-            <FacebookIcon
-              style={{ color: "white", fontSize: 23, paddingRight: 10 }}
-            />
+            <FacebookIcon id="footer_icon" />
             Reactit
           </Link>
           <Link
             variant="inherit"
             id="second_menu"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              cursor: "default",
-              textDecoration: "none",
-            }}
+            style={{ textDecoration: "none" }}
           >
-            <InstagramIcon
-              style={{ color: "white", fontSize: 23, paddingRight: 10 }}
-            />
+            <InstagramIcon id="footer_icon" />
             Reactit.Agency
           </Link>
         </div>
       </div>
-      <div
-        style={{ alignSelf: "center", display: "flex", alignItems: "center" }}
-      >
-        <img src="./logo-footer.png" style={{ marginRight: 20, height: 20 }} />
+      <div className="footer_footer">
+        <img src="./logo-footer.png" id="footer_logo" />
         <p style={{ color: "white" }}>
           Made with love by <b>Reactit</b> in Sousse, Tunisie 2021 Tous les
           droits sont réservés.

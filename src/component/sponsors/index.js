@@ -3,9 +3,9 @@ import "./style.css";
 export default function Sponsors(props) {
   const { image } = props;
   return (
-    <div style={{ display: "flex", height: 280, width: 280 }}>
+    <div className="sponsors_main_container">
       <div id="first_circle">
-        <img src={image} style={{ height: 42, width: 250 }} />
+        <img src={image} id="sponsors_logo" />
       </div>
       <div id="second_circle"></div>
     </div>
