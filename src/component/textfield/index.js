@@ -2,27 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
+import "./style.css";
+// const styles = {
+//   root: {
+//     background: "white",
+//   },
+//   input: {
+//     color: "black",
+//   },
+// };
 
-const styles = {
-  root: {
-    background: "grey",
-  },
-  input: {
-    color: "white",
-  },
-};
-
-function CustomizedTextField(props) {
-  const { classes, ...rest } = props;
+export default function CustomizedTextField(props) {
+  const { ...rest } = props;
 
   return (
     <TextField
-      className={classes.root}
+      className="custom_textfield"
       variant="outlined"
-      InputProps={{
-        className: classes.input,
-      }}
-      color="secondary"
+      // color="secondary"
       style={{ width: 250 }}
       {...rest}
     />
@@ -35,4 +32,4 @@ CustomizedTextField.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(CustomizedTextField);
+// export default withStyles(styles)(CustomizedTextField);

@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 
-export default function Index(props) {
+export default function CustomButton(props) {
   const { label, ...rest } = props;
   return (
     <div>

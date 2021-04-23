@@ -1,0 +1,9 @@
+.custom_textfield {
+  background-color: white;
+  color: black;
+}
+/* .MuiFormLabel-root .MuiInputLabel-root .MuiInputLabel-formControl .MuiInputLabel-animated .MuiInputLabel-outlined */
+
+.custom_textfield .MuiInputLabel-formControl {
+  color: #008288;
+}
