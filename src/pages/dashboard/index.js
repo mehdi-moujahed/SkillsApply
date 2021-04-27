@@ -10,7 +10,7 @@ import DashboardMenu from "../../component/menu-dashboard";
 import DashboardHome from "../dashboard/home";
 import "./style.css";
 import DashboardTests from "./tests";
-
+import DashboardCandidates from "./candidates";
 export default function Tests() {
   let { path, url } = useRouteMatch();
   return (
@@ -18,8 +18,9 @@ export default function Tests() {
       <DashboardMenu />
       <div style={{ display: "flex", flexDirection: "column", marginLeft: 15 }}>
         <DashboardHeader title="Les Tests" />
-        <div style={{ overflow: "auto" }}>
-          <DashboardTests />
+        <div>
+          {/* <DashboardTests /> */}
+          <DashboardCandidates />
         </div>
         {/* <Switch>
           <Route exact path={path} component={DashboardHome} />

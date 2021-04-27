@@ -1,25 +1,26 @@
 .search_container {
-  margin-right: 20px;
-  margin-top: 25px;
+  margin-right: 53px;
+  margin-top: 21px;
 }
-/* .tests_main_container {
-  height: 74vh;
-} */
-.tests_container {
-  height: 80px;
-  width: 45vw;
-  background-image: linear-gradient(to right, #151515, #3b3b62);
-  border-radius: 14px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.tests_main_container {
+  margin-top: 10;
 }
-#show_test_button {
-  width: 135px;
-  height: 40px;
+.track-vertical {
+  top: 2px;
+  bottom: 2px;
+  right: 2px;
+  border-radius: 30px;
+  background: #e8e8e8;
+}
+.track-vertical .thumb-vertical {
+  position: relative;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border-radius: inherit;
   background-color: #008288;
-  border-radius: 40px;
-  text-transform: none;
-  color: white;
+}
+.MuiDrawer-paperAnchorRight {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
 }

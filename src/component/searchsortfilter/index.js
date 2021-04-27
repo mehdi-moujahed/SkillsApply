@@ -31,7 +31,8 @@ function valuetext(value) {
   return value;
 }
 
-export default function SearchSortFilter() {
+export default function SearchSortFilter(props) {
+  const { searchTitle, testPage } = props;
   const classes = useStyles();
 
   const [value, setValue] = React.useState("debutant");
@@ -64,7 +65,7 @@ export default function SearchSortFilter() {
                 paddingLeft: 15,
               }}
             >
-              Recherchez votre test préféré
+              {searchTitle}
             </p>
           </div>
           <Box boxShadow={5} className="search_box">
@@ -130,41 +131,45 @@ export default function SearchSortFilter() {
               />
             </MuiPickersUtilsProvider>
           </div>
-          <div className="search_sort_title">
-            <p
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                paddingRight: 20,
-              }}
-            >
-              Niveau :
-            </p>
-            <RadioGroup
-              aria-label="gender"
-              name="gender1"
-              value={value}
-              onChange={handleChange}
-              row
-              className="radiogroup"
-            >
-              <FormControlLabel
-                value="debutant"
-                control={<Radio />}
-                label="Débutant"
-              />
-              <FormControlLabel
-                value="intermediaire"
-                control={<Radio />}
-                label="Moyen"
-              />
-              <FormControlLabel
-                value="professionnel"
-                control={<Radio />}
-                label="Difficle"
-              />
-            </RadioGroup>
-          </div>
+          {testPage ? (
+            <div className="search_sort_title">
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  paddingRight: 20,
+                }}
+              >
+                Niveau :
+              </p>
+              <RadioGroup
+                aria-label="gender"
+                name="gender1"
+                value={value}
+                onChange={handleChange}
+                row
+                className="radiogroup"
+              >
+                <FormControlLabel
+                  value="debutant"
+                  control={<Radio />}
+                  label="Débutant"
+                />
+                <FormControlLabel
+                  value="intermediaire"
+                  control={<Radio />}
+                  label="Moyen"
+                />
+                <FormControlLabel
+                  value="professionnel"
+                  control={<Radio />}
+                  label="Difficle"
+                />
+              </RadioGroup>
+            </div>
+          ) : (
+            <p></p>
+          )}
           <div className="search_sort_title">
             <p
               style={{
