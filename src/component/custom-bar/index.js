@@ -15,6 +15,7 @@ export default function CustomBar(props) {
     buttonLabel,
     onClick,
     testBar,
+    width = "45vw",
   } = props;
 
   const defaultProps = {
@@ -23,7 +24,7 @@ export default function CustomBar(props) {
     border: 1,
   };
   return (
-    <div className="tests_container">
+    <div style={{ width: width }} className="tests_container">
       <div
         style={{
           display: "flex",
@@ -57,7 +58,7 @@ export default function CustomBar(props) {
         style={{
           display: "flex",
           alignItems: "center",
-          marginLeft: 150,
+          // marginLeft: 150,
         }}
       >
         {testBar ? (

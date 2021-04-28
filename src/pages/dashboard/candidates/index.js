@@ -22,6 +22,13 @@ export default function DashboardCandidates() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [drawerProfile, setDrawerProfile] = React.useState(false);
+
+  const defaultProps = {
+    bgcolor: "background.paper",
+    m: 1,
+    border: 4,
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -35,7 +42,29 @@ export default function DashboardCandidates() {
     setState({ ...state, [anchor]: open });
   };
 
-  const list = (anchor) => (
+  const toggleDrawerProfile = (open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setDrawerProfile(open);
+  };
+
+  const candidateProfileHandler = () => {
+    setState({ ...state, right: false });
+    setDrawerProfile(true);
+  };
+
+  const testHistoryHandler = () => {
+    setDrawerProfile(false);
+    setState({ ...state, right: true });
+  };
+
+  const candidateDrawer = (anchor) => (
     <div
       style={{
         display: "flex",
@@ -283,99 +312,168 @@ export default function DashboardCandidates() {
                 fontWeight: "bold",
                 fontSize: 16,
               }}
+              onClick={candidateProfileHandler}
             >
               Profil du candidat
             </Button>
           </div>
         </div>
-
-        {/* <div style={{ display: "flex", alignItems: "center" }}>
-          <img src="../react-logo.png" />
-          <p style={{ fontSize: 36, paddingLeft: 25, fontWeight: "bold" }}>
-            React JS
-          </p>
-        </div> */}
-        {/* <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            // marginLeft: 80,
-          }}
-        >
-          <p style={{ fontSize: 30, fontWeight: "bold", marginBottom: 0 }}>
-            Description :
-          </p>
-          <p style={{ fontSize: 20, fontWeight: "bold" }}>
-            React est une bibliothèque JavaScript libre développée par Facebook
-            depuis 2013. Le but principal de cette bibliothèque est de faciliter
-            la création d'application web monopage, via la création de
-            composants dépendant d'un état et générant une page HTML à chaque
-            changement d'état.
-          </p>
-        </div> */}
-
-        {/* <div
-          style={{ display: "flex", flexDirection: "column", width: "100%" }}
-        >
-          <p style={{ fontSize: 30, fontWeight: "bold" }}>Information :</p>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            {[
-              { img: "../footsteps-logo.png", imgLabel: "4 Etapes" },
-              { img: "../fitness-logo.png", imgLabel: "30 Excercices" },
-              { img: "../trophy-logo.png", imgLabel: "3 Niveaux" },
-            ].map((item) => (
-              <Box
-                boxShadow={10}
-                style={{
-                  height: 130,
-                  width: 119,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <img src={item.img} style={{ height: 60, width: 60 }} />
-                <p style={{ fontSize: 15, fontWeight: "bold" }}>
-                  {item.imgLabel}
-                </p>
-              </Box>
-            ))}
-          </div>
-        </div> */}
-        {/* <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "88%",
-            flex: 1,
-            alignItems: "center",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Typography style={{ fontSize: 22, fontWeight: "bold" }}>
-              Durée :
-            </Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <WatchLaterIcon />
-              <Typography style={{ marginTop: 5, marginLeft: 5 }}>
-                1h 30min
-              </Typography>
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Typography style={{ fontSize: 22, fontWeight: "bold" }}>
-              Note :
-            </Typography>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <StarIcon />
-              <Typography style={{ marginTop: 5 }}>4/5</Typography>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
+
+  const profileDrawer = (anchor) => (
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: 579,
+        borderTopLeftRadius: 50,
+        borderBottomLeftRadius: 50,
+      }}
+    >
+      <CancelIcon
+        onClick={toggleDrawerProfile(false)}
+        style={{
+          position: "absolute",
+          color: "white",
+          top: 16,
+          left: 14,
+          fontSize: 30,
+          cursor: "pointer",
+        }}
+      />
+
+      <img
+        src="../rectangle-drawer.png"
+        style={{ height: "100%", width: 60 }}
+      />
+
+      <Scrollbars
+        style={{
+          display: "flex",
+          flex: 1,
+        }}
+        renderTrackVertical={(props) => (
+          <div {...props} className="track-vertical" />
+        )}
+        renderThumbVertical={(props) => (
+          <div {...props} className="thumb-vertical" />
+        )}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+          }}
+          onKeyDown={toggleDrawerProfile(false)}
+        >
+          <div style={{ display: "flex", marginTop: 20 }}>
+            <Box
+              display="flex"
+              justifyContent="center"
+              borderColor="#008288"
+              {...defaultProps}
+              style={{ borderRadius: 80 }}
+            >
+              <img
+                src="../me.jpg"
+                style={{ height: 100, width: 100, borderRadius: 50 }}
+              />
+            </Box>
+          </div>
+          <Box
+            style={{
+              display: "flex",
+              width: "85%",
+              height: 160,
+              borderRadius: 15,
+              marginTop: 20,
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+            boxShadow={5}
+          >
+            <div
+              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
+            >
+              <Typography
+                variant="h5"
+                style={{ fontSize: 20, fontWeight: "bold" }}
+              >
+                Nom :
+              </Typography>
+              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+                Moujahed
+              </Typography>
+            </div>
+            <div
+              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
+            >
+              <Typography
+                variant="h5"
+                style={{ fontSize: 20, fontWeight: "bold" }}
+              >
+                Prénom :
+              </Typography>
+              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+                Mehdi
+              </Typography>
+            </div>
+            <div
+              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
+            >
+              <Typography
+                variant="h5"
+                style={{ fontSize: 20, fontWeight: "bold" }}
+              >
+                Adresse Mail :
+              </Typography>
+              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+                moujahedmehdi@gmail.com
+              </Typography>
+            </div>
+          </Box>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: 30,
+              width: "94%",
+              flex: 1,
+            }}
+          >
+            <Typography
+              style={{
+                fontSize: 22,
+                fontWeight: "bold",
+                alignSelf: "center",
+                marginBottom: 20,
+              }}
+            >
+              Historique des tests
+            </Typography>
+
+            {[1, 2, 3, 4, 5, 6, 7].map(() => (
+              <CustomBar
+                testImg="../me.jpg"
+                testName="Mehdi Moujahed"
+                duration="1h 30min"
+                score="4/5"
+                width="100%"
+                buttonLabel="Plus de détails"
+                onClick={testHistoryHandler}
+                testBar={false}
+              ></CustomBar>
+            ))}
+          </div>
+        </div>
+      </Scrollbars>
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -419,7 +517,15 @@ export default function DashboardCandidates() {
             onClose={toggleDrawer("right", false)}
             onOpen={toggleDrawer("right", true)}
           >
-            {list("right")}
+            {candidateDrawer("right")}
+          </SwipeableDrawer>
+          <SwipeableDrawer
+            anchor="right"
+            open={drawerProfile}
+            onClose={toggleDrawerProfile(false)}
+            onOpen={toggleDrawerProfile(true)}
+          >
+            {profileDrawer("right")}
           </SwipeableDrawer>
         </div>
         <SearchSortFilter searchTitle="Rechercher Les candidats" />
