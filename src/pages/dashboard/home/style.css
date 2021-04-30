@@ -1,0 +1,7 @@
+#tab_appBar {
+  background-color: white;
+  box-shadow: none;
+}
+.tabAppBar .MuiTab-textColorInherit {
+  opacity: 0.3;
+}
