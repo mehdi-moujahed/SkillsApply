@@ -12,6 +12,7 @@ import "./style.css";
 import DashboardTests from "./tests";
 import DashboardCandidates from "./candidates";
 import CreateTest from "./createTest";
+import QcmTest from "./createTest/qcmTest";
 export default function Tests() {
   let { path, url } = useRouteMatch();
   return (
@@ -24,6 +25,7 @@ export default function Tests() {
           {/* <DashboardCandidates /> */}
           {/* <DashboardHome /> */}
           <CreateTest />
+          {/* <QcmTest isQcm={false} /> */}
         </div>
         {/* <Switch>
           <Route exact path={path} component={DashboardHome} />
