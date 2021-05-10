@@ -1,65 +1,127 @@
-import React from "react";
-import { Button, Grid, Link } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+} from "@material-ui/core";
 import "./style.css";
-import CustomizedTextField from "../../component/textfield";
 import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router-dom";
-import { ReactComponent as Logo } from "../../assets/svg/logo.svg";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { VisibilityOff } from "@material-ui/icons";
 
 export default function Index() {
+  const [showPassword, setShowPassword] = useState("password");
   let history = useHistory();
+
+  function handleClickPasswordIcon() {
+    if (showPassword === "password") setShowPassword("text");
+    else setShowPassword("password");
+  }
 
   function handleClick() {
     history.push("/home");
   }
 
-  function handleClick2() {
+  function handleClickRegister() {
     history.push("/");
   }
   return (
-    <div className="main_container">
-      <div id="logo">
-        <Logo id="svg" />
-      </div>
-      <Grid
-        container
-        direction="column"
-        justify="flex-start"
-        alignItems="center"
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+          flex: 1,
+        }}
       >
-        <Typography
-          variant="h4"
-          style={{ paddingTop: 80 }}
-          component="h4"
-          className="title"
-        >
-          Bienvenue à Bord
+        <Typography variant="h4" style={{ fontWeight: "bold" }}>
+          Bienvenue à bord
         </Typography>
-        <div className="input_container2">
-          <div style={{ marginBottom: 60 }}>
-            <CustomizedTextField label="Adresse Email" type="email" />
-          </div>
-          <div>
-            <CustomizedTextField label="Mot de passe" type="password" />
-          </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <TextField
+            id="filled-basic"
+            label="Email"
+            variant="filled"
+            style={{ width: "22vw", marginBottom: 100 }}
+            type="email"
+          />
+
+          <TextField
+            id="filled-basic"
+            label="Mot de passe"
+            variant="filled"
+            type={showPassword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    style={{ color: "black" }}
+                    onClick={handleClickPasswordIcon}
+                  >
+                    {showPassword === "password" ? (
+                      <VisibilityIcon />
+                    ) : (
+                      <VisibilityOff />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
-        <Button
-          className="button"
-          variant="contained"
-          color="primary"
-          onClick={handleClick}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          Se Connecter
-        </Button>
-        <div className="bottom_container">
-          <Typography variant="subtitle2" id="login_label">
-            Vous n'êtes pas encore inscrit ?
-          </Typography>
-          <Link color="primary" id="login_link" onClick={handleClick2}>
-            S'inscrire
-          </Link>
+          <Button
+            variant="outlined"
+            style={{
+              backgroundColor: "#008288",
+              color: "white",
+              textTransform: "capitalize",
+              width: 200,
+              fontSize: 17,
+              borderRadius: 30,
+              height: 40,
+            }}
+          >
+            Se Connecter
+          </Button>
+          <div style={{ display: "flex", alignItems: "center", marginTop: 20 }}>
+            <Typography
+              variant="subtitle1"
+              style={{
+                fontWeight: "bold",
+                textAlign: "center",
+                marginRight: 20,
+              }}
+            >
+              Vous n'avez pas encore un compte?
+            </Typography>
+            <Link
+              variant="subtitle1"
+              color="primary"
+              style={{ cursor: "pointer" }}
+              onClick={handleClickRegister}
+            >
+              Inscrivez-vous
+            </Link>
+          </div>
         </div>
-      </Grid>
+      </div>
+      <div className="main_container">
+        <img src="../logo.png" id="logo_login" />
+      </div>
     </div>
   );
 }

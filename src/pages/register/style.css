@@ -1,13 +1,12 @@
-.main_container {
-  background-image: url("../../assets/svg/background-login-big.svg");
-  background-repeat: no-repeat;
+.register_main_container {
+  background-image: url("../../assets/svg/background-login.svg");
   background-size: cover;
-  background-position: bottom;
   display: flex;
   flex: 1;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   justify-content: center;
+  align-items: center;
 }
 
 .title {
@@ -64,6 +63,10 @@
   position: absolute;
   left: 35px;
   top: 25px;
+}
+#register_logo {
+  width: 350px;
+  margin-right: 113px;
 }
 
 #svg {

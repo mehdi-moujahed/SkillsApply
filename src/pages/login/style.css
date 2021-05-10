@@ -1,13 +1,12 @@
 .main_container {
-  background-image: url("../../assets/svg/background-login-big.svg");
-  background-repeat: no-repeat;
+  background-image: url("../../assets/svg/left.svg");
   background-size: cover;
-  background-position: bottom;
   display: flex;
   flex: 1;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   justify-content: center;
+  align-items: center;
 }
 
 .title {
@@ -58,6 +57,10 @@
   top: 25px;
 }
 
+#logo_login {
+  width: 350px;
+  margin-left: 150px;
+}
 #svg {
   width: 110px;
 }
