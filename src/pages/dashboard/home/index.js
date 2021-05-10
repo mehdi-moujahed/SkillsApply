@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import "./style.css";
 import TestTab from "./testTab";
 import TestPassedTab from "./testPassedTab";
+import { useHistory, useRouteMatch } from "react-router";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
 export default function DashboardHome() {
   const classes = useStyles();
 
+  const history = useHistory();
+  let { path, url } = useRouteMatch();
+
   const [mainTab, setmainTab] = React.useState("one");
 
   const [testTab, setTestTab] = React.useState("one");
@@ -80,6 +84,7 @@ export default function DashboardHome() {
               fontSize: 16,
               fontWeight: "bold",
             }}
+            onClick={() => history.push(`${path}/addtest`)}
           >
             Ajouter un nouveau test
           </Button>

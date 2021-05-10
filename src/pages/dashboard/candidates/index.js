@@ -110,7 +110,7 @@ export default function DashboardCandidates() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="./hairstyle-logo.png" alt="hairStryle" />
+            <img src="../hairstyle-logo.png" alt="hairStryle" />
             <Typography
               variant="h5"
               style={{ fontWeight: "bold", marginLeft: 15 }}

@@ -4,20 +4,21 @@ import {
   IconButton,
   makeStyles,
   Modal,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React, { useState } from "react";
-import "./style.css";
 import EmptyTest from "../emptyTest";
 import Scrollbars from "react-custom-scrollbars";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import "./style.css";
+import { Assignment } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -26,17 +27,15 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
-    // position: "absolute",
     display: "flex",
     flexDirection: "column",
     width: 600,
     height: 600,
     borderRadius: 30,
     backgroundColor: theme.palette.background.paper,
-    // border: "2px solid #000",
     boxShadow: theme.shadows[5],
     alignItems: "center",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   formControl: {
     margin: theme.spacing(1),
@@ -114,9 +113,12 @@ const questions = [
 
 export default function CreateTest() {
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  //   const [modalStyle] = React.useState(getModalStyle);
+
   const [open, setOpen] = useState(false);
+
+  const [openTestModal, setOpenTestModal] = useState(false);
+
+  const [testModalNextPage, setTestModalNextPage] = useState(false);
 
   const [questionType, setQuestionType] = useState(10);
 
@@ -139,34 +141,27 @@ export default function CreateTest() {
     setOpen(true);
   };
 
+  const handleNextPageModal = () => {
+    setTestModalNextPage(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
-  const body = (
+  const handleOpenTestModal = () => {
+    setOpenTestModal(true);
+  };
+
+  const handleCloseTestModal = () => {
+    setOpenTestModal(false);
+  };
+
+  const questionModal = (
     <div className={classes.paper}>
-      <div
-        style={{
-          width: 600,
-          height: 84,
-          backgroundColor: "#008288",
-          borderRadius: 30,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="modal_header">
         <AddCircleIcon color="secondary" />
-        <Typography
-          style={{
-            fontWeight: "bold",
-            fontSize: 20,
-            color: "white",
-            marginLeft: 10,
-          }}
-        >
-          Nouvelle question
-        </Typography>
+        <Typography id="modal_title">Nouvelle question</Typography>
       </div>
       <div>
         <div style={{ marginBottom: 30 }}>
@@ -228,21 +223,167 @@ export default function CreateTest() {
           </FormControl>
         </div>
       </div>
-      <Button
-        variant="outlined"
-        color="primary"
-        style={{
-          width: 165,
-          height: 40,
-          textTransform: "capitalize",
-          marginBottom: 50,
-          backgroundColor: "#008288",
-          color: "white",
-          borderRadius: 14,
-        }}
-      >
+      <Button variant="outlined" color="primary" id="modal_button">
         Créer
       </Button>
+    </div>
+  );
+
+  const testModal = (
+    <div className={classes.paper}>
+      <div className="modal_header">
+        <Assignment color="secondary" />
+        <Typography id="modal_title">Création Test</Typography>
+      </div>
+      {!testModalNextPage ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            marginTop: 35,
+          }}
+        >
+          <div style={{ marginBottom: 30 }}>
+            <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
+              Titre :
+            </Typography>
+            <TextField
+              id="outlined-multiline-static"
+              variant="outlined"
+              style={{ width: 465 }}
+            />
+          </div>
+          <div>
+            <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
+              Déscripiton :
+            </Typography>
+            <TextField
+              id="outlined-multiline-static"
+              rows={8}
+              multiline
+              variant="outlined"
+              style={{ width: 465 }}
+            />
+          </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            id="modal_button"
+            onClick={handleNextPageModal}
+            style={{ marginTop: 50 }}
+          >
+            Créer
+          </Button>
+        </div>
+      ) : (
+        <Scrollbars
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "80%",
+          }}
+          renderTrackVertical={(props) => (
+            <div {...props} className="track-vertical" />
+          )}
+          renderThumbVertical={(props) => (
+            <div {...props} className="thumb-vertical" />
+          )}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-around",
+              marginTop: 35,
+            }}
+          >
+            <div style={{ marginBottom: 30 }}>
+              <Typography
+                variant="h6"
+                style={{ marginBottom: 5, marginLeft: 5 }}
+              >
+                Titre :
+              </Typography>
+              <TextField
+                id="outlined-multiline-static"
+                variant="outlined"
+                style={{ width: 465 }}
+                disabled={true}
+              />
+            </div>
+            <div>
+              <Typography
+                variant="h6"
+                style={{ marginBottom: 5, marginLeft: 5 }}
+              >
+                Déscripiton :
+              </Typography>
+              <TextField
+                id="outlined-multiline-static"
+                rows={8}
+                multiline
+                variant="outlined"
+                disabled={true}
+                style={{ width: 465 }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                width: "100%",
+                marginTop: 30,
+              }}
+            >
+              {[1, 2, 3].map(() => (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                    Points :
+                  </Typography>
+                  <Typography variant="subtitle1">120</Typography>
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                width: "100%",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="primary"
+                id="edit_button"
+                // onClick={handleNextPageModal}
+                style={{ marginTop: 50 }}
+                onClick={() => setTestModalNextPage(false)}
+              >
+                Modifier
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                id="modal_button"
+                // onClick={handleNextPageModal}
+                style={{ marginTop: 50 }}
+              >
+                Terminer
+              </Button>
+            </div>
+          </div>
+        </Scrollbars>
+      )}
     </div>
   );
 
@@ -338,6 +479,7 @@ export default function CreateTest() {
                 fontSize: 17,
                 width: "83%",
               }}
+              onClick={handleOpenTestModal}
             >
               Terminer
             </Button>
@@ -489,7 +631,16 @@ export default function CreateTest() {
           aria-describedby="simple-modal-description"
           className={classes.modal}
         >
-          {body}
+          {questionModal}
+        </Modal>
+        <Modal
+          open={openTestModal}
+          onClose={handleCloseTestModal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          className={classes.modal}
+        >
+          {testModal}
         </Modal>
       </div>
     </div>

@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Switch,
-  Route,
-  useRouteMatch,
-} from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 import React from "react";
 import DashboardHeader from "../../component/header-dashboard";
@@ -20,17 +16,23 @@ export default function Tests() {
       <DashboardMenu />
       <div style={{ display: "flex", flexDirection: "column", marginLeft: 15 }}>
         <DashboardHeader title="Les Tests" />
-        <div style={{ marginTop: 30, height: "100%", width: "100%" }}>
+        <div style={{ marginTop: 30 }}>
           {/* <DashboardTests /> */}
           {/* <DashboardCandidates /> */}
           {/* <DashboardHome /> */}
-          <CreateTest />
+
           {/* <QcmTest isQcm={false} /> */}
         </div>
-        {/* <Switch>
+        <Switch>
           <Route exact path={path} component={DashboardHome} />
           <Route exact path={`${path}/tests`} component={DashboardTests} />
-        </Switch> */}
+          <Route
+            exact
+            path={`${path}/candidates`}
+            component={DashboardCandidates}
+          />
+          <Route exact path={`${path}/addtest`} component={CreateTest} />
+        </Switch>
       </div>
     </div>
   );

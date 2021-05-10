@@ -2,10 +2,7 @@ import React from "react";
 import "./style.css";
 import {
   Box,
-  FormControl,
   FormControlLabel,
-  FormLabel,
-  InputLabel,
   makeStyles,
   MenuItem,
   Radio,
@@ -13,7 +10,6 @@ import {
   Select,
   Slider,
   TextField,
-  Typography,
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
@@ -57,7 +53,11 @@ export default function SearchSortFilter(props) {
       <Box className="search_sort_container" boxShadow={20}>
         <div>
           <div className="search_sort_title">
-            <img src="./search-icon.png" style={{ height: 25, width: 25 }} />
+            <img
+              src="../search-icon.png"
+              alt="search_icon"
+              style={{ height: 25, width: 25 }}
+            />
             <p
               style={{
                 fontWeight: "bold",
@@ -77,7 +77,11 @@ export default function SearchSortFilter(props) {
             />
           </Box>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="./filter-icon.png" style={{ height: 25, width: 25 }} />
+            <img
+              src="../filter-icon.png"
+              alt="filter_icon"
+              style={{ height: 25, width: 25 }}
+            />
             <p
               style={{
                 fontWeight: "bold",
