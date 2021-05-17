@@ -19,6 +19,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import "./style.css";
 import { Assignment } from "@material-ui/icons";
+import { useHistory, useRouteMatch } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     alignItems: "center",
-    // justifyContent: "space-between",
+    justifyContent: "space-between",
   },
   formControl: {
     margin: theme.spacing(1),
@@ -113,6 +114,9 @@ const questions = [
 
 export default function CreateTest() {
   const classes = useStyles();
+
+  let history = useHistory();
+  let { path, url } = useRouteMatch();
 
   const [open, setOpen] = useState(false);
 
@@ -223,7 +227,12 @@ export default function CreateTest() {
           </FormControl>
         </div>
       </div>
-      <Button variant="outlined" color="primary" id="modal_button">
+      <Button
+        variant="outlined"
+        color="primary"
+        id="modal_button"
+        onClick={() => history.push(`${path.replace("/addtest", "")}/qcmtest`)}
+      >
         Créer
       </Button>
     </div>

@@ -1,6 +1,7 @@
-import { ADD_TODO } from "../../action/actionType";
+import { ADD_TODO, TRY_AUTH } from "../../action/actionType";
 const initialState = {
   registerForm: {},
+  user: null,
 };
 export const todos = (state = initialState, action) => {
   switch (action.type) {
@@ -8,6 +9,12 @@ export const todos = (state = initialState, action) => {
       return {
         ...state,
         registerForm: { ...state.registerForm, ...action.payload },
+      };
+
+    case TRY_AUTH:
+      return {
+        ...state,
+        user: action.payload,
       };
 
     default:

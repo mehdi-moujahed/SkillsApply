@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Button,
+  Collapse,
   FormControl,
   IconButton,
   InputAdornment,
@@ -14,39 +15,54 @@ import { VisibilityOff } from "@material-ui/icons";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
-import { abc } from "../../store/action";
+import { abc, signupAPI } from "../../store/action";
 import { useForm } from "react-hook-form";
+import { Alert } from "@material-ui/lab";
+import CloseIcon from "@material-ui/icons/Close";
 
-const FormValues = {
-  firstName: "",
-  lastName: "",
-  phoneNumber: 0,
-  adress: "",
-  companyName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
+// const FormValues = {
+//   firstName:'',
+//   lastName:'',
+//   phoneNumber:0,
 
-export default function Register() {
+// };
+
+export default function Register(props) {
+  const axios = require("axios").default;
+
   const registerForm = useSelector((state) => state.todos.registerForm);
 
+  const userAdded = useSelector((state) => state.todos.registerForm);
+
   const dispatch = useDispatch();
+
+  // console.log(errors);
+  // const onSubmit = (data) => console.log(data);
+
+  const [showPassword, setShowPassword] = useState("password");
+
+  const [open, setOpen] = useState(true);
+
+  const [errorMsg, seterrorMsg] = useState();
+
+  const [nextPage, setNextPage] = useState(false);
+
+  const [valuesForm, setvaluesForm] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: 0,
+    address: "",
+    companyName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm(FormValues);
-
-  console.log(errors);
-  // const onSubmit = (data) => console.log(data);
-
-  const [showPassword, setShowPassword] = useState("password");
-
-  const [email, setEmail] = useState();
-
-  const [nextPage, setNextPage] = useState(false);
+  } = useForm();
 
   let history = useHistory();
 
@@ -88,8 +104,6 @@ export default function Register() {
           style={{
             display: "flex",
             alignItems: "center",
-            // justifyContent: "space-between",
-            // width: "100%",
           }}
         >
           <IconButton
@@ -115,7 +129,11 @@ export default function Register() {
             <form
               style={{ display: "flex", flexDirection: "column" }}
               onSubmit={handleSubmit((data) => {
-                console.log("this is data :", data);
+                console.log("dataaa", { data });
+                console.log("formvalues", valuesForm);
+                dispatch(signupAPI("manager/signup", data));
+
+                console.log("Redux ", userAdded);
               })}
             >
               <TextField
@@ -150,8 +168,9 @@ export default function Register() {
                     message: "adresse email est obligatoire",
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                    message: "email is not valid !",
+                    value:
+                      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    message: "email non valide !",
                   },
                 })}
                 error={errors.email ? true : false}
@@ -183,7 +202,7 @@ export default function Register() {
                 {...register("password", {
                   required: "mot de passe est obligatoire",
                   pattern: {
-                    value: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])/,
+                    value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
                     message:
                       "with at least a symbol, upper and lower case letters and a number ",
                   },
@@ -202,7 +221,7 @@ export default function Register() {
                 helperText={errors.password && errors.password.message}
               />
               <TextField
-                id="repeat-password"
+                id="confirmPassword"
                 label="Vérifier Mot de passe"
                 variant="filled"
                 type={showPassword}
@@ -228,6 +247,10 @@ export default function Register() {
                   // maxLength: 16,
                   // minLength: 8,
                 })}
+                error={errors.confirmPassword ? true : false}
+                helperText={
+                  errors.confirmPassword && errors.confirmPassword.message
+                }
               />
               <Button
                 variant="outlined"
@@ -271,76 +294,112 @@ export default function Register() {
               </div>
             </form>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <TextField
-                id="firstName"
-                label="Nom"
-                variant="filled"
-                style={{ width: "22vw", marginBottom: 50 }}
-                type="text"
-              />
-              <TextField
-                id="lastName"
-                label="Prénom"
-                variant="filled"
-                style={{ width: "22vw", marginBottom: 50 }}
-                type="text"
-              />
-              <TextField
-                id="phoneNumber"
-                label="Télephone"
-                variant="filled"
-                style={{ width: "22vw", marginBottom: 50 }}
-                type="tel"
-              />
-              <TextField
-                id="adress"
-                label="Adresse"
-                variant="filled"
-                style={{ width: "22vw" }}
-                type="text"
-              />
-              <Button
-                variant="outlined"
-                style={{
-                  backgroundColor: "#008288",
-                  color: "white",
-                  textTransform: "capitalize",
-                  width: 200,
-                  fontSize: 17,
-                  borderRadius: 30,
-                  height: 40,
-                  alignSelf: "center",
-                  marginTop: 30,
-                }}
-                onClick={handleClickNextPage}
-                type="submit"
-              >
-                continuer
-              </Button>
-              <div
-                style={{ display: "flex", alignItems: "center", marginTop: 20 }}
-              >
-                <Typography
-                  variant="subtitle1"
+            <form style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <TextField
+                  id="firstName"
+                  label="Nom"
+                  variant="filled"
+                  style={{ width: "22vw", marginBottom: 50 }}
+                  type="text"
+                  {...register("firstName", {
+                    required: "nom est obligatoire",
+                  })}
+                  // onChange={(event) => {
+                  //   setvaluesForm({
+                  //     ...register,
+                  //     firstName: event.target.value,
+                  //   });
+                  // }}
+                  // value={valuesForm.firstName}
+                  error={errors.firstName ? true : false}
+                  helperText={errors.firstName && errors.firstName.message}
+                />
+                <TextField
+                  id="lastName"
+                  label="Prénom"
+                  variant="filled"
+                  style={{ width: "22vw", marginBottom: 50 }}
+                  type="text"
+                  value={props.lastName}
+                  {...register("lastName", {
+                    required: "prénom est obligatoire",
+                  })}
+                  error={errors.lastName ? true : false}
+                  helperText={errors.lastName && errors.lastName.message}
+                />
+                <TextField
+                  id="phoneNumber"
+                  label="Télephone"
+                  variant="filled"
+                  style={{ width: "22vw", marginBottom: 50 }}
+                  type="tel"
+                  value={register.phoneNumber}
+                  {...register("phoneNumber", {
+                    required: "Télephone est obligatoire",
+                  })}
+                  error={errors.phoneNumber ? true : false}
+                  helperText={errors.phoneNumber && errors.phoneNumber.message}
+                />
+                <TextField
+                  id="address"
+                  label="Adresse"
+                  variant="filled"
+                  style={{ width: "22vw" }}
+                  type="text"
+                  value={register.address}
+                  {...register("address", {
+                    required: "Adresse est obligatoire",
+                  })}
+                  error={errors.address ? true : false}
+                  helperText={errors.address && errors.address.message}
+                />
+                <Button
+                  variant="outlined"
                   style={{
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    marginRight: 20,
+                    backgroundColor: "#008288",
+                    color: "white",
+                    textTransform: "capitalize",
+                    width: 200,
+                    fontSize: 17,
+                    borderRadius: 30,
+                    height: 40,
+                    alignSelf: "center",
+                    marginTop: 30,
+                  }}
+                  onClick={handleClickNextPage}
+                  type="submit"
+                >
+                  continuer
+                </Button>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: 20,
                   }}
                 >
-                  Vous avez déja un compte?
-                </Typography>
-                <Link
-                  variant="subtitle1"
-                  color="primary"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleClickLogin}
-                >
-                  Connectez-vous
-                </Link>
+                  <Typography
+                    variant="subtitle1"
+                    style={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      marginRight: 20,
+                    }}
+                  >
+                    Vous avez déja un compte?
+                  </Typography>
+                  <Link
+                    variant="subtitle1"
+                    color="primary"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleClickLogin}
+                  >
+                    Connectez-vous
+                  </Link>
+                </div>
               </div>
-            </div>
+            </form>
           )}
         </div>
 
@@ -351,22 +410,27 @@ export default function Register() {
             alignItems: "center",
           }}
         >
-          {/* <Button
-            variant="outlined"
-            style={{
-              backgroundColor: "#008288",
-              color: "white",
-              textTransform: "capitalize",
-              width: 200,
-              fontSize: 17,
-              borderRadius: 30,
-              height: 40,
-            }}
-            onClick={nextPage ? test : handleClickNextPage}
-            type="submit"
-          >
-            {nextPage ? <p>confirmer </p> : <p>continuer</p>}
-          </Button> */}
+          {errorMsg && (
+            <Collapse in={open}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {errorMsg}
+              </Alert>
+            </Collapse>
+          )}
         </div>
       </div>
       <div className="register_main_container">

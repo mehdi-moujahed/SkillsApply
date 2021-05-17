@@ -32,6 +32,7 @@ export default function Tests() {
             component={DashboardCandidates}
           />
           <Route exact path={`${path}/addtest`} component={CreateTest} />
+          <Route exact path={`${path}/qcmtest`} component={QcmTest} />
         </Switch>
       </div>
     </div>

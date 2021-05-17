@@ -12,10 +12,19 @@ import Typography from "@material-ui/core/Typography";
 import { useHistory } from "react-router-dom";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { VisibilityOff } from "@material-ui/icons";
+import { useForm } from "react-hook-form";
+
+const FormValues = {};
 
 export default function Index() {
   const [showPassword, setShowPassword] = useState("password");
   let history = useHistory();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm(FormValues);
 
   function handleClickPasswordIcon() {
     if (showPassword === "password") setShowPassword("text");
@@ -46,17 +55,50 @@ export default function Index() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <TextField
             id="filled-basic"
-            label="Email"
+            label="email"
             variant="filled"
             style={{ width: "22vw", marginBottom: 100 }}
             type="email"
+            {...register("email", {
+              required: {
+                value: true,
+                message: "adresse email est obligatoire",
+              },
+              pattern: {
+                value:
+                  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                message: "email non valide !",
+              },
+            })}
+            error={errors.email ? true : false}
+            helperText={errors.email && errors.email.message}
           />
 
           <TextField
             id="filled-basic"
-            label="Mot de passe"
+            label="password"
             variant="filled"
             type={showPassword}
+            {...register("password", {
+              required: "mot de passe est obligatoire",
+              pattern: {
+                value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
+                message:
+                  "with at least a symbol, upper and lower case letters and a number ",
+              },
+              maxLength: {
+                value: 16,
+                message:
+                  "le mot de passe doit contenir entre 8 et 16 caractéres",
+              },
+              minLength: {
+                value: 8,
+                message:
+                  "le mot de passe doit contenir entre 8 et 16 caractéres",
+              },
+            })}
+            error={errors.password ? true : false}
+            helperText={errors.password && errors.password.message}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -75,7 +117,6 @@ export default function Index() {
             }}
           />
         </div>
-
         <div
           style={{
             display: "flex",
@@ -85,6 +126,7 @@ export default function Index() {
         >
           <Button
             variant="outlined"
+            type="submit"
             style={{
               backgroundColor: "#008288",
               color: "white",

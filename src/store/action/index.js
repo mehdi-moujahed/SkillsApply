@@ -1,1 +1,1 @@
-export { abc } from "./auth";
+export { abc, signupAPI } from "./auth";
