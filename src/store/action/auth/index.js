@@ -5,6 +5,7 @@ const axios = require("axios").default;
 
 export const abc = (payload) => ({ type: ADD_TODO, payload });
 
+//déclaration de l'action
 export const setUserInfo = (payload) => ({ type: TRY_AUTH, payload });
 
 export const signupAPI = (url, form) => {
@@ -15,7 +16,7 @@ export const signupAPI = (url, form) => {
         console.log("reponse", response);
         console.log("form is", form);
         if (response.status === 200) {
-          dispatch(setUserInfo(response.data));
+          dispatch(setUserInfo(response.data)); //pour envoyer le réponse de l'api au reducer
         }
       })
       .catch(function (error) {

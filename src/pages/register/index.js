@@ -20,13 +20,6 @@ import { useForm } from "react-hook-form";
 import { Alert } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
 
-// const FormValues = {
-//   firstName:'',
-//   lastName:'',
-//   phoneNumber:0,
-
-// };
-
 export default function Register(props) {
   const axios = require("axios").default;
 
@@ -35,9 +28,6 @@ export default function Register(props) {
   const userAdded = useSelector((state) => state.todos.registerForm);
 
   const dispatch = useDispatch();
-
-  // console.log(errors);
-  // const onSubmit = (data) => console.log(data);
 
   const [showPassword, setShowPassword] = useState("password");
 

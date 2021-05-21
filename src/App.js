@@ -9,6 +9,7 @@ import Test from "./pages/test";
 import Pricing from "./pages/price";
 import Features from "./pages/features";
 import Dashboard from "./pages/dashboard";
+import confirmRegister from "./pages/register/confirmRegister";
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
           <Route path="/prices" exact component={Pricing} />
           <Route path="/features" exact component={Features} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/regitrationConfirm/:id" component={confirmRegister} />
         </Switch>
       </ThemeProvider>
     </Router>
