@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Collapse,
@@ -15,7 +15,12 @@ import { VisibilityOff } from "@material-ui/icons";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
-import { abc, signupAPI } from "../../store/action";
+import {
+  abc,
+  signupAPI,
+  setErrorMsgAPI,
+  setSuccessMsgAPI,
+} from "../../store/action";
 import { useForm } from "react-hook-form";
 import { Alert } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
@@ -23,17 +28,25 @@ import CloseIcon from "@material-ui/icons/Close";
 export default function Register(props) {
   const axios = require("axios").default;
 
+  const dispatch = useDispatch();
+
   const registerForm = useSelector((state) => state.todos.registerForm);
 
   const userAdded = useSelector((state) => state.todos.registerForm);
 
-  const dispatch = useDispatch();
+  const errorMsgAPI = useSelector((state) => state.todos.error);
+
+  const successMsgAPI = useSelector((state) => state.todos.success);
 
   const [showPassword, setShowPassword] = useState("password");
+
+  const [showVerifPassword, setShowVerifPassword] = useState("password");
 
   const [open, setOpen] = useState(true);
 
   const [errorMsg, seterrorMsg] = useState();
+
+  const [successMsg, setSuccessMsg] = useState();
 
   const [nextPage, setNextPage] = useState(false);
 
@@ -60,6 +73,21 @@ export default function Register(props) {
     if (showPassword === "password") setShowPassword("text");
     else setShowPassword("password");
   }
+  function handleClickVerifPasswordIcon() {
+    if (showVerifPassword === "password") setShowVerifPassword("text");
+    else setShowVerifPassword("password");
+  }
+
+  // function checkPasswords(password, verifPassword) {
+  //   if (password === verifPassword) {
+  //     return true;
+  //   } else {
+  //     seterrorMsg(
+  //       "Les deux mot de passes que vous avez saisie ne sont pas identiques"
+  //     );
+  //     return false;
+  //   }
+  // }
 
   function handleClickNextPage() {
     setNextPage(true);
@@ -72,6 +100,19 @@ export default function Register(props) {
   function handleClickLogin() {
     history.push("/login");
   }
+
+  useEffect(() => {
+    if (errorMsgAPI != "") {
+      setOpen(true);
+      seterrorMsg(errorMsgAPI);
+      dispatch(setErrorMsgAPI(""));
+    }
+    if (successMsgAPI != "") {
+      setOpen(true);
+      setSuccessMsg(successMsgAPI);
+      dispatch(setSuccessMsgAPI(""));
+    }
+  }, [errorMsgAPI, successMsgAPI]);
 
   return (
     <div
@@ -121,7 +162,12 @@ export default function Register(props) {
               onSubmit={handleSubmit((data) => {
                 console.log("dataaa", { data });
                 console.log("formvalues", valuesForm);
-                dispatch(signupAPI("manager/signup", data));
+                if (data.password === data.confirmPassword)
+                  dispatch(signupAPI("manager/signup", data));
+                else
+                  seterrorMsg(
+                    "Les deux mot de passes que vous avez saisie ne sont pas identiques"
+                  );
 
                 console.log("Redux ", userAdded);
               })}
@@ -181,9 +227,9 @@ export default function Register(props) {
                         onClick={handleClickPasswordIcon}
                       >
                         {showPassword === "password" ? (
-                          <VisibilityIcon />
-                        ) : (
                           <VisibilityOff />
+                        ) : (
+                          <VisibilityIcon />
                         )}
                       </IconButton>
                     </InputAdornment>
@@ -214,19 +260,19 @@ export default function Register(props) {
                 id="confirmPassword"
                 label="Vérifier Mot de passe"
                 variant="filled"
-                type={showPassword}
+                type={showVerifPassword}
                 style={{ width: "22vw" }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         style={{ color: "black" }}
-                        onClick={handleClickPasswordIcon}
+                        onClick={handleClickVerifPasswordIcon}
                       >
-                        {showPassword === "password" ? (
-                          <VisibilityIcon />
-                        ) : (
+                        {showVerifPassword === "password" ? (
                           <VisibilityOff />
+                        ) : (
+                          <VisibilityIcon />
                         )}
                       </IconButton>
                     </InputAdornment>
@@ -418,6 +464,27 @@ export default function Register(props) {
                 }
               >
                 {errorMsg}
+              </Alert>
+            </Collapse>
+          )}
+          {successMsg && (
+            <Collapse in={open}>
+              <Alert
+                severity="success"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {successMsg}
               </Alert>
             </Collapse>
           )}

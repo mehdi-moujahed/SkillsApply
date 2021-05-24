@@ -1,1 +1,1 @@
-export { abc, signupAPI } from "./auth";
+export { abc, signupAPI, setErrorMsgAPI, setSuccessMsgAPI } from "./auth";

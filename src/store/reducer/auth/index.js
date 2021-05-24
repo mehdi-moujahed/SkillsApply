@@ -1,8 +1,15 @@
-import { ADD_TODO, TRY_AUTH } from "../../action/actionType";
+import {
+  ADD_TODO,
+  TRY_AUTH,
+  TRY_AUTH_ERROR,
+  TRY_AUTH_SUCCESS,
+} from "../../action/actionType";
 
 const initialState = {
   registerForm: {},
   user: null,
+  error: "",
+  success: "",
 };
 
 export const todos = (state = initialState, action) => {
@@ -17,6 +24,16 @@ export const todos = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case TRY_AUTH_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case TRY_AUTH_SUCCESS:
+      return {
+        ...state,
+        success: action.payload,
       };
 
     default:
