@@ -1,0 +1,99 @@
+.mailForgotPassword .MuiInputBase-root {
+  background-color: white;
+}
+.forgotPassword_main_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.form_forgotPassword {
+  display: flex;
+  flex-direction: column;
+  background-color: #e9ebee;
+  height: 280px;
+  border-radius: 15px;
+}
+.forgotPassword_seperator {
+  height: 1px;
+  background-color: white;
+}
+#forgotPassword_title {
+  font-weight: bold;
+}
+.forgotPassword_second_container {
+  display: flex;
+  flex-direction: column;
+}
+#forgotPassword_subtitle {
+  white-space: pre-wrap;
+  margin-bottom: 20px;
+}
+.forgotPassword_button_container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+#forgotPassword_buttonConfirm {
+  background-color: #008288;
+  color: white;
+  text-transform: capitalize;
+  width: 160px;
+  font-size: 17px;
+  border-radius: 30px;
+  height: 40px;
+  margin-right: 15px;
+}
+#forgotPassword_buttonCancel {
+  background-color: #008288;
+  color: white;
+  text-transform: capitalize;
+  width: 160px;
+  font-size: 17px;
+  border-radius: 30px;
+  height: 40px;
+}
+#forgotPassword_alert {
+  width: 40%;
+  margin-top: 30px;
+}
+.forgotPassword_banner {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  height: 100%;
+  justify-content: space-between;
+}
+#notFound_button {
+  background-color: rgb(0, 130, 136);
+  color: white;
+  text-transform: none;
+  border-radius: 30px;
+  font-size: 15px;
+  width: 237px;
+  height: 45px;
+}
+#error_svg {
+  width: 550px;
+  height: 442px;
+}
+#not_found_svg {
+  width: 500px;
+  height: 350px;
+}
+#not_found_title {
+  font-weight: bold;
+  margin-bottom: 35px;
+  margin-top: 35px;
+}
+#token_error_title {
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+.not_found_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

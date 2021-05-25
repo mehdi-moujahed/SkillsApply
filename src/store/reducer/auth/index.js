@@ -3,10 +3,12 @@ import {
   TRY_AUTH,
   TRY_AUTH_ERROR,
   TRY_AUTH_SUCCESS,
+  AUTH,
 } from "../../action/actionType";
 
 const initialState = {
   registerForm: {},
+  loginForm: {},
   user: null,
   error: "",
   success: "",
@@ -18,6 +20,12 @@ export const todos = (state = initialState, action) => {
       return {
         ...state,
         registerForm: { ...state.registerForm, ...action.payload },
+      };
+
+    case AUTH:
+      return {
+        ...state,
+        loginForm: { ...state.loginForm, ...action.payload },
       };
 
     case TRY_AUTH:

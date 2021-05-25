@@ -9,7 +9,9 @@ import Test from "./pages/test";
 import Pricing from "./pages/price";
 import Features from "./pages/features";
 import Dashboard from "./pages/dashboard";
+import ForgotPassword from "./pages/forgotPassword";
 import confirmRegister from "./pages/register/confirmRegister";
+import ResetPassword from "./pages/forgotPassword/confirmResetPassword";
 function App() {
   return (
     <Router>
@@ -23,6 +25,11 @@ function App() {
           <Route path="/features" exact component={Features} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/regitrationConfirm/:id" component={confirmRegister} />
+          <Route path="/forgotPassword" component={ForgotPassword} />
+          <Route
+            path="/confirmResetPassword/:token"
+            component={ResetPassword}
+          />
         </Switch>
       </ThemeProvider>
     </Router>
