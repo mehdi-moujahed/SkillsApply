@@ -33,7 +33,7 @@ export default function Header(props) {
   function handleClickLogin() {
     history.push("/login");
   }
-  const { Iconsvg, title, subtitle, leftoright, onClickAboutus } = props;
+  const { Iconsvg, title, subtitle, leftoright } = props;
   return (
     <div>
       <div className="main_container_header">

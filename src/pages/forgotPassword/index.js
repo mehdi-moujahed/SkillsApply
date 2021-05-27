@@ -118,7 +118,7 @@ export default function ForgotPassword() {
         </Collapse>
       </div>
       <div className="main_container">
-        <img src="../logo.png" id="logo_login" />
+        <img src="../logo.png" id="logo_login" alt=""/>
       </div>
     </div>
   );

@@ -72,8 +72,8 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer_footer">
-        <img src="./logo-footer.png" id="footer_logo" />
-        <p style={{ color: "white" }}>
+        <img src="./logo-footer.png" id="footer_logo" alt=""/>
+        <p style={{ color: "white",fontSize:10 }}>
           Made with love by <b>Reactit</b> in Sousse, Tunisie 2021 Tous les
           droits sont réservés.
         </p>

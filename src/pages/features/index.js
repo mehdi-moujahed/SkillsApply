@@ -1,4 +1,4 @@
-import { Box, makeStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 import React from "react";
 import { ReactComponent as FeaturesLogo } from "../../assets/svg/features-logo.svg";
@@ -72,7 +72,7 @@ export default function Features() {
               flexDirection: index % 2 === 0 ? "row" : "row-reverse",
             }}
           >
-            <img src={item.img} id="features_img" />
+            <img src={item.img} id="features_img" alt=""/>
             <p id="img_description">{item.description}</p>
           </div>
         </div>

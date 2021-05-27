@@ -5,7 +5,7 @@ export default function Sponsors(props) {
   return (
     <div className="sponsors_main_container">
       <div id="first_circle">
-        <img src={image} id="sponsors_logo" />
+        <img src={image} id="sponsors_logo" alt=""/>
       </div>
       <div id="second_circle"></div>
     </div>

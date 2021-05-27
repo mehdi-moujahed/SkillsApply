@@ -8,6 +8,7 @@
   height: 67vh;
   flex-direction: column;
   margin-top: 5px;
+  padding-bottom:15px;
 }
 .footer_container {
   display: flex;

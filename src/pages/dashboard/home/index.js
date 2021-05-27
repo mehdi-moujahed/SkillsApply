@@ -2,7 +2,6 @@ import {
   AppBar,
   Box,
   Button,
-  Icon,
   makeStyles,
   Tab,
   Tabs,
@@ -57,7 +56,7 @@ export default function DashboardHome() {
   const classes = useStyles();
 
   const history = useHistory();
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   const [mainTab, setmainTab] = useState("one");
 

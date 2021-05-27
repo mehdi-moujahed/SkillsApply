@@ -26,7 +26,6 @@ export default function ResetPassword() {
   const [openResendMail, setOpenResendMail] = useState(false);
   const [verifToken, setVerifToken] = useState(false);
   const [verifTime, setVerifTime] = useState(false);
-  const [emailResend, setEmailResend] = useState(true);
 
   useEffect(() => {
     axios
@@ -293,7 +292,7 @@ export default function ResetPassword() {
         )}
       </div>
       <div className="main_container">
-        <img src="../logo.png" id="logo_login" />
+        <img src="../logo.png" id="logo_login" alt=""/>
       </div>
     </div>
   );

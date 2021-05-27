@@ -6,9 +6,6 @@ import {
   AppBar,
   Box,
   Button,
-  Icon,
-  IconButton,
-  makeStyles,
   SwipeableDrawer,
   Tab,
   Tabs,
@@ -24,7 +21,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { useHistory, useRouteMatch } from "react-router";
 
 export default function DashboardTests() {
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   const history = useHistory();
 
@@ -111,6 +108,7 @@ export default function DashboardTests() {
       <img
         src="../rectangle-drawer.png"
         style={{ height: "100%", width: 60 }}
+        alt=""
       />
       <div
         style={{
@@ -124,7 +122,7 @@ export default function DashboardTests() {
         onKeyDown={toggleDrawer(anchor, false)}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src="../react-logo.png" />
+          <img src="../react-logo.png" alt=""/>
           <p style={{ fontSize: 36, paddingLeft: 25, fontWeight: "bold" }}>
             React JS
           </p>
@@ -169,7 +167,7 @@ export default function DashboardTests() {
                   justifyContent: "center",
                 }}
               >
-                <img src={item.img} style={{ height: 60, width: 60 }} />
+                <img src={item.img} style={{ height: 60, width: 60 }} alt=""/>
                 <p style={{ fontSize: 15, fontWeight: "bold" }}>
                   {item.imgLabel}
                 </p>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Button,
-  Grid,
   IconButton,
   InputAdornment,
   Link,
@@ -16,10 +15,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { signinAPI } from "../../store/action";
 
-const FormValues = {};
-
 export default function Index() {
-  const axios = require("axios").default;
 
   const [showPassword, setShowPassword] = useState("password");
 
@@ -40,12 +36,8 @@ export default function Index() {
     else setShowPassword("password");
   }
 
-  function handleClick() {
-    history.push("/home");
-  }
-
   function handleClickRegister() {
-    history.push("/");
+    history.push("/register");
   }
 
   function handleClickForgotPassword() {
@@ -84,7 +76,7 @@ export default function Index() {
               id="filled-basic"
               label="Adresse email"
               variant="filled"
-              style={{ width: "22vw", marginBottom: 100 }}
+              style={{ width: "22vw", marginBottom: 50 }}
               type="email"
               {...register("email", {
                 required: {
@@ -167,7 +159,7 @@ export default function Index() {
             >
               Se Connecter
             </Button>
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column",marginTop:10 }}>
               <div
                 style={{ display: "flex", alignItems: "center", marginTop: 20 }}
               >
@@ -203,7 +195,7 @@ export default function Index() {
         </form>
       </div>
       <div className="main_container">
-        <img src="../logo.png" id="logo_login" />
+        <img src="../logo.png" id="logo_login" alt=""/>
       </div>
     </div>
   );

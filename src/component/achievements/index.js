@@ -5,7 +5,7 @@ export default function Achievements(props) {
   return (
     <div className="achievements">
       <div className="numbers_container">
-        <img src={image} id="img_achievements" />
+        <img src={image} id="img_achievements" alt=""/>
       </div>
       <div className="achievements_text_container">
         <p className="achievements_text"> {numbers} </p>

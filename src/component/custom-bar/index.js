@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
 import React from "react";
@@ -41,6 +41,7 @@ export default function CustomBar(props) {
           <img
             src={testImg}
             style={{ height: 56, width: 56, borderRadius: 30 }}
+            alt=""
           />
         </Box>
 
@@ -64,7 +65,7 @@ export default function CustomBar(props) {
         {testBar ? (
           <WatchLaterIcon color="secondary" />
         ) : (
-          <img src="../test-logo.png" />
+          <img src="../test-logo.png" alt=""/>
         )}
         <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>
           {duration}
@@ -74,7 +75,7 @@ export default function CustomBar(props) {
         {testBar ? (
           <StarIcon color="secondary" style={{ fontSize: 17 }} />
         ) : (
-          <img src="../muscle-logo.png" />
+          <img src="../muscle-logo.png" alt=""/>
         )}
 
         {/* <StarIcon color="secondary" style={{ fontSize: 17 }} /> */}

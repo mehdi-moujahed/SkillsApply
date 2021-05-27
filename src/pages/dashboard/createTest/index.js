@@ -116,7 +116,7 @@ export default function CreateTest() {
   const classes = useStyles();
 
   let history = useHistory();
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   const [open, setOpen] = useState(false);
 
@@ -189,7 +189,7 @@ export default function CreateTest() {
         </div>
         <div
           style={{ marginBottom: 30 }}
-          hidden={questionType == 30 ? false : true}
+          hidden={questionType === 30 ? false : true}
         >
           <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
             Language de Programmation :

@@ -1,4 +1,4 @@
-import { AppBar, Box, Tab, Tabs, Typography } from "@material-ui/core";
+import { AppBar, Tab, Tabs, Typography } from "@material-ui/core";
 import React from "react";
 import PropTypes from "prop-types";
 import CustomBar from "../../../component/custom-bar";

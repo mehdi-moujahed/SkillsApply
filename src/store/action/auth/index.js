@@ -1,4 +1,3 @@
-import Register from "../../../pages/register";
 import {
   ADD_TODO,
   TRY_AUTH,

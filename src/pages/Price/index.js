@@ -1,4 +1,4 @@
-import { makeStyles, Switch, Typography } from "@material-ui/core";
+import { Switch, Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
 import React from "react";

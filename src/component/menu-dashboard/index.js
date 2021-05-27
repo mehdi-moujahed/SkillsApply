@@ -4,13 +4,13 @@ import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
-import { Box, Icon, IconButton } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 export default function DashboardMenu() {
   const history = useHistory();
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   return (
     <div>

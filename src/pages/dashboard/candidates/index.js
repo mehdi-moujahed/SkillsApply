@@ -3,11 +3,8 @@ import React from "react";
 import Scrollbars from "react-custom-scrollbars";
 import CustomBar from "../../../component/custom-bar";
 import SearchSortFilter from "../../../component/searchsortfilter";
-import StarIcon from "@material-ui/icons/Star";
 import { Box, Typography } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
-import WatchLaterIcon from "@material-ui/icons/WatchLater";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import Rating from "@material-ui/lab/Rating";
 import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
 const StyledRating = withStyles({
@@ -89,6 +86,7 @@ export default function DashboardCandidates() {
       <img
         src="../rectangle-drawer.png"
         style={{ height: "100%", width: 60 }}
+        alt=""
       />
       <div
         style={{
@@ -146,7 +144,7 @@ export default function DashboardCandidates() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="../react-logo.png" />
+            <img src="../react-logo.png" alt=""/>
             <p style={{ fontWeight: "bold", fontSize: 22 }}>React JS</p>
           </div>
           <Box
@@ -347,6 +345,7 @@ export default function DashboardCandidates() {
       <img
         src="../rectangle-drawer.png"
         style={{ height: "100%", width: 60 }}
+        alt=""
       />
 
       <Scrollbars
@@ -381,6 +380,7 @@ export default function DashboardCandidates() {
               <img
                 src="../me.jpg"
                 style={{ height: 100, width: 100, borderRadius: 50 }}
+                alt=""
               />
             </Box>
           </div>

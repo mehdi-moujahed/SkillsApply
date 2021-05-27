@@ -10,7 +10,7 @@ import DashboardCandidates from "./candidates";
 import CreateTest from "./createTest";
 import QcmTest from "./createTest/qcmTest";
 export default function Tests() {
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
   return (
     <div style={{ display: "flex" }}>
       <DashboardMenu />

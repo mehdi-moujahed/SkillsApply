@@ -8,16 +8,13 @@ import {
   Switch,
   TextField,
   Typography,
-  withStyles,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import "./style.css";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import DeleteIcon from "@material-ui/icons/Delete";
-import RemoveIcon from "@material-ui/icons/Remove";
-import { RemoveCircle, RemoveCircleOutline } from "@material-ui/icons";
+import { RemoveCircleOutline } from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
   switch_track: {

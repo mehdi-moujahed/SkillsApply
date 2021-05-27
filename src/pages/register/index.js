@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Button,
   Collapse,
-  FormControl,
   IconButton,
   InputAdornment,
   Link,
@@ -16,7 +15,6 @@ import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import "./style.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  abc,
   signupAPI,
   setErrorMsgAPI,
   setSuccessMsgAPI,
@@ -26,11 +24,8 @@ import { Alert } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
 
 export default function Register(props) {
-  const axios = require("axios").default;
 
   const dispatch = useDispatch();
-
-  const registerForm = useSelector((state) => state.todos.registerForm);
 
   const userAdded = useSelector((state) => state.todos.registerForm);
 
@@ -93,21 +88,17 @@ export default function Register(props) {
     setNextPage(true);
   }
 
-  function test() {
-    console.log("confimer pressed");
-  }
-
   function handleClickLogin() {
     history.push("/login");
   }
 
   useEffect(() => {
-    if (errorMsgAPI != "") {
+    if (errorMsgAPI !== "") {
       setOpen(true);
       seterrorMsg(errorMsgAPI);
       dispatch(setErrorMsgAPI(""));
     }
-    if (successMsgAPI != "") {
+    if (successMsgAPI !== "") {
       setOpen(true);
       setSuccessMsg(successMsgAPI);
       dispatch(setSuccessMsgAPI(""));
@@ -142,7 +133,7 @@ export default function Register(props) {
               color: "white",
               position: "absolute",
               backgroundColor: "black",
-              right: 711,
+              right: "45%",
               visibility: nextPage ? "inherit" : "hidden",
             }}
             onClick={() => setNextPage(false)}
@@ -491,7 +482,7 @@ export default function Register(props) {
         </div>
       </div>
       <div className="register_main_container">
-        <img src="../logo.png" id="register_logo" />
+        <img src="../logo.png" id="register_logo" alt=""/>
       </div>
     </div>
   );
