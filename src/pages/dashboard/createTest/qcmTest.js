@@ -104,7 +104,7 @@ export default function QcmTest(props) {
             className="qcm_qeustion"
           />
         </div>
-        {isQcm ? (
+        {!isQcm ? (
           <div style={{ marginLeft: 200 }}>
             <Typography
               variant="h6"

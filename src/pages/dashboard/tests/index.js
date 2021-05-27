@@ -1,25 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchSortFilter from "../../../component/searchsortfilter";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import StarIcon from "@material-ui/icons/Star";
 import {
+  AppBar,
   Box,
   Button,
+  Icon,
   IconButton,
   makeStyles,
   SwipeableDrawer,
+  Tab,
+  Tabs,
   Typography,
 } from "@material-ui/core";
 import "./style.css";
 import Scrollbars from "react-custom-scrollbars";
 import CancelIcon from "@material-ui/icons/Cancel";
+import PropTypes from "prop-types";
 import CustomBar from "../../../component/custom-bar";
+import { TabPanel } from "@material-ui/lab";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { useHistory, useRouteMatch } from "react-router";
 
 export default function DashboardTests() {
-  const [state, setState] = React.useState({
+  let { path, url } = useRouteMatch();
+
+  const history = useHistory();
+
+  const [state, setState] = useState({
     right: false,
   });
 
+  const [mainTab, setmainTab] = useState("one");
+
+  const handleChange = (event, newValue) => {
+    setmainTab(newValue);
+  };
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`wrapped-tabpanel-${index}`}
+        aria-labelledby={`wrapped-tab-${index}`}
+        {...other}
+      >
+        <Scrollbars
+          style={{
+            display: "flex",
+            width: "47vw",
+            height: "69vh",
+          }}
+          renderTrackVertical={(props) => (
+            <div {...props} className="track-vertical" />
+          )}
+          renderThumbVertical={(props) => (
+            <div {...props} className="thumb-vertical" />
+          )}
+        >
+          {value === index && children}
+        </Scrollbars>
+      </div>
+    );
+  }
+
+  function a11yProps(index) {
+    return {
+      id: `wrapped-tab-${index}`,
+      "aria-controls": `wrapped-tabpanel-${index}`,
+    };
+  }
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -100,8 +154,8 @@ export default function DashboardTests() {
           <p style={{ fontSize: 30, fontWeight: "bold" }}>Information :</p>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             {[
-              { img: "../footsteps-logo.png", imgLabel: "4 Etapes" },
-              { img: "../fitness-logo.png", imgLabel: "30 Excercices" },
+              { img: "../score-logo.png", imgLabel: "4 Etapes" },
+              { img: "../question-logo.png", imgLabel: "30 Excercices" },
               { img: "../trophy-logo.png", imgLabel: "3 Niveaux" },
             ].map((item) => (
               <Box
@@ -153,17 +207,11 @@ export default function DashboardTests() {
             </div>
           </div>
         </div>
-
-        {/* <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
+        <div>
+          <Button id="assign_test_button" variant="outlined">
+            Ajouter un candidat
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -172,23 +220,54 @@ export default function DashboardTests() {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        marginTop: 30,
       }}
     >
-      <Scrollbars
-        style={{
-          display: "flex",
-          width: "47vw",
-          height: "75vh",
-        }}
-        renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
-        )}
-        renderThumbVertical={(props) => (
-          <div {...props} className="thumb-vertical" />
-        )}
-      >
-        <div className="tests_main_container">
+      <div className="tests_main_container">
+        <AppBar position="static" id="tab_appBar" className="tabAppBar">
+          <Tabs
+            value={mainTab}
+            onChange={handleChange}
+            aria-label="wrapped label tabs example"
+          >
+            <Tab
+              value="one"
+              label="Tests disponibles"
+              wrapped
+              {...a11yProps("one")}
+              style={{
+                textTransform: "none",
+                fontSize: 20,
+                color: "black",
+                fontWeight: "bold",
+              }}
+            />
+            <Tab
+              value="two"
+              label="Tests crées"
+              {...a11yProps("two")}
+              style={{
+                textTransform: "none",
+                fontSize: 20,
+                color: "black",
+                fontWeight: "bold",
+              }}
+            />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={mainTab} index="one">
+          {[1, 2, 3].map(() => (
+            <CustomBar
+              testImg="../react-logo.png"
+              testName="React JS"
+              duration="1h 30min"
+              score="4/5"
+              buttonLabel="Afficher le test"
+              onClick={toggleDrawer("right", true)}
+              testBar
+            ></CustomBar>
+          ))}
+        </TabPanel>
+        <TabPanel value={mainTab} index="two">
           {[1, 2, 3, 4, 5, 6, 7].map(() => (
             <CustomBar
               testImg="../react-logo.png"
@@ -200,8 +279,8 @@ export default function DashboardTests() {
               testBar
             ></CustomBar>
           ))}
-        </div>
-      </Scrollbars>
+        </TabPanel>
+      </div>
       <div className="search_container">
         <div>
           <SwipeableDrawer
@@ -213,6 +292,14 @@ export default function DashboardTests() {
             {list("right")}
           </SwipeableDrawer>
         </div>
+        <Button
+          id="add_new_test"
+          variant="outlined"
+          endIcon={<AddCircleIcon />}
+          onClick={() => history.push(`${path.replace("/tests", "")}/addtest`)}
+        >
+          Ajouter un nouveau test
+        </Button>
         <SearchSortFilter
           searchTitle="Rechercher votre test préféré"
           testPage
@@ -221,3 +308,9 @@ export default function DashboardTests() {
     </div>
   );
 }
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};

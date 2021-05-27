@@ -1,6 +1,8 @@
 .search_container {
   margin-right: 53px;
-  margin-top: 21px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .tests_main_container {
   margin-top: 10;
@@ -23,4 +25,23 @@
 .MuiDrawer-paperAnchorRight {
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
+}
+#add_new_test {
+  background-color: #008288;
+  color: white;
+  border-radius: 14px;
+  height: 47px;
+  margin-bottom: 15px;
+  text-transform: none;
+  font-size: 17px;
+}
+#assign_test_button {
+  text-transform: none;
+  background-color: rgb(0, 130, 136);
+  border-radius: 14px;
+  height: 40px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }

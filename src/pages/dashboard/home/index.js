@@ -8,13 +8,14 @@ import {
   Tabs,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import PropTypes from "prop-types";
 import "./style.css";
 import TestTab from "./testTab";
 import TestPassedTab from "./testPassedTab";
 import { useHistory, useRouteMatch } from "react-router";
+import ReactApexChart from "react-apexcharts";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,11 +59,82 @@ export default function DashboardHome() {
   const history = useHistory();
   let { path, url } = useRouteMatch();
 
-  const [mainTab, setmainTab] = React.useState("one");
+  const [mainTab, setmainTab] = useState("one");
 
-  const [testTab, setTestTab] = React.useState("one");
+  const [testTab, setTestTab] = useState("one");
 
-  const [testPassedTab, setTestPassedTab] = React.useState("one");
+  const [testPassedTab, setTestPassedTab] = useState("one");
+
+  const [chartData, setChartData] = useState({
+    series: [
+      // {
+      //   name: "High - 2013",
+      //   data: [28, 29, 33, 36, 32, 32, 33],
+      // },
+      {
+        name: "Low - 2013",
+        data: [12, 40, 30, 20, 67, 100, 0],
+      },
+    ],
+    options: {
+      chart: {
+        height: 350,
+        type: "line",
+        dropShadow: {
+          enabled: true,
+          color: "#000",
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2,
+        },
+        toolbar: {
+          show: false,
+        },
+      },
+      colors: ["#008288", "#545454"],
+      dataLabels: {
+        enabled: true,
+      },
+      stroke: {
+        curve: "smooth",
+      },
+      title: {
+        text: "Moyenne des candidatures par jour",
+        align: "left",
+      },
+      grid: {
+        borderColor: "#e7e7e7",
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      markers: {
+        size: 1,
+      },
+      xaxis: {
+        categories: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+        title: {
+          text: "Jours",
+        },
+      },
+      yaxis: {
+        title: {
+          text: "Nombre des candidats",
+        },
+        min: 0,
+        max: 100,
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        floating: true,
+        offsetY: -25,
+        offsetX: -5,
+      },
+    },
+  });
 
   const handleChange = (event, newValue) => {
     setmainTab(newValue);
@@ -99,12 +171,7 @@ export default function DashboardHome() {
         </div>
         <div style={{ display: "flex", marginTop: 50 }}>
           <div className={classes.root}>
-            <AppBar
-              position="static"
-              id="tab_appBar"
-              // style={{ backgroundColor: "white", boxShadow: "none" }}
-              className="tabAppBar"
-            >
+            <AppBar position="static" id="tab_appBar" className="tabAppBar">
               <Tabs
                 value={mainTab}
                 onChange={handleChange}
@@ -147,13 +214,18 @@ export default function DashboardHome() {
                 setTestPassedTab={(value) => setTestPassedTab(value)}
               />
             </TabPanel>
-            {/* <TabPanel value={value} index="three">
-              Item Three
-            </TabPanel> */}
           </div>
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -190,6 +262,13 @@ export default function DashboardHome() {
             </Box>
           ))}
         </div>
+        <ReactApexChart
+          options={chartData.options}
+          series={chartData.series}
+          type="line"
+          height={350}
+          width={550}
+        />
       </div>
     </div>
   );

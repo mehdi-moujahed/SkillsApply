@@ -16,13 +16,7 @@ export default function Tests() {
       <DashboardMenu />
       <div style={{ display: "flex", flexDirection: "column", marginLeft: 15 }}>
         <DashboardHeader title="Les Tests" />
-        <div style={{ marginTop: 30 }}>
-          {/* <DashboardTests /> */}
-          {/* <DashboardCandidates /> */}
-          {/* <DashboardHome /> */}
-
-          {/* <QcmTest isQcm={false} /> */}
-        </div>
+        <div style={{ marginTop: 30 }}></div>
         <Switch>
           <Route exact path={path} component={DashboardHome} />
           <Route exact path={`${path}/tests`} component={DashboardTests} />
