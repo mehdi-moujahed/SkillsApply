@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   align-items: center;
+  flex: 1;
 }
 #empty_test_logo {
   height: 250px;

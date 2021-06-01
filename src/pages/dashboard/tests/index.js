@@ -122,7 +122,7 @@ export default function DashboardTests() {
         onKeyDown={toggleDrawer(anchor, false)}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src="../react-logo.png" alt=""/>
+          <img src="../react-logo.png" alt="" />
           <p style={{ fontSize: 36, paddingLeft: 25, fontWeight: "bold" }}>
             React JS
           </p>
@@ -167,7 +167,7 @@ export default function DashboardTests() {
                   justifyContent: "center",
                 }}
               >
-                <img src={item.img} style={{ height: 60, width: 60 }} alt=""/>
+                <img src={item.img} style={{ height: 60, width: 60 }} alt="" />
                 <p style={{ fontSize: 15, fontWeight: "bold" }}>
                   {item.imgLabel}
                 </p>
@@ -207,7 +207,7 @@ export default function DashboardTests() {
         </div>
         <div>
           <Button id="assign_test_button" variant="outlined">
-            Ajouter un candidat
+            Attribuer à un candidat
           </Button>
         </div>
       </div>
@@ -217,6 +217,7 @@ export default function DashboardTests() {
     <div
       style={{
         display: "flex",
+        flex: 1,
         justifyContent: "space-between",
       }}
     >

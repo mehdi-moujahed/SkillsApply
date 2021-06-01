@@ -4,6 +4,7 @@ import {
   TRY_AUTH_ERROR,
   TRY_AUTH_SUCCESS,
   AUTH,
+  RESET_PASSWORD,
 } from "../../action/actionType";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   user: null,
   error: "",
   success: "",
+  resetPassword: "",
 };
 
 export const todos = (state = initialState, action) => {
@@ -42,6 +44,11 @@ export const todos = (state = initialState, action) => {
       return {
         ...state,
         success: action.payload,
+      };
+    case RESET_PASSWORD:
+      return {
+        ...state,
+        resetPassword: action.payload,
       };
 
     default:

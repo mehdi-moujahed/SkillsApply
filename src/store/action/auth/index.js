@@ -3,6 +3,7 @@ import {
   TRY_AUTH,
   TRY_AUTH_ERROR,
   TRY_AUTH_SUCCESS,
+  RESET_PASSWORD,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -18,6 +19,30 @@ export const setSuccessMsgAPI = (payload) => ({
   type: TRY_AUTH_SUCCESS,
   payload,
 });
+
+export const setResetPasswordSuccessMsg = (payload) => ({
+  type: RESET_PASSWORD,
+  payload,
+});
+
+export const resetPasswordAPI = (url, form) => {
+  return (dispatch) => {
+    axios
+      .post(`http://127.0.0.1:8080/manager/${url}`, {
+        newPassword: form.password,
+        confirmNewPassword: form.newPassword,
+      })
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log("reponse", response);
+          dispatch(setResetPasswordSuccessMsg(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        console.log("error", { error });
+      });
+  };
+};
 
 export const signupAPI = (url, form) => {
   return (dispatch) => {
@@ -65,18 +90,3 @@ export const signinAPI = (url, form) => {
       });
   };
 };
-
-// axios
-//       .post(‘http://localhost:8080/oauth/token’, {
-//         params: {
-//           username: kyc?.phoneNumber,
-//           password: passCode,
-//           grant_type
-//         },
-//         auth: {
-//           password: ‘khaled123’,
-//           username: ‘khaled’,
-//         },
-//       })
-//       .then(async (responseToken) => {
-//         console.warn(responseToken);

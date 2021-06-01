@@ -15,6 +15,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { RemoveCircleOutline } from "@material-ui/icons";
+import { useDispatch } from "react-redux";
+import { addQuestion } from "../../../store/action";
+import { useHistory, useRouteMatch } from "react-router";
+import InputMask from "react-input-mask";
+import "./style.css";
 
 const useStyles = makeStyles(() => ({
   switch_track: {
@@ -52,13 +57,23 @@ const useStyles = makeStyles(() => ({
 
 export default function QcmTest(props) {
   const { isQcm } = props;
+
   const [state, setState] = useState({
     addAnswer: [
       { answer: "", state: true },
       { answer: "", state: false },
     ],
     questionType: 10,
+    question: "",
+    points: 0,
+    duration: 0,
   });
+
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+
+  const { path, url } = useRouteMatch();
 
   const handleChange = (event, index) => {
     setState({
@@ -94,7 +109,9 @@ export default function QcmTest(props) {
           </Typography>
           <TextField
             id="outlined-multiline-static"
-            // label="Multiline"
+            onChange={(event) => {
+              setState({ ...state, question: event.target.value });
+            }}
             multiline
             rows={10}
             variant="outlined"
@@ -236,8 +253,14 @@ export default function QcmTest(props) {
             Points :
           </Typography>
           <TextField
-            id="outlined-multiline-static"
-            multiline
+            type="number"
+            onChange={(event) => {
+              setState({ ...state, points: event.target.value });
+            }}
+            id="test_points"
+            InputLabelProps={{
+              shrink: false,
+            }}
             variant="outlined"
             className="qcm_answers"
           />
@@ -250,10 +273,13 @@ export default function QcmTest(props) {
             Durée (en minutes) :
           </Typography>
           <TextField
+            onChange={(event) => {
+              setState({ ...state, duration: event.target.value });
+            }}
             id="outlined-multiline-static"
             variant="outlined"
+            type="number"
             className="qcm_answers"
-            value="120"
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -272,27 +298,28 @@ export default function QcmTest(props) {
               style={{ borderRadius: 17, width: 237 }}
               name="questionType"
             >
-              <MenuItem value={10}>Question à choix multiples</MenuItem>
-              <MenuItem value={20}>Text</MenuItem>
-              <MenuItem value={30}>Programmation</MenuItem>
-              <MenuItem value={40}>Correction du code</MenuItem>
+              <MenuItem value={10}>Niveau Débutant</MenuItem>
+              <MenuItem value={20}>Niveau Intermédiare</MenuItem>
+              <MenuItem value={30}>Niveau Professionnel</MenuItem>
             </Select>
           </FormControl>
         </div>
 
         <Button
           variant="outlined"
-          style={{
-            textTransform: "capitalize",
-            backgroundColor: "#008288",
-            color: "white",
-            width: 175,
-            height: 46,
-            borderRadius: 11,
-            fontSize: 16,
-            fontWeight: "bold",
-            alignSelf: "center",
-            marginTop: 47,
+          id="finish_test_button"
+          onClick={() => {
+            dispatch(
+              addQuestion({
+                question: state.question,
+                answers: state.addAnswer,
+                points: state.points,
+                duration: state.duration,
+                level: state.questionType,
+                questionType: "Choix Multiple",
+              })
+            );
+            history.push(`${path.replace("/qcmtest", "/addtest")}`);
           }}
         >
           Terminer

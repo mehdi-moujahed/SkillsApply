@@ -19,7 +19,10 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import "./style.css";
 import { Assignment } from "@material-ui/icons";
+import WarningIcon from "@material-ui/icons/Warning";
 import { useHistory, useRouteMatch } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuestion, deleteQuestion } from "../../../store/action";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -46,81 +49,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const questions = [
-  {
-    number: 1,
-    type: "choix multiple",
-    duration: "1 heures",
-    score: "50",
-    level: "Difficile",
-  },
-  {
-    number: 2,
-    type: "text",
-    duration: "1 heures",
-    score: "80",
-    level: "Intermédiare",
-  },
-  {
-    number: 3,
-    type: "Programmation",
-    duration: "2 heures",
-    score: "100",
-    level: "Facile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-  {
-    number: 4,
-    type: "Correction Code",
-    duration: "45 min",
-    score: "90",
-    level: "Difficile",
-  },
-];
-
 export default function CreateTest() {
   const classes = useStyles();
 
   let history = useHistory();
+
   let { path } = useRouteMatch();
 
   const [open, setOpen] = useState(false);
 
   const [openTestModal, setOpenTestModal] = useState(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const [testModalNextPage, setTestModalNextPage] = useState(false);
 
@@ -129,6 +69,12 @@ export default function CreateTest() {
   const [questionLanguage, setQuestionLanguage] = useState("francais");
 
   const [technology, setTechnology] = useState(10);
+
+  const [selectedItem, setSelectedItem] = useState(0);
+
+  const questionAdded = useSelector((state) => state.testReducer.questions);
+
+  const dispatch = useDispatch();
 
   const handleChangeQuestions = (event) => {
     setQuestionType(event.target.value);
@@ -161,80 +107,130 @@ export default function CreateTest() {
     setOpenTestModal(false);
   };
 
+  const handleOpenDeleteModal = (index) => {
+    setOpenDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const Displaylevel = (level) => {
+    switch (level) {
+      case 10:
+        return "Débutant";
+      case 20:
+        return "Intermédiare";
+      case 30:
+        return "Professionnel";
+    }
+  };
+
   const questionModal = (
     <div className={classes.paper}>
       <div className="modal_header">
         <AddCircleIcon color="secondary" />
         <Typography id="modal_title">Nouvelle question</Typography>
       </div>
-      <div>
-        <div style={{ marginBottom: 30 }}>
-          <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
-            Type de question :
-          </Typography>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={questionType}
-              onChange={handleChangeQuestions}
-              style={{ width: 330, height: 50 }}
-            >
-              <MenuItem value={10}>Question à choix multiples</MenuItem>
-              <MenuItem value={20}>Text</MenuItem>
-              <MenuItem value={30}>Programmation</MenuItem>
-              <MenuItem value={40}>Correction du code</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <div
-          style={{ marginBottom: 30 }}
-          hidden={questionType === 30 ? false : true}
-        >
-          <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
-            Language de Programmation :
-          </Typography>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={technology}
-              onChange={handleChangeTechnology}
-              style={{ width: 330, height: 50 }}
-            >
-              <MenuItem value={10}>Javascript</MenuItem>
-              <MenuItem value={20}>Java</MenuItem>
-              <MenuItem value={30}>PHP</MenuItem>
-              <MenuItem value={40}>Python</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <div>
-          <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
-            Langues :
-          </Typography>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={questionLanguage}
-              onChange={handleChangeLanguage}
-              style={{ width: 330, height: 50 }}
-            >
-              <MenuItem value={"francais"}>Français</MenuItem>
-              <MenuItem value={"anglais"}>Anglais</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      </div>
-      <Button
-        variant="outlined"
-        color="primary"
-        id="modal_button"
-        onClick={() => history.push(`${path.replace("/addtest", "")}/qcmtest`)}
+      <Scrollbars
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "80%",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+        renderTrackVertical={(props) => (
+          <div {...props} className="track-vertical" />
+        )}
+        renderThumbVertical={(props) => (
+          <div {...props} className="thumb-vertical" />
+        )}
       >
-        Créer
-      </Button>
+        <div className="questionModal_inputs">
+          <div style={{ marginBottom: 30 }}>
+            <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
+              Type de question :
+            </Typography>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={questionType}
+                onChange={handleChangeQuestions}
+                style={{ width: 330, height: 50 }}
+              >
+                <MenuItem value={10}>Question à choix multiples</MenuItem>
+                <MenuItem value={20}>Text</MenuItem>
+                <MenuItem value={30}>Programmation</MenuItem>
+                <MenuItem value={40}>Correction du code</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div
+            style={{ marginBottom: 30 }}
+            hidden={questionType === 30 ? false : true}
+          >
+            <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
+              Language de Programmation :
+            </Typography>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={technology}
+                onChange={handleChangeTechnology}
+                style={{ width: 330, height: 50 }}
+              >
+                <MenuItem value={10}>Javascript</MenuItem>
+                <MenuItem value={20}>Java</MenuItem>
+                <MenuItem value={30}>PHP</MenuItem>
+                <MenuItem value={40}>Python</MenuItem>
+                <MenuItem value={50}>Autre</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div
+            style={{ marginBottom: 30 }}
+            hidden={technology === 50 && questionType === 30 ? false : true}
+          >
+            <TextField
+              id="outlined-basic"
+              label="Nom du language"
+              variant="outlined"
+              style={{ width: 330, height: 50 }}
+            />
+          </div>
+          <div>
+            <Typography variant="h6" style={{ marginBottom: 5, marginLeft: 5 }}>
+              Langues :
+            </Typography>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={questionLanguage}
+                onChange={handleChangeLanguage}
+                style={{ width: 330, height: 50 }}
+              >
+                <MenuItem value={"francais"}>Français</MenuItem>
+                <MenuItem value={"anglais"}>Anglais</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <Button
+            variant="outlined"
+            color="primary"
+            id="modal_button"
+            style={{ marginTop: 20 }}
+            onClick={() =>
+              history.push(`${path.replace("/addtest", "")}/qcmtest`)
+            }
+          >
+            Créer
+          </Button>
+        </div>
+      </Scrollbars>
     </div>
   );
 
@@ -396,7 +392,62 @@ export default function CreateTest() {
     </div>
   );
 
-  return questions.length > 0 ? (
+  const deleteModal = (
+    <div className={classes.paper} style={{ width: 600, height: 350 }}>
+      <div className="modal_header" style={{ backgroundColor: "red" }}>
+        <DeleteIcon color="secondary" />
+        <Typography id="modal_title">Suppression Test</Typography>
+      </div>
+      <div style={{ display: "flex" }}>
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>
+          Voulez-vous vraiment supprimer cette question ?
+        </Typography>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          variant="outlined"
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            borderColor: "red",
+            borderWidth: 1,
+          }}
+          onClick={() => handleCloseDeleteModal()}
+        >
+          Annuler
+        </Button>
+        <Button
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            backgroundColor: "red",
+            color: "white",
+          }}
+          onClick={() => {
+            dispatch(deleteQuestion(selectedItem));
+            setSelectedItem(0);
+            handleCloseDeleteModal();
+          }}
+        >
+          Supprimer
+        </Button>
+      </div>
+    </div>
+  );
+  return questionAdded.length > 0 ? (
     <div
       style={{
         display: "flex",
@@ -414,6 +465,7 @@ export default function CreateTest() {
           //   width: "100%",
           paddingLeft: 30,
           paddingRight: 30,
+          paddingBottom: 20,
         }}
       >
         <div
@@ -500,8 +552,6 @@ export default function CreateTest() {
         style={{
           display: "flex",
           width: "100%",
-
-          //   height: "100%",
         }}
         renderTrackVertical={(props) => (
           <div {...props} className="track-vertical" />
@@ -510,8 +560,8 @@ export default function CreateTest() {
           <div {...props} className="thumb-vertical" />
         )}
       >
-        <div style={{ marginLeft: 30, marginRight: 30 }}>
-          {questions.map((item) => (
+        <div style={{ paddingLeft: 30, paddingRight: 30, paddingTop: 10 }}>
+          {questionAdded.map((item, index) => (
             <Box
               style={{
                 display: "flex",
@@ -520,7 +570,7 @@ export default function CreateTest() {
                 justifyContent: "center",
                 height: 60,
                 width: "100%",
-                marginTop: 30,
+                marginBottom: 30,
                 borderRadius: 14,
               }}
               boxShadow={5}
@@ -541,7 +591,7 @@ export default function CreateTest() {
                     textAlign: "center",
                   }}
                 >
-                  {item.number}
+                  {index + 1}
                 </Typography>
                 <Typography
                   style={{
@@ -552,7 +602,7 @@ export default function CreateTest() {
                     textTransform: "capitalize",
                   }}
                 >
-                  {item.type}
+                  {item.questionType}
                 </Typography>
                 <Typography
                   style={{
@@ -572,7 +622,7 @@ export default function CreateTest() {
                     textAlign: "center",
                   }}
                 >
-                  {item.score}
+                  {item.points}
                 </Typography>
                 <Typography
                   style={{
@@ -582,7 +632,7 @@ export default function CreateTest() {
                     textAlign: "center",
                   }}
                 >
-                  {item.level}
+                  {Displaylevel(item.level)}
                 </Typography>
                 <div
                   style={{
@@ -592,12 +642,31 @@ export default function CreateTest() {
                   }}
                 >
                   <IconButton>
-                    <EditIcon style={{ color: "black" }} />
+                    <EditIcon style={{ color: "black" }} onClick={() => {}} />
                   </IconButton>
                   <IconButton>
-                    <FileCopyIcon style={{ color: "black" }} />
+                    <FileCopyIcon
+                      style={{ color: "black" }}
+                      onClick={() => {
+                        dispatch(
+                          addQuestion({
+                            question: item.question,
+                            answers: item.answers,
+                            points: item.points,
+                            duration: item.duration,
+                            level: item.level,
+                            questionType: "Choix Multiple",
+                          })
+                        );
+                      }}
+                    />
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      handleOpenDeleteModal();
+                      setSelectedItem(index);
+                    }}
+                  >
                     <DeleteIcon style={{ color: "black" }} />
                   </IconButton>
                 </div>
@@ -650,6 +719,15 @@ export default function CreateTest() {
           className={classes.modal}
         >
           {testModal}
+        </Modal>
+        <Modal
+          open={openDeleteModal}
+          onClose={handleCloseDeleteModal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          className={classes.modal}
+        >
+          {deleteModal}
         </Modal>
       </div>
     </div>

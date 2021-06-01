@@ -25,7 +25,7 @@ export default function Header(props) {
     history.push("/prices");
   }
   function handleClickHome() {
-    history.push("/home");
+    history.push("/");
   }
   function handleClickFeatures() {
     history.push("/features");

@@ -1,5 +1,5 @@
 import { Button, SwipeableDrawer, withStyles } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import Scrollbars from "react-custom-scrollbars";
 import CustomBar from "../../../component/custom-bar";
 import SearchSortFilter from "../../../component/searchsortfilter";
@@ -7,6 +7,7 @@ import { Box, Typography } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Rating from "@material-ui/lab/Rating";
 import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
+import "./style.css";
 const StyledRating = withStyles({
   iconFilled: {
     color: "#008288",
@@ -16,10 +17,10 @@ const StyledRating = withStyles({
   },
 })(Rating);
 export default function DashboardCandidates() {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     right: false,
   });
-  const [drawerProfile, setDrawerProfile] = React.useState(false);
+  const [drawerProfile, setDrawerProfile] = useState(false);
 
   const defaultProps = {
     bgcolor: "background.paper",
@@ -62,68 +63,22 @@ export default function DashboardCandidates() {
   };
 
   const candidateDrawer = (anchor) => (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        width: 579,
-        borderTopLeftRadius: 50,
-        borderBottomLeftRadius: 50,
-      }}
-    >
+    <div className="drawer_main_container">
       <CancelIcon
         onClick={toggleDrawer(anchor, false)}
-        style={{
-          position: "absolute",
-          color: "white",
-          top: 16,
-          left: 14,
-          fontSize: 30,
-          cursor: "pointer",
-        }}
+        id="cancelIcon_drawer"
       />
 
-      <img
-        src="../rectangle-drawer.png"
-        style={{ height: "100%", width: 60 }}
-        alt=""
-      />
-      <div
-        style={{
-          // backgroundColor: "red",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-        onKeyDown={toggleDrawer(anchor, false)}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
-            marginTop: 15,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
+      <img src="../rectangle-drawer.png" id="rectangle-drawer" alt="" />
+      <div className="drawer_container" onKeyDown={toggleDrawer(anchor, false)}>
+        <div className="candidateDrawer_header">
+          <div className="candidateDrawer_name_container">
             <img src="../hairstyle-logo.png" alt="hairStryle" />
-            <Typography
-              variant="h5"
-              style={{ fontWeight: "bold", marginLeft: 15 }}
-            >
+            <Typography variant="h5" id="candidateDrawer_name">
               Mehdi Moujahed
             </Typography>
           </div>
-          <Typography
-            style={{
-              fontWeight: "900",
-              fontSize: 13,
-              textAlign: "center",
-              marginRight: 15,
-            }}
-          >
+          <Typography id="betterThan_text">
             Mieux que <br />
             <Typography
               color="primary"
@@ -135,45 +90,15 @@ export default function DashboardCandidates() {
             des développeurs
           </Typography>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            marginTop: 30,
-          }}
-        >
+        <div className="candidateDrawer_second_container">
           <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="../react-logo.png" alt=""/>
-            <p style={{ fontWeight: "bold", fontSize: 22 }}>React JS</p>
+            <img src="../react-logo.png" alt="" />
+            <p id="candidateDrawer_technology">React JS</p>
           </div>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              height: 300,
-              width: 466,
-              //   alignSelf: "center",
-              borderRadius: 15,
-              marginLeft: 15,
-            }}
-            boxShadow={5}
-          >
+          <Box className="candidateDrawer_box" boxShadow={5}>
             {[1, 2, 3, 4].map(() => (
-              <div
-                style={{
-                  display: "flex",
-                  // alignItems: "center",
-                  justifyContent: "space-between",
-                  marginLeft: 30,
-                  marginRight: 30,
-                  marginTop: 30,
-                }}
-              >
-                <Typography
-                  style={{ fontSize: 17, marginRight: 35, fontWeight: "bold" }}
-                  color="primary"
-                >
+              <div className="candidateDrawer_box_container">
+                <Typography id="candidateDrawer_box_title" color="primary">
                   Manipluer le DOM
                 </Typography>
                 <Box borderColor="transparent">
@@ -184,7 +109,6 @@ export default function DashboardCandidates() {
                     getLabelText={(value) =>
                       `${value} Heart${value !== 1 ? "s" : ""}`
                     }
-                    // precision={0.5}
                     icon={<CircleIcon fontSize="inherit" />}
                   />
                 </Box>
@@ -194,122 +118,42 @@ export default function DashboardCandidates() {
               </div>
             ))}
           </Box>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 50,
-              marginLeft: 15,
-              marginRight: 50,
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <Typography style={{ fontSize: 18, fontWeight: "900" }}>
+          <div className="candidateDrawer_score_container">
+            <div id="candidateDrawer_score">
+              <Typography id="candidateDrawer_score_font">
                 Note du candidat
               </Typography>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography
-                  color="primary"
-                  style={{ fontSize: 18, fontWeight: "900" }}
-                >
+              <div className="candidateDrawer_score_value">
+                <Typography id="candidateDrawer_score_font" color="primary">
                   280
                 </Typography>
-                {/* <Typography style={{ fontSize: 20, fontWeight: "900" }}>
-                  /
-                </Typography> */}
-                <Typography style={{ fontSize: 18, fontWeight: "900" }}>
-                  / 240
-                </Typography>
-                <div
-                  style={{
-                    height: 45,
-                    width: 45,
-                    borderRadius: 30,
-                    backgroundColor: "#008288",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginLeft: 20,
-                  }}
-                >
-                  <Typography
-                    color="secondary"
-                    style={{ fontWeight: "bold", fontSize: 20 }}
-                  >
+                <Typography id="candidateDrawer_score_font">/ 240</Typography>
+                <div id="candidate_score">
+                  <Typography color="secondary" id="candidate_score_value">
                     70%
                   </Typography>
                 </div>
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <Typography style={{ fontSize: 18, fontWeight: "900" }}>
+            <div id="candidateDrawer_score">
+              <Typography id="candidateDrawer_score_font">
                 Durée passée
               </Typography>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginTop: 13,
-                  justifyContent: "center",
-                }}
-              >
-                <Typography
-                  color="primary"
-                  style={{ fontSize: 18, fontWeight: "900" }}
-                >
+              <div id="test_duration_container">
+                <Typography color="primary" id="candidateDrawer_score_font">
                   1h
                 </Typography>
-                {/* <Typography style={{ fontSize: 20, fontWeight: "900" }}>
-                  /
-                </Typography> */}
-                <Typography style={{ fontSize: 18, fontWeight: "900" }}>
-                  / 1h30
-                </Typography>
+                <Typography id="candidateDrawer_score_font">/ 1h30</Typography>
               </div>
             </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 50,
-              marginRight: 44,
-              marginLeft: 15,
-            }}
-          >
-            <Button
-              variant="outlined"
-              style={{
-                color: "white",
-                backgroundColor: "#008288",
-                width: 200,
-                height: 48,
-                borderRadius: 14,
-                textTransform: "none",
-                fontWeight: "bold",
-                fontSize: 16,
-              }}
-            >
+          <div className="candidateDrawer_button_container">
+            <Button variant="outlined" id="candidateDrawer_button">
               Voir les réponses
             </Button>
             <Button
               variant="outlined"
-              style={{
-                color: "white",
-                backgroundColor: "#008288",
-                width: 200,
-                height: 48,
-                borderRadius: 14,
-                textTransform: "none",
-                fontWeight: "bold",
-                fontSize: 16,
-              }}
+              id="candidateDrawer_button"
               onClick={candidateProfileHandler}
             >
               Profil du candidat
@@ -321,38 +165,13 @@ export default function DashboardCandidates() {
   );
 
   const profileDrawer = (anchor) => (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        width: 579,
-        borderTopLeftRadius: 50,
-        borderBottomLeftRadius: 50,
-      }}
-    >
-      <CancelIcon
-        onClick={toggleDrawerProfile(false)}
-        style={{
-          position: "absolute",
-          color: "white",
-          top: 16,
-          left: 14,
-          fontSize: 30,
-          cursor: "pointer",
-        }}
-      />
+    <div className="drawer_main_container">
+      <CancelIcon onClick={toggleDrawerProfile(false)} id="cancelIcon_drawer" />
 
-      <img
-        src="../rectangle-drawer.png"
-        style={{ height: "100%", width: 60 }}
-        alt=""
-      />
+      <img src="../rectangle-drawer.png" id="rectangle-drawer" alt="" />
 
       <Scrollbars
-        style={{
-          display: "flex",
-          flex: 1,
-        }}
+        className="profileDrawer_scrollbar"
         renderTrackVertical={(props) => (
           <div {...props} className="track-vertical" />
         )}
@@ -361,98 +180,52 @@ export default function DashboardCandidates() {
         )}
       >
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
-          }}
+          className="drawer_container"
           onKeyDown={toggleDrawerProfile(false)}
         >
-          <div style={{ display: "flex", marginTop: 20 }}>
+          <div id="profileDrawer_header">
             <Box
               display="flex"
               justifyContent="center"
               borderColor="#008288"
               {...defaultProps}
-              style={{ borderRadius: 80 }}
+              id="profileDrawer_pic_box"
             >
               <img
+                id="profileDrawer_pic"
                 src="../me.jpg"
-                style={{ height: 100, width: 100, borderRadius: 50 }}
-                alt=""
+                alt="profile picture"
               />
             </Box>
           </div>
-          <Box
-            style={{
-              display: "flex",
-              width: "85%",
-              height: 160,
-              borderRadius: 15,
-              marginTop: 20,
-              flexDirection: "column",
-              justifyContent: "space-around",
-            }}
-            boxShadow={5}
-          >
-            <div
-              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
-            >
-              <Typography
-                variant="h5"
-                style={{ fontSize: 20, fontWeight: "bold" }}
-              >
+          <Box className="profileDrawer_candidate_box" boxShadow={5}>
+            <div className="profileDrawer_name_container">
+              <Typography variant="h5" id="profileDrawer_name_font">
                 Nom :
               </Typography>
-              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+              <Typography variant="h6" id="profileDrawer_lastName">
                 Moujahed
               </Typography>
             </div>
-            <div
-              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
-            >
-              <Typography
-                variant="h5"
-                style={{ fontSize: 20, fontWeight: "bold" }}
-              >
+            <div className="profileDrawer_name_container">
+              <Typography variant="h5" id="profileDrawer_name_font">
                 Prénom :
               </Typography>
-              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+              <Typography variant="h6" id="profileDrawer_lastName">
                 Mehdi
               </Typography>
             </div>
-            <div
-              style={{ display: "flex", marginLeft: 30, alignItems: "center" }}
-            >
-              <Typography
-                variant="h5"
-                style={{ fontSize: 20, fontWeight: "bold" }}
-              >
+            <div className="profileDrawer_name_container">
+              <Typography variant="h5" id="profileDrawer_name_font">
                 Adresse Mail :
               </Typography>
-              <Typography variant="h6" style={{ marginLeft: 10, fontSize: 18 }}>
+              <Typography variant="h6" id="profileDrawer_lastName">
                 moujahedmehdi@gmail.com
               </Typography>
             </div>
           </Box>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: 30,
-              width: "94%",
-              flex: 1,
-            }}
-          >
-            <Typography
-              style={{
-                fontSize: 22,
-                fontWeight: "bold",
-                alignSelf: "center",
-                marginBottom: 20,
-              }}
-            >
+          <div className="profilDrawer_testHistory">
+            <Typography id="profilDrawer_testHistory_title">
               Historique des tests
             </Typography>
 
@@ -475,13 +248,7 @@ export default function DashboardCandidates() {
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        marginTop: 30,
-      }}
-    >
+    <div className="candidate_main_container">
       <Scrollbars
         style={{
           display: "flex",
