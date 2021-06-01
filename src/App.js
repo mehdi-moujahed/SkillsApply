@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/login";
 import Home from "./pages/home";
 import Test from "./pages/test";
-import Pricing from "./pages/Price";
+import Pricing from "./pages/price";
 import Features from "./pages/features";
 import Dashboard from "./pages/dashboard";
 import ForgotPassword from "./pages/forgotPassword";

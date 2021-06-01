@@ -14,18 +14,31 @@ import { VisibilityOff } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
 import { ReactComponent as ErrorLogo } from "../../assets/svg/email-noverified.svg";
 import { ReactComponent as NotFoundLogo } from "../../assets/svg/not-found.svg";
-
 import "./style.css";
 import { Alert } from "@material-ui/lab";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  resetPasswordAPI,
+  setResetPasswordSuccessMsg,
+} from "../../store/action";
 export default function ResetPassword() {
   const axios = require("axios").default;
+
   let { token } = useParams();
+
   const [showPassword, setShowPassword] = useState("password");
   const [showVerifPassword, setShowVerifPassword] = useState("password");
   const [open, setOpen] = useState(false);
   const [openResendMail, setOpenResendMail] = useState(false);
   const [verifToken, setVerifToken] = useState(false);
   const [verifTime, setVerifTime] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
+  const dispatch = useDispatch();
+
+  const resetPasswordSuccessMsg = useSelector(
+    (state) => state.todos.resetPassword
+  );
 
   useEffect(() => {
     axios
@@ -41,6 +54,17 @@ export default function ResetPassword() {
         console.log("error", { error });
       });
   }, []);
+
+  useEffect(() => {
+    if (resetPasswordSuccessMsg !== "") {
+      setSuccessMsg(resetPasswordSuccessMsg);
+      setOpen(true);
+      dispatch(setResetPasswordSuccessMsg(""));
+    }
+    // return () => {
+    //   dispatch(setResetPasswordSuccessMsg(""));
+    // };
+  }, [resetPasswordSuccessMsg]);
 
   function handleClickPasswordIcon() {
     if (showPassword === "password") setShowPassword("text");
@@ -67,23 +91,9 @@ export default function ResetPassword() {
               <form
                 onSubmit={handleSubmit((data) => {
                   console.log("dataaa", data);
-                  axios
-                    .post(
-                      `http://127.0.0.1:8080/manager/confirmResetPassword/${token}`,
-                      {
-                        newPassword: data.password,
-                        confirmNewPassword: data.newPassword,
-                      }
-                    )
-                    .then(function (response) {
-                      if (response.status === 200) {
-                        console.log("reponse", response);
-                        setOpen(true);
-                      }
-                    })
-                    .catch(function (error) {
-                      console.log("error", { error });
-                    });
+                  dispatch(
+                    resetPasswordAPI(`confirmResetPassword/${token}`, data)
+                  );
                 })}
                 className="form_forgotPassword"
                 style={{ height: "50%", width: "75%" }}
@@ -237,7 +247,7 @@ export default function ResetPassword() {
                     </IconButton>
                   }
                 >
-                  Mot de passe changé avec succés
+                  {successMsg}
                 </Alert>
               </Collapse>
             </>
@@ -292,7 +302,7 @@ export default function ResetPassword() {
         )}
       </div>
       <div className="main_container">
-        <img src="../logo.png" id="logo_login" alt=""/>
+        <img src="../logo.png" id="logo_login" alt="" />
       </div>
     </div>
   );
