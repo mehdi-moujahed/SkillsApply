@@ -224,7 +224,7 @@ export default function CreateTest() {
             id="modal_button"
             style={{ marginTop: 20 }}
             onClick={() =>
-              history.push(`${path.replace("/addtest", "")}/qcmtest`)
+              history.push(`${path.replace("/addtest", "")}/qcmtest${questionType === 10 ? "?isQcm=true" : ""}`)
             }
           >
             Créer
@@ -644,7 +644,7 @@ export default function CreateTest() {
                   <IconButton
                     onClick={() => {
                       history.push(
-                        `${path.replace("/addtest", `/qcmtest?id=${index}`)}`
+                        `${path.replace("/addtest", `/qcmtest?id=${index}${item?.questionType === 10 ? "&isQcm=true" : ""}`)}`
                       );
                     }}
                   >

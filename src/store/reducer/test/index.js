@@ -25,8 +25,8 @@ export const testReducer = (state = initialState, action) => {
     case EDIT_QUESTION:
       return {
         ...state,
-        questions: state.questions.filter((item, index) =>
-          index !== action.index ? item : { ...action.payload }
+        questions: state.questions.map((item, index) =>
+          index === action.index ? action.payload : item  
         ),
       };
     default:

@@ -18,7 +18,7 @@ import { RemoveCircleOutline } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { addQuestion, editQuestion } from "../../../store/action";
 import { useHistory, useLocation, useRouteMatch } from "react-router";
-import InputMask from "react-input-mask";
+//import InputMask from "react-input-mask";
 import "./style.css";
 
 const useStyles = makeStyles(() => ({
@@ -56,18 +56,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function QcmTest(props) {
-  const { isQcm } = props;
 
-  const [state, setState] = useState({
-    addAnswer: [
-      { answer: "", state: true },
-      { answer: "", state: false },
-    ],
-    questionType: 10,
-    question: "",
-    points: 0,
-    duration: 0,
-  });
+  const [state, setState] = useState({});
 
   const dispatch = useDispatch();
 
@@ -78,7 +68,7 @@ export default function QcmTest(props) {
   const { path, url } = useRouteMatch();
 
   const id = new URLSearchParams(location.search).get("id");
-
+ const isQcm = new URLSearchParams(location.search).get("isQcm");
   const questionToEdit = useSelector(
     (state) => state.testReducer.questions[id]
   );
@@ -91,13 +81,26 @@ export default function QcmTest(props) {
         question: questionToEdit.question,
         points: questionToEdit.points,
         duration: questionToEdit.duration,
+        level:questionToEdit.level
+      });
+    } else {
+      setState({
+        addAnswer: [
+          { answer: "", state: true },
+          { answer: "", state: false },
+        ],
+        questionType: 10,
+        question: "",
+        points: 0,
+        duration: 0,
+        level:10
       });
     }
   }, []);
   const handleChange = (event, index) => {
     setState({
       ...state,
-      addAnswer: state.addAnswer.map((obj, indexMap) =>
+      addAnswer: state.addAnswer?.map((obj, indexMap) =>
         indexMap === index ? { ...obj, state: event.target.checked } : obj
       ),
     });
@@ -116,10 +119,10 @@ export default function QcmTest(props) {
             answers: state.addAnswer,
             points: state.points,
             duration: state.duration,
-            level: state.questionType,
-            questionType: "Choix Multiple",
+            level: state.level,
+            questionType: isQcm ? 10 : 20,
           },
-          id
+          parseInt(id)
         )
       );
     } else {
@@ -129,14 +132,13 @@ export default function QcmTest(props) {
           answers: state.addAnswer,
           points: state.points,
           duration: state.duration,
-          level: state.questionType,
-          questionType: "Choix Multiple",
+          level: state.level,
+          questionType: isQcm ? 10 : 20,
         })
       );
     }
     history.push(`${path.replace("/qcmtest", "/addtest")}`);
   };
-  console.log("id :", questionToEdit);
 
   const classes = useStyles();
 
@@ -169,7 +171,7 @@ export default function QcmTest(props) {
             className="qcm_qeustion"
           />
         </div>
-        {!isQcm ? (
+        {isQcm ? (
           <div style={{ marginLeft: 200 }}>
             <Typography
               variant="h6"
@@ -177,7 +179,7 @@ export default function QcmTest(props) {
             >
               Réponses :
             </Typography>
-            {state.addAnswer.map((item, index) => (
+            {state.addAnswer?.map((item, index) => (
               <div
                 style={{
                   display: "flex",
@@ -346,10 +348,10 @@ export default function QcmTest(props) {
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
-              value={state.questionType}
+              value={state?.level || 10}
               onChange={handleChangeQuestions}
               style={{ borderRadius: 17, width: 237 }}
-              name="questionType"
+              name="level"
             >
               <MenuItem value={10}>Niveau Débutant</MenuItem>
               <MenuItem value={20}>Niveau Intermédiare</MenuItem>

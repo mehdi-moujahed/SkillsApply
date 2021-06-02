@@ -73,9 +73,9 @@ export default function EmptyTest() {
   const selectPageQuestion = () => {
     switch (questionType) {
       case 10:
-        return "/qcmtest";
+        return "/qcmtest?isQcm=true";
       case 20:
-        return "/textQuestion";
+        return "/qcmtest";
       case 30:
         return "/programmation";
       case 40:
