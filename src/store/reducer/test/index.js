@@ -1,7 +1,7 @@
 import {
   ADD_QUESTION,
   DELETE_QUESTION,
-  UPDATE_QUESTION,
+  EDIT_QUESTION,
 } from "../../action/actionType";
 
 const initialState = {
@@ -22,11 +22,11 @@ export const testReducer = (state = initialState, action) => {
           (item, index) => index !== action.payload && item
         ),
       };
-    case UPDATE_QUESTION:
+    case EDIT_QUESTION:
       return {
         ...state,
         questions: state.questions.filter((item, index) =>
-          index !== action.payload ? item : { ...item, ...action.payload }
+          index !== action.index ? item : { ...action.payload }
         ),
       };
     default:

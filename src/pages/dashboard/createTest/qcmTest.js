@@ -9,15 +9,15 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { RemoveCircleOutline } from "@material-ui/icons";
-import { useDispatch } from "react-redux";
-import { addQuestion } from "../../../store/action";
-import { useHistory, useRouteMatch } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuestion, editQuestion } from "../../../store/action";
+import { useHistory, useLocation, useRouteMatch } from "react-router";
 import InputMask from "react-input-mask";
 import "./style.css";
 
@@ -73,8 +73,27 @@ export default function QcmTest(props) {
 
   const history = useHistory();
 
+  const location = useLocation();
+
   const { path, url } = useRouteMatch();
 
+  const id = new URLSearchParams(location.search).get("id");
+
+  const questionToEdit = useSelector(
+    (state) => state.testReducer.questions[id]
+  );
+
+  useEffect(() => {
+    if (id !== null) {
+      setState({
+        addAnswer: questionToEdit.answers,
+        questionType: 10,
+        question: questionToEdit.question,
+        points: questionToEdit.points,
+        duration: questionToEdit.duration,
+      });
+    }
+  }, []);
   const handleChange = (event, index) => {
     setState({
       ...state,
@@ -87,6 +106,37 @@ export default function QcmTest(props) {
   const handleChangeQuestions = (event) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
+
+  const finishHandler = () => {
+    if (id !== null) {
+      dispatch(
+        editQuestion(
+          {
+            question: state.question,
+            answers: state.addAnswer,
+            points: state.points,
+            duration: state.duration,
+            level: state.questionType,
+            questionType: "Choix Multiple",
+          },
+          id
+        )
+      );
+    } else {
+      dispatch(
+        addQuestion({
+          question: state.question,
+          answers: state.addAnswer,
+          points: state.points,
+          duration: state.duration,
+          level: state.questionType,
+          questionType: "Choix Multiple",
+        })
+      );
+    }
+    history.push(`${path.replace("/qcmtest", "/addtest")}`);
+  };
+  console.log("id :", questionToEdit);
 
   const classes = useStyles();
 
@@ -109,6 +159,7 @@ export default function QcmTest(props) {
           </Typography>
           <TextField
             id="outlined-multiline-static"
+            value={state.question}
             onChange={(event) => {
               setState({ ...state, question: event.target.value });
             }}
@@ -253,6 +304,7 @@ export default function QcmTest(props) {
             Points :
           </Typography>
           <TextField
+            value={state.points}
             type="number"
             onChange={(event) => {
               setState({ ...state, points: event.target.value });
@@ -273,6 +325,7 @@ export default function QcmTest(props) {
             Durée (en minutes) :
           </Typography>
           <TextField
+            value={state.duration}
             onChange={(event) => {
               setState({ ...state, duration: event.target.value });
             }}
@@ -308,19 +361,7 @@ export default function QcmTest(props) {
         <Button
           variant="outlined"
           id="finish_test_button"
-          onClick={() => {
-            dispatch(
-              addQuestion({
-                question: state.question,
-                answers: state.addAnswer,
-                points: state.points,
-                duration: state.duration,
-                level: state.questionType,
-                questionType: "Choix Multiple",
-              })
-            );
-            history.push(`${path.replace("/qcmtest", "/addtest")}`);
-          }}
+          onClick={() => finishHandler()}
         >
           Terminer
         </Button>

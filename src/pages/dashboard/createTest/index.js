@@ -641,8 +641,14 @@ export default function CreateTest() {
                     display: "flex",
                   }}
                 >
-                  <IconButton>
-                    <EditIcon style={{ color: "black" }} onClick={() => {}} />
+                  <IconButton
+                    onClick={() => {
+                      history.push(
+                        `${path.replace("/addtest", `/qcmtest?id=${index}`)}`
+                      );
+                    }}
+                  >
+                    <EditIcon style={{ color: "black" }} />
                   </IconButton>
                   <IconButton>
                     <FileCopyIcon

@@ -12,8 +12,10 @@ import QcmTest from "./createTest/qcmTest";
 
 export default function Tests() {
   let { path, url } = useRouteMatch();
+
   const location = useLocation();
-  console.log(location.pathname);
+
+  console.log(new URLSearchParams(location.search).get("id"));
 
   const displayTitle = () => {
     switch (location.pathname) {
