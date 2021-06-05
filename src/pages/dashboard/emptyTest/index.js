@@ -98,7 +98,7 @@ export default function EmptyTest() {
           flexDirection: "column",
         }}
         renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
+          <div {...props} id="track-scrollbar" className="track-vertical" />
         )}
         renderThumbVertical={(props) => (
           <div {...props} className="thumb-vertical" />

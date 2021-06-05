@@ -140,7 +140,7 @@ export default function DashboardHome() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", flex: 1 }}>
       <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button

@@ -7,4 +7,10 @@ export {
   resetPasswordAPI,
   setResetPasswordSuccessMsg,
 } from "./auth";
-export { addQuestion, deleteQuestion, editQuestion } from "./test";
+export {
+  addQuestion,
+  deleteQuestion,
+  editQuestion,
+  addTest,
+  setAddingTestSuccesMsg,
+} from "./test";

@@ -57,3 +57,6 @@
   align-self: center;
   margin-top: 47px;
 }
+#track-scrollbar-testModal {
+  bottom: 30px;
+}

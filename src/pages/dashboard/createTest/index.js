@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Collapse,
   IconButton,
   makeStyles,
   Modal,
@@ -10,7 +11,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import DeleteIcon from "@material-ui/icons/Delete";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyTest from "../emptyTest";
 import Scrollbars from "react-custom-scrollbars";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -22,7 +23,15 @@ import { Assignment } from "@material-ui/icons";
 import WarningIcon from "@material-ui/icons/Warning";
 import { useHistory, useRouteMatch } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { addQuestion, deleteQuestion } from "../../../store/action";
+import {
+  addQuestion,
+  addTest,
+  deleteQuestion,
+  setAddingTestSuccesMsg,
+} from "../../../store/action";
+import { clearTest } from "../../../store/action/test";
+import { Alert } from "@material-ui/lab";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -58,6 +67,8 @@ export default function CreateTest() {
 
   const [open, setOpen] = useState(false);
 
+  const [openAlert, setOpenAlert] = useState(false);
+
   const [openTestModal, setOpenTestModal] = useState(false);
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -72,7 +83,17 @@ export default function CreateTest() {
 
   const [selectedItem, setSelectedItem] = useState(0);
 
+  const [testName, setTestName] = useState("");
+
+  const [testDescription, setTestDescription] = useState("");
+
+  const [successMsg, setSuccessMsg] = useState("");
+
   const questionAdded = useSelector((state) => state.testReducer.questions);
+
+  const testAddedSuccesfully = useSelector(
+    (state) => state.testReducer.addTestSuccesMsg
+  );
 
   const dispatch = useDispatch();
 
@@ -83,6 +104,7 @@ export default function CreateTest() {
   const handleChangeLanguage = (event) => {
     setQuestionLanguage(event.target.value);
   };
+
   const handleChangeTechnology = (event) => {
     setTechnology(event.target.value);
   };
@@ -126,6 +148,54 @@ export default function CreateTest() {
     }
   };
 
+  const Displaytype = (questionType) => {
+    switch (questionType) {
+      case 10:
+        return "Question Choix Multiple";
+      case 20:
+        return "Text";
+      case 30:
+        return "Programmation";
+      case 40:
+        return "Correction du code";
+    }
+  };
+
+  const totalPoints = () => {
+    let testPoints = 0;
+    questionAdded.map((item) => {
+      testPoints += parseInt(item.points);
+    });
+    return testPoints;
+  };
+
+  const totalDuration = () => {
+    let testDuration = 0;
+    questionAdded.map((item) => {
+      testDuration += parseInt(item.duration);
+    });
+    return testDuration;
+  };
+
+  const calculLevel = () => {
+    let testLevel = 0;
+    questionAdded.map((item) => {
+      testLevel += item.level;
+    });
+    let x = Math.round(testLevel / questionAdded.length / 10);
+    let level = x * 10;
+    return Displaylevel(level);
+  };
+
+  useEffect(() => {
+    if (testAddedSuccesfully !== "") {
+      setSuccessMsg("Test Ajouté avec succés !");
+      setOpenAlert(true);
+      dispatch(clearTest());
+      dispatch(setAddingTestSuccesMsg(""));
+    }
+  }, [testAddedSuccesfully]);
+
   const questionModal = (
     <div className={classes.paper}>
       <div className="modal_header">
@@ -141,7 +211,7 @@ export default function CreateTest() {
           flexDirection: "column",
         }}
         renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
+          <div {...props} id="track-scrollbar" className="track-vertical" />
         )}
         renderThumbVertical={(props) => (
           <div {...props} className="thumb-vertical" />
@@ -224,7 +294,11 @@ export default function CreateTest() {
             id="modal_button"
             style={{ marginTop: 20 }}
             onClick={() =>
-              history.push(`${path.replace("/addtest", "")}/qcmtest${questionType === 10 ? "?isQcm=true" : ""}`)
+              history.push(
+                `${path.replace("/addtest", "")}/qcmtest${
+                  questionType === 10 ? "?isQcm=true" : ""
+                }`
+              )
             }
           >
             Créer
@@ -247,7 +321,6 @@ export default function CreateTest() {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-around",
-            marginTop: 35,
           }}
         >
           <div style={{ marginBottom: 30 }}>
@@ -258,6 +331,8 @@ export default function CreateTest() {
               id="outlined-multiline-static"
               variant="outlined"
               style={{ width: 465 }}
+              value={testName}
+              onChange={(event) => setTestName(event.target.value)}
             />
           </div>
           <div>
@@ -270,6 +345,8 @@ export default function CreateTest() {
               multiline
               variant="outlined"
               style={{ width: 465 }}
+              value={testDescription}
+              onChange={(event) => setTestDescription(event.target.value)}
             />
           </div>
           <Button
@@ -290,7 +367,11 @@ export default function CreateTest() {
             height: "80%",
           }}
           renderTrackVertical={(props) => (
-            <div {...props} className="track-vertical" />
+            <div
+              {...props}
+              id="track-scrollbar-testModal"
+              className="track-vertical"
+            />
           )}
           renderThumbVertical={(props) => (
             <div {...props} className="thumb-vertical" />
@@ -302,7 +383,6 @@ export default function CreateTest() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-around",
-              marginTop: 35,
             }}
           >
             <div style={{ marginBottom: 30 }}>
@@ -317,6 +397,7 @@ export default function CreateTest() {
                 variant="outlined"
                 style={{ width: 465 }}
                 disabled={true}
+                value={testName}
               />
             </div>
             <div>
@@ -332,6 +413,7 @@ export default function CreateTest() {
                 multiline
                 variant="outlined"
                 disabled={true}
+                value={testDescription}
                 style={{ width: 465 }}
               />
             </div>
@@ -344,20 +426,44 @@ export default function CreateTest() {
                 marginTop: 30,
               }}
             >
-              {[1, 2, 3].map(() => (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h6" style={{ fontWeight: "bold" }}>
-                    Points :
-                  </Typography>
-                  <Typography variant="subtitle1">120</Typography>
-                </div>
-              ))}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                  Points :
+                </Typography>
+                <Typography variant="subtitle1">{totalPoints()}</Typography>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                  Durée :
+                </Typography>
+                <Typography variant="subtitle1">
+                  {totalDuration()} min
+                </Typography>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="h6" style={{ fontWeight: "bold" }}>
+                  Difficulté :
+                </Typography>
+                <Typography variant="subtitle1">{calculLevel()}</Typography>
+              </div>
             </div>
             <div
               style={{
@@ -380,7 +486,15 @@ export default function CreateTest() {
                 variant="outlined"
                 color="primary"
                 id="modal_button"
-                // onClick={handleNextPageModal}
+                onClick={() => {
+                  dispatch(
+                    addTest("addTest", {
+                      testDescription,
+                      testName,
+                      questionAdded,
+                    })
+                  );
+                }}
                 style={{ marginTop: 50 }}
               >
                 Terminer
@@ -461,8 +575,6 @@ export default function CreateTest() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          //   height: "100%",
-          //   width: "100%",
           paddingLeft: 30,
           paddingRight: 30,
           paddingBottom: 20,
@@ -602,7 +714,7 @@ export default function CreateTest() {
                     textTransform: "capitalize",
                   }}
                 >
-                  {item.questionType}
+                  {Displaytype(item.questionType)}
                 </Typography>
                 <Typography
                   style={{
@@ -644,7 +756,12 @@ export default function CreateTest() {
                   <IconButton
                     onClick={() => {
                       history.push(
-                        `${path.replace("/addtest", `/qcmtest?id=${index}${item?.questionType === 10 ? "&isQcm=true" : ""}`)}`
+                        `${path.replace(
+                          "/addtest",
+                          `/qcmtest?id=${index}${
+                            item?.questionType === 10 ? "&isQcm=true" : ""
+                          }`
+                        )}`
                       );
                     }}
                   >
@@ -661,7 +778,7 @@ export default function CreateTest() {
                             points: item.points,
                             duration: item.duration,
                             level: item.level,
-                            questionType: "Choix Multiple",
+                            questionType: item.questionType,
                           })
                         );
                       }}
@@ -738,6 +855,27 @@ export default function CreateTest() {
       </div>
     </div>
   ) : (
-    <EmptyTest />
+    <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+      <Collapse in={openAlert}>
+        <Alert
+          severity="success"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpenAlert(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          {successMsg}
+        </Alert>
+      </Collapse>
+      <EmptyTest />
+    </div>
   );
 }

@@ -56,8 +56,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function QcmTest(props) {
-
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    level: 10,
+  });
 
   const dispatch = useDispatch();
 
@@ -68,7 +69,9 @@ export default function QcmTest(props) {
   const { path, url } = useRouteMatch();
 
   const id = new URLSearchParams(location.search).get("id");
- const isQcm = new URLSearchParams(location.search).get("isQcm");
+
+  const isQcm = new URLSearchParams(location.search).get("isQcm");
+
   const questionToEdit = useSelector(
     (state) => state.testReducer.questions[id]
   );
@@ -81,7 +84,7 @@ export default function QcmTest(props) {
         question: questionToEdit.question,
         points: questionToEdit.points,
         duration: questionToEdit.duration,
-        level:questionToEdit.level
+        level: questionToEdit.level,
       });
     } else {
       setState({
@@ -93,7 +96,7 @@ export default function QcmTest(props) {
         question: "",
         points: 0,
         duration: 0,
-        level:10
+        level: 10,
       });
     }
   }, []);
@@ -348,7 +351,7 @@ export default function QcmTest(props) {
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
-              value={state?.level || 10}
+              value={state.level}
               onChange={handleChangeQuestions}
               style={{ borderRadius: 17, width: 237 }}
               name="level"
@@ -365,7 +368,7 @@ export default function QcmTest(props) {
           id="finish_test_button"
           onClick={() => finishHandler()}
         >
-          Terminer
+          {id ? "Modifier" : "Terminer"}
         </Button>
       </div>
     </div>

@@ -15,3 +15,11 @@ export const ADD_QUESTION = "ADD_QUESTION";
 export const DELETE_QUESTION = "DELETE_QUESTION";
 
 export const EDIT_QUESTION = "EDIT_QUESTION";
+
+export const ADD_TEST = "ADD_TEST";
+
+export const ADD_TEST_SUCCESS_MSG = "ADD_TEST_SUCCESS_MSG";
+
+export const ADD_TEST_ERROR_MSG = "ADD_TEST_ERROR_MSG";
+
+export const CLEAR_TESTS = "CLEAR_TESTS";

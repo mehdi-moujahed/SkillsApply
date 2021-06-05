@@ -27,3 +27,6 @@
   align-items: center;
   margin-top: 70px;
 }
+#track-scrollbar {
+  bottom: 30px;
+}
