@@ -13,4 +13,5 @@ export {
   editQuestion,
   addTest,
   setAddingTestSuccesMsg,
+  getCreatedTest,
 } from "./test";

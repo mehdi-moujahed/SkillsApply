@@ -89,8 +89,8 @@ export default function QcmTest(props) {
     } else {
       setState({
         addAnswer: [
-          { answer: "", state: true },
-          { answer: "", state: false },
+          { answer: "", status: true },
+          { answer: "", status: false },
         ],
         questionType: 10,
         question: "",
@@ -218,8 +218,8 @@ export default function QcmTest(props) {
                     switchBase: classes.switch_base,
                     colorPrimary: classes.switch_primary,
                   }}
-                  color={item.state ? "primary" : "default"}
-                  checked={item.state}
+                  color={item.status ? "primary" : "default"}
+                  checked={item.status}
                   onChange={(event) => handleChange(event, index)}
                   name="checkedA"
                   // disabled={state.checkedB}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchSortFilter from "../../../component/searchsortfilter";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import StarIcon from "@material-ui/icons/Star";
@@ -6,6 +6,10 @@ import {
   AppBar,
   Box,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   SwipeableDrawer,
   Tab,
   Tabs,
@@ -19,21 +23,49 @@ import CustomBar from "../../../component/custom-bar";
 import { TabPanel } from "@material-ui/lab";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { useHistory, useRouteMatch } from "react-router";
+import { getCreatedTest } from "../../../store/action";
+import { useDispatch, useSelector } from "react-redux";
+import Pagination from "@material-ui/lab/Pagination";
 
 export default function DashboardTests() {
   let { path } = useRouteMatch();
 
   const history = useHistory();
 
+  const dispatch = useDispatch();
+
+  const testsCreated = useSelector((state) => state.testReducer.testsCreated);
+
+  const totalPagesTestsCreated = useSelector(
+    (state) => state.testReducer.pagination.totalPages
+  );
+
+  const currentPage = useSelector(
+    (state) => state.testReducer.pagination.currentPage
+  );
+
   const [state, setState] = useState({
     right: false,
+    testIndex: 0,
+    createdTestsNbr: 5,
   });
+
+  const pageSizes = [3, 6, 9];
 
   const [mainTab, setmainTab] = useState("one");
 
   const handleChange = (event, newValue) => {
     setmainTab(newValue);
   };
+
+  useEffect(() => {
+    dispatch(getCreatedTest("getCreatedTests", 0, 1));
+    console.log("tests crées :", testsCreated);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getCreatedTest("getCreatedTests", 0, state.createdTestsNbr));
+  }, [state.createdTestsNbr]);
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,7 +82,7 @@ export default function DashboardTests() {
           style={{
             display: "flex",
             width: "47vw",
-            height: "69vh",
+            height: "60vh",
           }}
           renderTrackVertical={(props) => (
             <div {...props} className="track-vertical" />
@@ -79,7 +111,6 @@ export default function DashboardTests() {
     ) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
@@ -104,7 +135,6 @@ export default function DashboardTests() {
           cursor: "pointer",
         }}
       />
-
       <img
         src="../rectangle-drawer.png"
         style={{ height: "100%", width: 60 }}
@@ -112,37 +142,30 @@ export default function DashboardTests() {
       />
       <div
         style={{
-          // backgroundColor: "red",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
         role="presentation"
-        // onClick={toggleDrawer(anchor, false)}
         onKeyDown={toggleDrawer(anchor, false)}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src="../react-logo.png" alt="" />
+          <img src="../react-logo.png" alt="test-logo" />
           <p style={{ fontSize: 36, paddingLeft: 25, fontWeight: "bold" }}>
-            React JS
+            {testsCreated[state.testIndex]?.name}
           </p>
         </div>
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            // marginLeft: 80,
           }}
         >
           <p style={{ fontSize: 30, fontWeight: "bold", marginBottom: 0 }}>
             Description :
           </p>
           <p style={{ fontSize: 20, fontWeight: "bold" }}>
-            React est une bibliothèque JavaScript libre développée par Facebook
-            depuis 2013. Le but principal de cette bibliothèque est de faciliter
-            la création d'application web monopage, via la création de
-            composants dépendant d'un état et générant une page HTML à chaque
-            changement d'état.
+            {testsCreated[state.testIndex]?.description}
           </p>
         </div>
 
@@ -191,7 +214,7 @@ export default function DashboardTests() {
             <div style={{ display: "flex", alignItems: "center" }}>
               <WatchLaterIcon />
               <Typography style={{ marginTop: 5, marginLeft: 5 }}>
-                1h 30min
+                {testsCreated[state.testIndex]?.duration}
               </Typography>
             </div>
           </div>
@@ -201,7 +224,9 @@ export default function DashboardTests() {
             </Typography>
             <div style={{ display: "flex", alignItems: "center" }}>
               <StarIcon />
-              <Typography style={{ marginTop: 5 }}>4/5</Typography>
+              <Typography style={{ marginTop: 5 }}>
+                {testsCreated[state.testIndex]?.rate}
+              </Typography>
             </div>
           </div>
         </div>
@@ -251,6 +276,35 @@ export default function DashboardTests() {
                 fontWeight: "bold",
               }}
             />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: 160,
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                style={{ color: "black", paddingRight: 10 }}
+              >
+                Tests par page
+              </Typography>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={state.createdTestsNbr}
+                onChange={(event) =>
+                  setState({
+                    ...state,
+                    createdTestsNbr: event.target.value,
+                  })
+                }
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+              </Select>
+            </div>
           </Tabs>
         </AppBar>
         <TabPanel value={mainTab} index="one">
@@ -267,18 +321,42 @@ export default function DashboardTests() {
           ))}
         </TabPanel>
         <TabPanel value={mainTab} index="two">
-          {[1, 2, 3, 4, 5, 6, 7].map(() => (
+          {testsCreated?.map((item, index) => (
             <CustomBar
-              testImg="../react-logo.png"
-              testName="React JS"
-              duration="1h 30min"
-              score="4/5"
+              testName={item.name}
+              duration={item.duration + " min"}
+              score={item.rate}
               buttonLabel="Afficher le test"
-              onClick={toggleDrawer("right", true)}
+              onClick={() => {
+                setState({
+                  right: true,
+                  testIndex: index,
+                });
+                console.log("testindex", state.testIndex);
+              }}
               testBar
             ></CustomBar>
           ))}
         </TabPanel>
+        <Pagination
+          className="pagination_container"
+          hidden={mainTab == "one" ? true : false}
+          count={mainTab == "two" ? totalPagesTestsCreated : 0}
+          page={currentPage + 1}
+          boundaryCount={1}
+          onChange={(event, value) => {
+            setState({ ...state, pageNumber: value - 1 });
+            dispatch(
+              getCreatedTest(
+                "getCreatedTests",
+                value - 1,
+                state.createdTestsNbr
+              )
+            );
+          }}
+          variant="outlined"
+          color="primary"
+        />
       </div>
       <div className="search_container">
         <div>
@@ -295,7 +373,9 @@ export default function DashboardTests() {
           id="add_new_test"
           variant="outlined"
           endIcon={<AddCircleIcon />}
-          onClick={() => history.push(`${path.replace("/tests", "")}/addtest`)}
+          onClick={() => {
+            history.push(`${path.replace("/tests", "")}/addtest`);
+          }}
         >
           Ajouter un nouveau test
         </Button>

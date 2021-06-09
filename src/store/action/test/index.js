@@ -5,6 +5,7 @@ import {
   ADD_TEST_SUCCESS_MSG,
   ADD_TEST_ERROR_MSG,
   CLEAR_TESTS,
+  ADD_CREATED_TESTS,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -17,6 +18,11 @@ export const editQuestion = (payload, index) => ({
   type: EDIT_QUESTION,
   payload,
   index,
+});
+
+export const setCreatedTests = (payload) => ({
+  type: ADD_CREATED_TESTS,
+  payload,
 });
 
 export const setAddingTestSuccesMsg = (payload) => ({
@@ -50,6 +56,24 @@ export const addTest = (url, form) => {
       })
       .catch(function (error) {
         dispatch(setAddingTestErrorMsg(error.response.data.message));
+      });
+  };
+};
+
+export const getCreatedTest = (url, page, pageSize) => {
+  return (dispatch) => {
+    axios
+      .get(
+        `http://127.0.0.1:8080/manager/${url}/60a79878a0784e4240d4a619?page=${page}&size=${pageSize}`
+      )
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log("reponse", response);
+          dispatch(setCreatedTests(response.data));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur", { error });
       });
   };
 };
