@@ -13,7 +13,6 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { VisibilityOff } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
 import { ReactComponent as ErrorLogo } from "../../assets/svg/email-noverified.svg";
-import { ReactComponent as NotFoundLogo } from "../../assets/svg/not-found.svg";
 import "./style.css";
 import { Alert } from "@material-ui/lab";
 import { useDispatch, useSelector } from "react-redux";
@@ -61,9 +60,6 @@ export default function ResetPassword() {
       setOpen(true);
       dispatch(setResetPasswordSuccessMsg(""));
     }
-    // return () => {
-    //   dispatch(setResetPasswordSuccessMsg(""));
-    // };
   }, [resetPasswordSuccessMsg]);
 
   function handleClickPasswordIcon() {
@@ -287,7 +283,12 @@ export default function ResetPassword() {
           )
         ) : (
           <div className="not_found_container">
-            <NotFoundLogo id="not_found_svg" />
+            <img
+              src="../not-found.png"
+              alt="not-found-img"
+              id="not_found_svg"
+            />
+            {/* <NotFoundLogo id="not_found_svg" /> */}
             <Typography variant="h6" id="not_found_title">
               Il semble que la page n'existe plus
             </Typography>

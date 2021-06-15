@@ -14,4 +14,5 @@ export {
   addTest,
   setAddingTestSuccesMsg,
   getCreatedTest,
+  getAvailablleTest,
 } from "./test";

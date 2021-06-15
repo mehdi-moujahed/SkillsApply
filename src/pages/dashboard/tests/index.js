@@ -23,9 +23,11 @@ import CustomBar from "../../../component/custom-bar";
 import { TabPanel } from "@material-ui/lab";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { useHistory, useRouteMatch } from "react-router";
-import { getCreatedTest } from "../../../store/action";
+import { getAvailablleTest, getCreatedTest } from "../../../store/action";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 import Pagination from "@material-ui/lab/Pagination";
+import { setAvailablesTests } from "../../../store/action/test";
 
 export default function DashboardTests() {
   let { path } = useRouteMatch();
@@ -36,6 +38,36 @@ export default function DashboardTests() {
 
   const testsCreated = useSelector((state) => state.testReducer.testsCreated);
 
+  const availableTests = useSelector(
+    (state) => state.testReducer.availableTests
+  );
+
+  const [testName, setTestName] = useState("");
+
+  const [testAvailableName, setTestAvailableName] = useState("");
+
+  const [timeFilter, setTimeFilter] = useState(10);
+
+  const [timeFilterAvailable, setTimeFilterAvailable] = useState(10);
+
+  const [testLevel, setTestLevel] = useState("10");
+
+  const [testLevelAvailable, setTestLevelAvailable] = useState("10");
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [selectedDateAvailable, setSelectedDateAvailable] = useState(
+    new Date()
+  );
+
+  const [valueSlide, setValueSlide] = useState([0, 5]);
+
+  const [valueSlideAvailable, setValueSlideAvailable] = useState([0, 5]);
+
+  const [valueSlide2, setValueSlide2] = useState([0, 5]);
+
+  const [valueSlide2Available, setValueSlide2Available] = useState([0, 5]);
+
   const totalPagesTestsCreated = useSelector(
     (state) => state.testReducer.pagination.totalPages
   );
@@ -43,14 +75,21 @@ export default function DashboardTests() {
   const currentPage = useSelector(
     (state) => state.testReducer.pagination.currentPage
   );
+  const totalPagesAvailableTests = useSelector(
+    (state) => state.testReducer.availableTestsPagination.totalPages
+  );
+
+  const currentPageAvailableTests = useSelector(
+    (state) => state.testReducer.availableTestsPagination.currentPage
+  );
 
   const [state, setState] = useState({
     right: false,
     testIndex: 0,
     createdTestsNbr: 5,
+    createdTestsAvailableNbr: 5,
+    testAvailableIndex: 0,
   });
-
-  const pageSizes = [3, 6, 9];
 
   const [mainTab, setmainTab] = useState("one");
 
@@ -59,17 +98,52 @@ export default function DashboardTests() {
   };
 
   useEffect(() => {
-    dispatch(getCreatedTest("getCreatedTests", 0, 1));
-    console.log("tests crées :", testsCreated);
-  }, []);
-
-  useEffect(() => {
-    dispatch(getCreatedTest("getCreatedTests", 0, state.createdTestsNbr));
-  }, [state.createdTestsNbr]);
+    dispatch(
+      getAvailablleTest(
+        "getAvailableTests",
+        0,
+        state.createdTestsAvailableNbr,
+        testAvailableName,
+        timeFilterAvailable,
+        parseFloat(testLevelAvailable),
+        moment(selectedDateAvailable)
+          .add(1, "days")
+          .format("yyyy-MM-DD")
+          .toString(),
+        valueSlideAvailable[0],
+        valueSlideAvailable[1]
+      )
+    );
+    dispatch(
+      getCreatedTest(
+        "getCreatedTests",
+        0,
+        state.createdTestsNbr,
+        testName,
+        timeFilter,
+        parseFloat(testLevel),
+        moment(selectedDate).add(1, "days").format("yyyy-MM-DD").toString(),
+        valueSlide[0],
+        valueSlide[1]
+      )
+    );
+  }, [
+    state.createdTestsNbr,
+    testName,
+    timeFilter,
+    testLevel,
+    selectedDate,
+    valueSlide,
+    state.createdTestsAvailableNbr,
+    testAvailableName,
+    timeFilterAvailable,
+    testLevelAvailable,
+    selectedDateAvailable,
+    valueSlideAvailable,
+  ]);
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
       <div
         role="tabpanel"
@@ -152,7 +226,9 @@ export default function DashboardTests() {
         <div style={{ display: "flex", alignItems: "center" }}>
           <img src="../react-logo.png" alt="test-logo" />
           <p style={{ fontSize: 36, paddingLeft: 25, fontWeight: "bold" }}>
-            {testsCreated[state.testIndex]?.name}
+            {mainTab === "one"
+              ? availableTests[state.testAvailableIndex]?.name
+              : testsCreated[state.testIndex]?.name}
           </p>
         </div>
         <div
@@ -165,7 +241,9 @@ export default function DashboardTests() {
             Description :
           </p>
           <p style={{ fontSize: 20, fontWeight: "bold" }}>
-            {testsCreated[state.testIndex]?.description}
+            {mainTab === "one"
+              ? availableTests[state.testAvailableIndex]?.description
+              : testsCreated[state.testIndex]?.description}
           </p>
         </div>
 
@@ -214,7 +292,9 @@ export default function DashboardTests() {
             <div style={{ display: "flex", alignItems: "center" }}>
               <WatchLaterIcon />
               <Typography style={{ marginTop: 5, marginLeft: 5 }}>
-                {testsCreated[state.testIndex]?.duration}
+                {mainTab === "one"
+                  ? availableTests[state.testAvailableIndex]?.duration
+                  : testsCreated[state.testIndex]?.duration + " min"}
               </Typography>
             </div>
           </div>
@@ -225,7 +305,9 @@ export default function DashboardTests() {
             <div style={{ display: "flex", alignItems: "center" }}>
               <StarIcon />
               <Typography style={{ marginTop: 5 }}>
-                {testsCreated[state.testIndex]?.rate}
+                {mainTab === "one"
+                  ? availableTests[state.testAvailableIndex]?.rate
+                  : testsCreated[state.testIndex]?.rate}
               </Typography>
             </div>
           </div>
@@ -308,14 +390,19 @@ export default function DashboardTests() {
           </Tabs>
         </AppBar>
         <TabPanel value={mainTab} index="one">
-          {[1, 2, 3].map(() => (
+          {availableTests?.map((item, index) => (
             <CustomBar
-              testImg="../react-logo.png"
-              testName="React JS"
-              duration="1h 30min"
-              score="4/5"
+              testName={item.name}
+              duration={item.duration + " min"}
+              score={item.rate}
               buttonLabel="Afficher le test"
-              onClick={toggleDrawer("right", true)}
+              onClick={() => {
+                setState({
+                  ...state,
+                  right: true,
+                  testAvailableIndex: index,
+                });
+              }}
               testBar
             ></CustomBar>
           ))}
@@ -329,6 +416,7 @@ export default function DashboardTests() {
               buttonLabel="Afficher le test"
               onClick={() => {
                 setState({
+                  ...state,
                   right: true,
                   testIndex: index,
                 });
@@ -338,25 +426,63 @@ export default function DashboardTests() {
             ></CustomBar>
           ))}
         </TabPanel>
-        <Pagination
-          className="pagination_container"
-          hidden={mainTab == "one" ? true : false}
-          count={mainTab == "two" ? totalPagesTestsCreated : 0}
-          page={currentPage + 1}
-          boundaryCount={1}
-          onChange={(event, value) => {
-            setState({ ...state, pageNumber: value - 1 });
-            dispatch(
-              getCreatedTest(
-                "getCreatedTests",
-                value - 1,
-                state.createdTestsNbr
-              )
-            );
-          }}
-          variant="outlined"
-          color="primary"
-        />
+        {mainTab === "two" ? (
+          <Pagination
+            className="pagination_container"
+            count={totalPagesTestsCreated}
+            page={currentPage + 1}
+            boundaryCount={1}
+            onChange={(event, value) => {
+              setState({ ...state, pageNumber: value - 1 });
+              dispatch(
+                getCreatedTest(
+                  "getCreatedTests",
+                  value - 1,
+                  state.createdTestsNbr,
+                  testName,
+                  timeFilter,
+                  parseFloat(testLevel),
+                  moment(selectedDate)
+                    .add(1, "days")
+                    .format("yyyy-MM-DD")
+                    .toString(),
+                  valueSlide[0],
+                  valueSlide[1]
+                )
+              );
+            }}
+            variant="outlined"
+            color="primary"
+          />
+        ) : (
+          <Pagination
+            className="pagination_container"
+            count={totalPagesAvailableTests}
+            page={currentPageAvailableTests + 1}
+            boundaryCount={1}
+            onChange={(event, value) => {
+              setState({ ...state, pageNumber: value - 1 });
+              dispatch(
+                getAvailablleTest(
+                  "getAvailableTests",
+                  value - 1,
+                  state.createdTestsAvailableNbr,
+                  testAvailableName,
+                  timeFilterAvailable,
+                  parseFloat(testLevelAvailable),
+                  moment(selectedDateAvailable)
+                    .add(1, "days")
+                    .format("yyyy-MM-DD")
+                    .toString(),
+                  valueSlideAvailable[0],
+                  valueSlideAvailable[1]
+                )
+              );
+            }}
+            variant="outlined"
+            color="primary"
+          />
+        )}
       </div>
       <div className="search_container">
         <div>
@@ -380,6 +506,43 @@ export default function DashboardTests() {
           Ajouter un nouveau test
         </Button>
         <SearchSortFilter
+          testName={mainTab === "one" ? testAvailableName : testName}
+          setTestName={
+            mainTab === "one"
+              ? (value) => setTestAvailableName(value)
+              : (value) => setTestName(value)
+          }
+          timeFilter={mainTab === "one" ? timeFilterAvailable : timeFilter}
+          testLevel={mainTab === "one" ? testLevelAvailable : testLevel}
+          setTestLevel={
+            mainTab === "one"
+              ? (value) => setTestLevelAvailable(value)
+              : (value) => setTestLevel(value)
+          }
+          setTimeFilter={
+            mainTab === "one"
+              ? (value) => setTimeFilterAvailable(value)
+              : (value) => setTimeFilter(value)
+          }
+          selectedDate={
+            mainTab === "one" ? selectedDateAvailable : selectedDate
+          }
+          setSelectedDate={
+            mainTab === "one"
+              ? (value) => setSelectedDateAvailable(value)
+              : (value) => setSelectedDate(value)
+          }
+          valueSlide={mainTab === "one" ? valueSlide2Available : valueSlide2}
+          setValueSlide={
+            mainTab === "one"
+              ? (value) => setValueSlide2Available(value)
+              : (value) => setValueSlide2(value)
+          }
+          onChange={
+            mainTab === "one"
+              ? () => setValueSlideAvailable(valueSlide2Available)
+              : () => setValueSlide(valueSlide2)
+          }
           searchTitle="Rechercher votre test préféré"
           testPage
         />

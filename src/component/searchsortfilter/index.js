@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 import {
   Box,
@@ -28,17 +28,23 @@ function valuetext(value) {
 }
 
 export default function SearchSortFilter(props) {
-  const { searchTitle, testPage } = props;
-  const classes = useStyles();
+  const {
+    searchTitle,
+    testPage,
+    testName,
+    setTestName,
+    timeFilter,
+    setTimeFilter,
+    testLevel,
+    setTestLevel,
+    selectedDate,
+    setSelectedDate,
+    valueSlide,
+    setValueSlide,
+    onChange,
+  } = props;
 
-  const [value, setValue] = React.useState("debutant");
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("1997-01-26T21:11:54")
-  );
-  const [valueSlide, setValueSlide] = React.useState([0, 5]);
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const classes = useStyles();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -74,6 +80,8 @@ export default function SearchSortFilter(props) {
               id="outlined-basic"
               variant="outlined"
               style={{ width: "100%" }}
+              value={testName}
+              onChange={(event) => setTestName(event.target.value)}
             />
           </Box>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -105,11 +113,11 @@ export default function SearchSortFilter(props) {
             <Select
               labelId="demo-simple-select-label"
               className="filter_select"
-              value={20}
+              value={timeFilter}
+              onChange={(event) => setTimeFilter(event.target.value)}
             >
               <MenuItem value={10}>Les plus récents</MenuItem>
               <MenuItem value={20}>Les plus populaires</MenuItem>
-              <MenuItem value={30}>Les plus vus</MenuItem>
             </Select>
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -149,23 +157,23 @@ export default function SearchSortFilter(props) {
               <RadioGroup
                 aria-label="gender"
                 name="gender1"
-                value={value}
-                onChange={handleChange}
+                value={testLevel}
+                onChange={(event) => setTestLevel(event.target.value)}
                 row
                 className="radiogroup"
               >
                 <FormControlLabel
-                  value="debutant"
+                  value="10"
                   control={<Radio />}
                   label="Débutant"
                 />
                 <FormControlLabel
-                  value="intermediaire"
+                  value="20"
                   control={<Radio />}
                   label="Moyen"
                 />
                 <FormControlLabel
-                  value="professionnel"
+                  value="30"
                   control={<Radio />}
                   label="Difficle"
                 />
@@ -189,6 +197,7 @@ export default function SearchSortFilter(props) {
                 className="dashboard_slider"
                 value={valueSlide}
                 onChange={handleChangeSlider}
+                onChangeCommitted={onChange}
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
                 getAriaValueText={valuetext}

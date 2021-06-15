@@ -7,6 +7,7 @@ import {
   ADD_TEST_ERROR_MSG,
   CLEAR_TESTS,
   ADD_CREATED_TESTS,
+  ADD_AVAILABLE_TESTS,
 } from "../../action/actionType";
 
 const initialState = {
@@ -16,6 +17,8 @@ const initialState = {
   addTestErrorMsg: "",
   testsCreated: [],
   pagination: [],
+  availableTests: [],
+  availableTestsPagination: [],
 };
 
 export const testReducer = (state = initialState, action) => {
@@ -65,6 +68,17 @@ export const testReducer = (state = initialState, action) => {
         testsCreated: action.payload.testsCreated,
         pagination: {
           ...state.pagination,
+          totalPages: action.payload.totalPages,
+          totalItems: action.payload.totalItems,
+          currentPage: action.payload.currentPage,
+        },
+      };
+    case ADD_AVAILABLE_TESTS:
+      return {
+        ...state,
+        availableTests: action.payload.availableTests,
+        availableTestsPagination: {
+          ...state.availableTestsPagination,
           totalPages: action.payload.totalPages,
           totalItems: action.payload.totalItems,
           currentPage: action.payload.currentPage,
