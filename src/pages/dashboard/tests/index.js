@@ -9,11 +9,13 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Modal,
   Select,
   SwipeableDrawer,
   Tab,
   Tabs,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import "./style.css";
 import Scrollbars from "react-custom-scrollbars";
@@ -28,6 +30,32 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import Pagination from "@material-ui/lab/Pagination";
 import { setAvailablesTests } from "../../../store/action/test";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    width: 600,
+    height: 600,
+    borderRadius: 30,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 export default function DashboardTests() {
   let { path } = useRouteMatch();
@@ -35,6 +63,8 @@ export default function DashboardTests() {
   const history = useHistory();
 
   const dispatch = useDispatch();
+
+  const classes = useStyles();
 
   const testsCreated = useSelector((state) => state.testReducer.testsCreated);
 
@@ -68,6 +98,8 @@ export default function DashboardTests() {
 
   const [valueSlide2Available, setValueSlide2Available] = useState([0, 5]);
 
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   const totalPagesTestsCreated = useSelector(
     (state) => state.testReducer.pagination.totalPages
   );
@@ -97,6 +129,10 @@ export default function DashboardTests() {
     setmainTab(newValue);
   };
 
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
   useEffect(() => {
     dispatch(
       getAvailablleTest(
@@ -110,8 +146,8 @@ export default function DashboardTests() {
           .add(1, "days")
           .format("yyyy-MM-DD")
           .toString(),
-        valueSlideAvailable[0],
-        valueSlideAvailable[1]
+        valueSlideAvailable[0] - 0.1,
+        valueSlideAvailable[1] + 0.1
       )
     );
     dispatch(
@@ -123,8 +159,8 @@ export default function DashboardTests() {
         timeFilter,
         parseFloat(testLevel),
         moment(selectedDate).add(1, "days").format("yyyy-MM-DD").toString(),
-        valueSlide[0],
-        valueSlide[1]
+        valueSlide[0] - 0.1,
+        valueSlide[1] + 0.1
       )
     );
   }, [
@@ -141,6 +177,68 @@ export default function DashboardTests() {
     selectedDateAvailable,
     valueSlideAvailable,
   ]);
+
+  const deleteModal = (
+    <div
+      className={classes.paper}
+      style={{
+        width: 600,
+        height: 350,
+      }}
+    >
+      <div className="modal_header" style={{ backgroundColor: "red" }}>
+        <DeleteIcon color="secondary" />
+        <Typography id="modal_title">Suppression Test</Typography>
+      </div>
+      <div style={{ display: "flex" }}>
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>
+          Voulez-vous vraiment supprimer cet test ?
+        </Typography>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          variant="outlined"
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            borderColor: "red",
+            borderWidth: 1,
+          }}
+          onClick={() => handleCloseDeleteModal()}
+        >
+          Annuler
+        </Button>
+        <Button
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            backgroundColor: "red",
+            color: "white",
+          }}
+          onClick={() => {
+            // dispatch(deleteQuestion(selectedItem));
+            // setSelectedItem(0);
+            // handleCloseDeleteModal();
+          }}
+        >
+          Supprimer
+        </Button>
+      </div>
+    </div>
+  );
 
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -390,41 +488,61 @@ export default function DashboardTests() {
           </Tabs>
         </AppBar>
         <TabPanel value={mainTab} index="one">
-          {availableTests?.map((item, index) => (
-            <CustomBar
-              testName={item.name}
-              duration={item.duration + " min"}
-              score={item.rate}
-              buttonLabel="Afficher le test"
-              onClick={() => {
-                setState({
-                  ...state,
-                  right: true,
-                  testAvailableIndex: index,
-                });
-              }}
-              testBar
-            ></CustomBar>
-          ))}
+          {availableTests.length > 0 ? (
+            availableTests?.map((item, index) => (
+              <CustomBar
+                testName={item.name}
+                duration={item.duration + " min"}
+                score={item.rate}
+                buttonLabel="Afficher le test"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    right: true,
+                    testAvailableIndex: index,
+                  });
+                }}
+                testBar
+              ></CustomBar>
+            ))
+          ) : (
+            <div id="no_result_container">
+              <Typography color="primary" id="no_result_text">
+                Aucun test disponible !
+              </Typography>
+              <img src="../empty-tests.png" alt="empty tests" />
+            </div>
+          )}
         </TabPanel>
         <TabPanel value={mainTab} index="two">
-          {testsCreated?.map((item, index) => (
-            <CustomBar
-              testName={item.name}
-              duration={item.duration + " min"}
-              score={item.rate}
-              buttonLabel="Afficher le test"
-              onClick={() => {
-                setState({
-                  ...state,
-                  right: true,
-                  testIndex: index,
-                });
-                console.log("testindex", state.testIndex);
-              }}
-              testBar
-            ></CustomBar>
-          ))}
+          {testsCreated.length > 0 ? (
+            testsCreated?.map((item, index) => (
+              <CustomBar
+                testName={item.name}
+                duration={item.duration + " min"}
+                score={item.rate}
+                buttonLabel="Afficher le test"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    right: true,
+                    testIndex: index,
+                  });
+                  console.log("testindex", state.testIndex);
+                }}
+                testBar
+                editable
+                onClickDelete={() => setOpenDeleteModal(true)}
+              ></CustomBar>
+            ))
+          ) : (
+            <div id="no_result_container">
+              <Typography color="primary" id="no_result_text">
+                Aucun test disponible !
+              </Typography>
+              <img src="../empty-tests.png" alt="empty tests" />
+            </div>
+          )}
         </TabPanel>
         {mainTab === "two" ? (
           <Pagination
@@ -446,8 +564,8 @@ export default function DashboardTests() {
                     .add(1, "days")
                     .format("yyyy-MM-DD")
                     .toString(),
-                  valueSlide[0],
-                  valueSlide[1]
+                  valueSlide[0] - 0.1,
+                  valueSlide[1] + 0.1
                 )
               );
             }}
@@ -474,8 +592,8 @@ export default function DashboardTests() {
                     .add(1, "days")
                     .format("yyyy-MM-DD")
                     .toString(),
-                  valueSlideAvailable[0],
-                  valueSlideAvailable[1]
+                  valueSlideAvailable[0] - 0.1,
+                  valueSlideAvailable[1] + 0.1
                 )
               );
             }}
@@ -546,6 +664,17 @@ export default function DashboardTests() {
           searchTitle="Rechercher votre test préféré"
           testPage
         />
+      </div>
+      <div className="modal">
+        <Modal
+          open={openDeleteModal}
+          onClose={handleCloseDeleteModal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          className={classes.modal}
+        >
+          {deleteModal}
+        </Modal>
       </div>
     </div>
   );

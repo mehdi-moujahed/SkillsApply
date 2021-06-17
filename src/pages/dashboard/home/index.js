@@ -233,11 +233,15 @@ export default function DashboardHome() {
             width: "100%",
           }}
         >
-          {[1, 2, 3].map(() => (
+          {[
+            { label: "Candidats", number: 10 },
+            { label: "Tests Obtenus", number: 20 },
+            { label: "Tests Crées", number: 15 },
+          ].map((item, index) => (
             <Box
               style={{
-                height: 130,
-                width: 100,
+                minHeight: 130,
+                minWidth: 100,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -246,17 +250,19 @@ export default function DashboardHome() {
               }}
               boxShadow={5}
             >
-              <Typography style={{ fontSize: 55, fontWeight: "900" }}>
-                69
+              <Typography
+                style={{ fontSize: 55, fontWeight: "900", textAlign: "center" }}
+              >
+                {item.number}
               </Typography>
               <Typography
                 style={{
-                  fontSize: 15,
                   fontWeight: "bold",
                   textAlign: "center",
+                  fontSize: 13,
                 }}
               >
-                Tests Obtenus
+                {item.label}
               </Typography>
             </Box>
           ))}

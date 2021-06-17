@@ -5,3 +5,14 @@
 .tabAppBar .MuiTab-textColorInherit {
   opacity: 0.3;
 }
+#no_result_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+#no_result_text {
+  font-weight: bold;
+  font-size: 14px;
+}

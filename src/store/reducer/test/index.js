@@ -8,6 +8,9 @@ import {
   CLEAR_TESTS,
   ADD_CREATED_TESTS,
   ADD_AVAILABLE_TESTS,
+  SET_NEW_AVAILABLE_TEST,
+  SET_BEST_AVAILABLE_TEST,
+  SET_POPULAR_AVAILABLE_TEST,
 } from "../../action/actionType";
 
 const initialState = {
@@ -19,6 +22,9 @@ const initialState = {
   pagination: [],
   availableTests: [],
   availableTestsPagination: [],
+  newAvailableTests: [],
+  bestAvailableTests: [],
+  popularAvailableTests: [],
 };
 
 export const testReducer = (state = initialState, action) => {
@@ -83,6 +89,21 @@ export const testReducer = (state = initialState, action) => {
           totalItems: action.payload.totalItems,
           currentPage: action.payload.currentPage,
         },
+      };
+    case SET_NEW_AVAILABLE_TEST:
+      return {
+        ...state,
+        newAvailableTests: action.payload.availableTests,
+      };
+    case SET_BEST_AVAILABLE_TEST:
+      return {
+        ...state,
+        bestAvailableTests: action.payload.availableTests,
+      };
+    case SET_POPULAR_AVAILABLE_TEST:
+      return {
+        ...state,
+        popularAvailableTests: action.payload.availableTests,
       };
     default:
       return state;

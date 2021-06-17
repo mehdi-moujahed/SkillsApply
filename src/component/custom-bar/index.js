@@ -4,7 +4,10 @@ import Box from "@material-ui/core/Box";
 import React from "react";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import StarIcon from "@material-ui/icons/Star";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import "./style.css";
+import { IconButton } from "@material-ui/core";
 
 export default function CustomBar(props) {
   const {
@@ -16,6 +19,8 @@ export default function CustomBar(props) {
     onClick,
     testBar,
     width = "45vw",
+    editable,
+    onClickDelete,
   } = props;
 
   const defaultProps = {
@@ -24,11 +29,12 @@ export default function CustomBar(props) {
     border: 2,
   };
   return (
-    <div style={{ width: width }} className="tests_container">
+    <div style={{ maxWidth: width }} className="tests_container">
       <div
         style={{
           display: "flex",
           alignItems: "center",
+          maxWidth: "30%",
         }}
       >
         <Box
@@ -58,7 +64,7 @@ export default function CustomBar(props) {
         style={{
           display: "flex",
           alignItems: "center",
-          // marginLeft: 150,
+          maxWidth: "30%",
         }}
       >
         {testBar ? (
@@ -70,16 +76,57 @@ export default function CustomBar(props) {
           {duration}
         </p>
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", maxWidth: "30%" }}>
         {testBar ? (
           <StarIcon color="secondary" style={{ fontSize: 17 }} />
         ) : (
           <img src="../muscle-logo.png" alt="" />
         )}
-
-        {/* <StarIcon color="secondary" style={{ fontSize: 17 }} /> */}
         <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>{score}</p>
       </div>
+      {editable ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            maxWidth: "30%",
+          }}
+        >
+          <div
+            style={{
+              height: 35,
+              width: 35,
+              backgroundColor: "green",
+              borderRadius: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: 20,
+            }}
+          >
+            <IconButton>
+              <EditIcon style={{ color: "white" }} />
+            </IconButton>
+          </div>
+          <div
+            style={{
+              height: 35,
+              width: 35,
+              backgroundColor: "red",
+              borderRadius: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton onClick={onClickDelete}>
+              <DeleteIcon style={{ color: "white" }} />
+            </IconButton>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <Button variant="outlined" id="show_test_button" onClick={onClick}>
         {buttonLabel}
       </Button>

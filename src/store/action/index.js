@@ -15,4 +15,6 @@ export {
   setAddingTestSuccesMsg,
   getCreatedTest,
   getAvailablleTest,
+  getRecentAvailableTests,
+  getProfessionalAvailableTests,
 } from "./test";

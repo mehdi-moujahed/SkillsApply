@@ -123,19 +123,8 @@ export default function CandidateTab(props) {
             ></CustomBar>
           ))
         ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              marginTop: 20,
-            }}
-          >
-            <Typography
-              color="primary"
-              style={{ fontWeight: "bold", fontSize: 14 }}
-            >
+          <div id="no_result_container">
+            <Typography color="primary" id="no_result_text">
               Aucun Test Disponible !
             </Typography>
             <img src="../empty-tests.png" alt="empty tests" />
