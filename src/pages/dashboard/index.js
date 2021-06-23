@@ -6,9 +6,10 @@ import DashboardMenu from "../../component/menu-dashboard";
 import DashboardHome from "../dashboard/home";
 import "./style.css";
 import DashboardTests from "./tests";
-import DashboardCandidates from "./candidates";
+import DashboardTestPassed from "./testPassed";
 import CreateTest from "./createTest";
 import QcmTest from "./createTest/qcmTest";
+import DashboardCandidates from "./candidates";
 
 export default function Tests() {
   let { path, url } = useRouteMatch();
@@ -23,10 +24,12 @@ export default function Tests() {
         return "Bienvenue !";
       case "/dashboard/tests":
         return "Les Tests";
-      case "/dashboard/candidates":
-        return "Les Candidats";
+      case "/dashboard/testPassed":
+        return "Tests passés";
       case "/dashboard/addtest":
         return "Ajout Test";
+      case "/dashboard/candidates":
+        return "Candidats";
       case "/dashboard/qcmtest":
         return "Question Choix Multiple";
     }
@@ -41,6 +44,11 @@ export default function Tests() {
           <Switch>
             <Route exact path={path} component={DashboardHome} />
             <Route exact path={`${path}/tests`} component={DashboardTests} />
+            <Route
+              exact
+              path={`${path}/testPassed`}
+              component={DashboardTestPassed}
+            />
             <Route
               exact
               path={`${path}/candidates`}

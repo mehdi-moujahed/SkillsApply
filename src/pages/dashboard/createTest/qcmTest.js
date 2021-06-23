@@ -104,7 +104,7 @@ export default function QcmTest(props) {
     setState({
       ...state,
       addAnswer: state.addAnswer?.map((obj, indexMap) =>
-        indexMap === index ? { ...obj, state: event.target.checked } : obj
+        indexMap === index ? { ...obj, status: event.target.checked } : obj
       ),
     });
   };
@@ -256,7 +256,7 @@ export default function QcmTest(props) {
                     ...state,
                     addAnswer: [
                       ...state.addAnswer,
-                      { answer: "", state: false },
+                      { answer: "", status: false },
                     ],
                   })
                 }

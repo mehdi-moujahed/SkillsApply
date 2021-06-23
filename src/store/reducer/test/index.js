@@ -25,6 +25,7 @@ const initialState = {
   newAvailableTests: [],
   bestAvailableTests: [],
   popularAvailableTests: [],
+  paginationAllAvailableTests: [],
 };
 
 export const testReducer = (state = initialState, action) => {
@@ -77,6 +78,7 @@ export const testReducer = (state = initialState, action) => {
           totalPages: action.payload.totalPages,
           totalItems: action.payload.totalItems,
           currentPage: action.payload.currentPage,
+          allTestsCreated: action.payload.allTestsCreated,
         },
       };
     case ADD_AVAILABLE_TESTS:
@@ -94,6 +96,12 @@ export const testReducer = (state = initialState, action) => {
       return {
         ...state,
         newAvailableTests: action.payload.availableTests,
+        paginationAllAvailableTests: {
+          ...state.paginationAllAvailableTests,
+          totalPages: action.payload.totalPages,
+          totalItems: action.payload.totalItems,
+          currentPage: action.payload.currentPage,
+        },
       };
     case SET_BEST_AVAILABLE_TEST:
       return {

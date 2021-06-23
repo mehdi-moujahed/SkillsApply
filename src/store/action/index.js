@@ -18,3 +18,12 @@ export {
   getRecentAvailableTests,
   getProfessionalAvailableTests,
 } from "./test";
+
+export {
+  candidateRegister,
+  setAddingCandidateSuccesMsg,
+  setAddingCandidateErrorMsg,
+  getAllCandidates,
+  deleteCandidate,
+  setDeleteMSg,
+} from "./candidate";

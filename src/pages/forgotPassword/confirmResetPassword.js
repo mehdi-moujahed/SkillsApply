@@ -163,7 +163,7 @@ export default function ResetPassword() {
                     <TextField
                       id="newPassword"
                       className="mailForgotPassword"
-                      label="Resaisir nouveau mot de passe"
+                      label="Ressaisir votre nouveau mot de passe"
                       variant="filled"
                       type={showVerifPassword}
                       style={{ whiteSpace: "pre-line" }}

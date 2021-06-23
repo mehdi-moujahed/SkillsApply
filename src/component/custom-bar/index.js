@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@material-ui/core";
+import { Avatar, Button, Typography } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 
 import React from "react";
@@ -21,6 +21,8 @@ export default function CustomBar(props) {
     width = "45vw",
     editable,
     onClickDelete,
+    candidate,
+    candidateEmail,
   } = props;
 
   const defaultProps = {
@@ -34,7 +36,7 @@ export default function CustomBar(props) {
         style={{
           display: "flex",
           alignItems: "center",
-          maxWidth: "30%",
+          width: "50%%",
         }}
       >
         <Box
@@ -60,30 +62,40 @@ export default function CustomBar(props) {
           {testName}
         </p>
       </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          maxWidth: "30%",
-        }}
-      >
-        {testBar ? (
-          <WatchLaterIcon color="secondary" />
-        ) : (
-          <img src="../test-logo.png" alt="" />
-        )}
-        <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>
-          {duration}
-        </p>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", maxWidth: "30%" }}>
-        {testBar ? (
-          <StarIcon color="secondary" style={{ fontSize: 17 }} />
-        ) : (
-          <img src="../muscle-logo.png" alt="" />
-        )}
-        <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>{score}</p>
-      </div>
+      {!candidate ? (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              paddingRight: 40,
+            }}
+          >
+            {testBar ? (
+              <WatchLaterIcon color="secondary" />
+            ) : (
+              <img src="../test-logo.png" alt="" />
+            )}
+            <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>
+              {duration}
+            </p>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {testBar ? (
+              <StarIcon color="secondary" style={{ fontSize: 17 }} />
+            ) : (
+              <img src="../muscle-logo.png" alt="" />
+            )}
+            <p style={{ color: "white", fontSize: 13, paddingLeft: 5 }}>
+              {score}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <Typography variant="subtitle2" style={{ color: "white" }}>
+          {candidateEmail}
+        </Typography>
+      )}
       {editable ? (
         <div
           style={{

@@ -1,13 +1,73 @@
-import { Button, SwipeableDrawer, withStyles } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CloseIcon from "@material-ui/icons/Close";
+import {
+  Box,
+  Typography,
+  withStyles,
+  Button,
+  SwipeableDrawer,
+  TextField,
+  makeStyles,
+  Modal,
+  FormControl,
+  MenuItem,
+  Select,
+  IconButton,
+  Collapse,
+} from "@material-ui/core";
+import { Alert, Rating } from "@material-ui/lab";
+import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
 import Scrollbars from "react-custom-scrollbars";
 import CustomBar from "../../../component/custom-bar";
 import SearchSortFilter from "../../../component/searchsortfilter";
-import { Box, Typography } from "@material-ui/core";
-import CancelIcon from "@material-ui/icons/Cancel";
-import Rating from "@material-ui/lab/Rating";
-import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import Pagination from "@material-ui/lab/Pagination";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  candidateRegister,
+  deleteCandidate,
+  getAllCandidates,
+  setAddingCandidateErrorMsg,
+  setAddingCandidateSuccesMsg,
+} from "../../../store/action";
+import { useDispatch, useSelector } from "react-redux";
 import "./style.css";
+import moment from "moment";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { setDeleteMSg } from "../../../store/action";
+
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    width: 600,
+    height: 600,
+    borderRadius: 30,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 const StyledRating = withStyles({
   iconFilled: {
     color: "#008288",
@@ -16,11 +76,178 @@ const StyledRating = withStyles({
     color: "#008288",
   },
 })(Rating);
+
 export default function DashboardCandidates() {
+  const classes = useStyles();
+
   const [state, setState] = useState({
     right: false,
+    candidatesNbr: 5,
   });
+
+  const [formRegister, setFormRegister] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    birthDate: new Date(),
+    diploma: 10,
+  });
+
+  const candidateAddedSuccesfully = useSelector(
+    (state) => state.candidateReducer.addCandidateSuccessMsg
+  );
+
+  const candidateAddedError = useSelector(
+    (state) => state.candidateReducer.addCandidateErrorMsg
+  );
+
+  const candidates = useSelector((state) => state.candidateReducer.candidates);
+
+  const totalPages = useSelector(
+    (state) => state.candidateReducer.pagination.totalPages
+  );
+
+  const candidateDeleted = useSelector(
+    (state) => state.candidateReducer.deleteCandidateSuccesMsg
+  );
+
+  const currentPage = useSelector(
+    (state) => state.candidateReducer.pagination.currentPage
+  );
+
+  const handleChange = (prop) => (event) => {
+    setFormRegister({ ...formRegister, [prop]: event.target.value });
+  };
+
+  const dispatch = useDispatch();
+
   const [drawerProfile, setDrawerProfile] = useState(false);
+
+  const [candidateName, setCandidateName] = useState("");
+
+  const [diploma, setDiploma] = useState(50);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const [nextPage, setNextPage] = useState(true);
+
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const [candidateID, setCandidateID] = useState("");
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  const handleDateChange = (date) => {
+    setFormRegister({ ...formRegister, birthDate: date });
+  };
+
+  const deleteModal = (
+    <div
+      className={classes.paper}
+      style={{
+        width: 600,
+        height: 350,
+      }}
+    >
+      <div className="modal_header" style={{ backgroundColor: "red" }}>
+        <DeleteIcon color="secondary" />
+        <Typography id="modal_title">Suppression Candidat</Typography>
+      </div>
+      <div style={{ display: "flex" }}>
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>
+          Voulez-vous vraiment supprimer ce candidat ?
+        </Typography>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-around",
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          variant="outlined"
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            borderColor: "red",
+            borderWidth: 1,
+          }}
+          onClick={() => setOpenDeleteModal(false)}
+        >
+          Annuler
+        </Button>
+        <Button
+          style={{
+            fontWeight: "bold",
+            textTransform: "none",
+            width: 178,
+            height: 57,
+            borderRadius: 14,
+            backgroundColor: "red",
+            color: "white",
+          }}
+          onClick={() => {
+            dispatch(deleteCandidate("deleteCandidate", candidateID));
+            handleCloseDeleteModal();
+          }}
+        >
+          Supprimer
+        </Button>
+      </div>
+    </div>
+  );
+
+  useEffect(() => {
+    if (candidateAddedSuccesfully !== "") {
+      setOpenAlert(true);
+    }
+    if (candidateAddedError !== "") {
+      setOpenAlert(true);
+    }
+  }, [candidateAddedSuccesfully, candidateAddedError]);
+
+  useEffect(() => {
+    if (candidateDeleted !== "") {
+      dispatch(setDeleteMSg(""));
+    }
+  }, [candidateDeleted]);
+
+  useEffect(() => {
+    dispatch(
+      getAllCandidates(
+        "getAllCandidates",
+        "60a79878a0784e4240d4a619",
+        0,
+        state.candidatesNbr,
+        candidateName,
+        diploma,
+        moment(selectedDate).add(1, "days").format("yyyy-MM-DD").toString()
+      )
+    );
+  }, [
+    candidateAddedSuccesfully,
+    state.candidatesNbr,
+    candidateName,
+    diploma,
+    selectedDate,
+    candidateDeleted,
+  ]);
 
   const defaultProps = {
     bgcolor: "background.paper",
@@ -51,6 +278,161 @@ export default function DashboardCandidates() {
 
     setDrawerProfile(open);
   };
+
+  const candidateModal = (
+    <div className={classes.paper}>
+      <div className="modal_header">
+        <PersonAddIcon color="secondary" />
+        <Typography id="modal_title">Ajouter un Candidat</Typography>
+      </div>
+      {nextPage ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            height: "90%",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h6">Nom :</Typography>
+            <TextField
+              id="outlined-multiline-static"
+              variant="outlined"
+              value={formRegister.lastName}
+              onChange={handleChange("lastName")}
+              style={{ width: 465, paddingTop: 10 }}
+            />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h6">Prénom :</Typography>
+            <TextField
+              id="outlined-multiline-static"
+              variant="outlined"
+              value={formRegister.firstName}
+              onChange={handleChange("firstName")}
+              style={{ width: 465, paddingTop: 10 }}
+            />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h6">Email :</Typography>
+            <TextField
+              onChange={handleChange("email")}
+              id="outlined-multiline-static"
+              variant="outlined"
+              value={formRegister.email}
+              style={{ width: 465, paddingTop: 10 }}
+            />
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              style={{ marginBottom: 25 }}
+              color="primary"
+              id="modal_button"
+              onClick={() => setNextPage(false)}
+            >
+              Continuer
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-around",
+            height: "90%",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h6">Numéro de téléphone :</Typography>
+            <TextField
+              id="outlined-multiline-static"
+              variant="outlined"
+              value={formRegister?.phoneNumber}
+              onChange={handleChange("phoneNumber")}
+              style={{ width: 465, paddingTop: 10 }}
+            />
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          >
+            <Typography variant="h6">Date de naissance :</Typography>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                id="date-picker-dialog"
+                format="dd/MM/yyyy"
+                value={formRegister?.birthDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+                color="primary"
+              />
+            </MuiPickersUtilsProvider>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="h6">Niveau d'étude :</Typography>
+            <FormControl variant="outlined">
+              <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={formRegister?.diploma}
+                onChange={handleChange("diploma")}
+                style={{ width: 465, height: 50 }}
+              >
+                <MenuItem value={10}>Licence</MenuItem>
+                <MenuItem value={20}>Master</MenuItem>
+                <MenuItem value={30}>Ingénieur</MenuItem>
+                <MenuItem value={40}>Autre</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-around",
+            }}
+          >
+            <Button
+              variant="outlined"
+              id="edit_button"
+              color="primary"
+              style={{ marginBottom: 25 }}
+              onClick={() => setNextPage(true)}
+            >
+              Retour
+            </Button>
+            <Button
+              variant="outlined"
+              style={{ marginBottom: 25 }}
+              color="primary"
+              id="modal_button"
+              onClick={() => {
+                dispatch(candidateRegister("candidateSignup", formRegister));
+                setOpenModal(false);
+                setFormRegister({
+                  ...formRegister,
+                  firstName: "",
+                  lastName: "",
+                  email: "",
+                  phoneNumber: "",
+                  birthDate: new Date(),
+                  diploma: 10,
+                });
+              }}
+            >
+              Terminer
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   const candidateProfileHandler = () => {
     setState({ ...state, right: false });
@@ -191,11 +573,7 @@ export default function DashboardCandidates() {
               {...defaultProps}
               id="profileDrawer_pic_box"
             >
-              <img
-                id="profileDrawer_pic"
-                src="../me.jpg"
-                alt="profile picture"
-              />
+              <img id="profileDrawer_pic" src="../me.jpg" alt="profile-icon" />
             </Box>
           </div>
           <Box className="profileDrawer_candidate_box" boxShadow={5}>
@@ -249,34 +627,118 @@ export default function DashboardCandidates() {
 
   return (
     <div className="candidate_main_container">
-      <Scrollbars
-        style={{
-          display: "flex",
-          width: "47vw",
-          height: "75vh",
-        }}
-        renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
-        )}
-        renderThumbVertical={(props) => (
-          <div {...props} className="thumb-vertical" />
-        )}
-      >
-        <div className="tests_main_container">
-          {[1, 2, 3, 4, 5, 6].map(() => (
-            <CustomBar
-              testImg="../me.jpg"
-              testName="Mehdi Moujahed"
-              duration="1h 30min"
-              score="4/5"
-              buttonLabel="Plus de détails"
-              onClick={toggleDrawer("right", true)}
-              testBar={false}
-            ></CustomBar>
-          ))}
+      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+        <Collapse in={openAlert}>
+          <Alert
+            severity={candidateAddedSuccesfully !== "" ? "success" : "error"}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpenAlert(false);
+                  dispatch(setAddingCandidateErrorMsg(""));
+                  dispatch(setAddingCandidateSuccesMsg(""));
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {candidateAddedSuccesfully !== ""
+              ? candidateAddedSuccesfully
+              : candidateAddedError}
+          </Alert>
+        </Collapse>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            alignSelf: "flex-end",
+            paddingBottom: 10,
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            style={{ color: "black", paddingRight: 10 }}
+          >
+            Candidats par page
+          </Typography>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={state.candidatesNbr}
+            onChange={(event) =>
+              setState({
+                ...state,
+                candidatesNbr: event.target.value,
+              })
+            }
+          >
+            <MenuItem value={5}>5</MenuItem>
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+          </Select>
         </div>
-      </Scrollbars>
-      <div className="search_container">
+        <Scrollbars
+          style={{
+            display: "flex",
+            width: "47vw",
+            height: "65vh",
+          }}
+          renderTrackVertical={(props) => (
+            <div {...props} className="track-vertical" />
+          )}
+          renderThumbVertical={(props) => (
+            <div {...props} className="thumb-vertical" />
+          )}
+        >
+          <div className="tests_main_container">
+            {candidates.map((item, index) => (
+              <CustomBar
+                testName={item.firstName + " " + item.lastName}
+                buttonLabel="Plus de détails"
+                onClick={toggleDrawer("right", true)}
+                testBar={false}
+                editable
+                candidate
+                candidateEmail={item.email}
+                onClickDelete={() => {
+                  setOpenDeleteModal(true);
+                  setCandidateID(item.id);
+                }}
+              ></CustomBar>
+            ))}
+          </div>
+        </Scrollbars>
+        <Pagination
+          className="candidate_pagination_container"
+          count={totalPages}
+          page={currentPage + 1}
+          boundaryCount={1}
+          onChange={(event, value) => {
+            setState({ ...state, pageNumber: value - 1 });
+            dispatch(
+              getAllCandidates(
+                "getAllCandidates",
+                "60a79878a0784e4240d4a619",
+                value - 1,
+                state.candidatesNbr,
+                candidateName,
+                diploma,
+                moment(selectedDate)
+                  .add(1, "days")
+                  .format("yyyy-MM-DD")
+                  .toString()
+              )
+            );
+          }}
+          variant="outlined"
+          color="primary"
+        />
+      </div>
+      <div className="candidate_search_container">
         <div>
           <SwipeableDrawer
             anchor="right"
@@ -295,7 +757,39 @@ export default function DashboardCandidates() {
             {profileDrawer("right")}
           </SwipeableDrawer>
         </div>
-        <SearchSortFilter searchTitle="Rechercher Les candidats" />
+        <Button
+          id="add_new_test"
+          variant="outlined"
+          endIcon={<AddCircleIcon />}
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        >
+          Ajouter un nouveau candidat
+        </Button>
+        <SearchSortFilter
+          testName={candidateName}
+          setTestName={(value) => setCandidateName(value)}
+          timeFilter={diploma}
+          setTimeFilter={(value) => setDiploma(value)}
+          selectedDate={selectedDate}
+          setSelectedDate={(value) => setSelectedDate(value)}
+          searchTitle="Rechercher Les candidats"
+          candidate
+          width="90%"
+        />
+      </div>
+      <div className="modal">
+        <Modal open={openModal} onClose={handleClose} className={classes.modal}>
+          {candidateModal}
+        </Modal>
+        <Modal
+          open={openDeleteModal}
+          onClose={handleCloseDeleteModal}
+          className={classes.modal}
+        >
+          {deleteModal}
+        </Modal>
       </div>
     </div>
   );

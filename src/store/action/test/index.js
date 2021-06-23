@@ -148,8 +148,10 @@ export const getRecentAvailableTests = (url, page, pageSize, isRecent) => {
       )
       .then(function (response) {
         if (response.status === 200) {
-          if (isRecent) dispatch(setNewAvailablesTests(response.data));
-          else dispatch(setBestAvailablesTests(response.data));
+          if (isRecent) {
+            dispatch(setNewAvailablesTests(response.data));
+            console.log("available tests", { response });
+          } else dispatch(setBestAvailablesTests(response.data));
         }
       })
       .catch(function (error) {

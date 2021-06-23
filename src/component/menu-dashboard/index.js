@@ -8,6 +8,7 @@ import { Box, IconButton } from "@material-ui/core";
 import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
+
 export default function DashboardMenu() {
   const history = useHistory();
   let { path } = useRouteMatch();
@@ -22,7 +23,7 @@ export default function DashboardMenu() {
         <IconButton onClick={() => history.push(`${path}/tests`)}>
           <AssignmentOutlinedIcon color="secondary" id="menu_dashboard_icons" />
         </IconButton>
-        <IconButton onClick={() => history.push(`${path}/tests`)}>
+        <IconButton onClick={() => history.push(`${path}/testPassed`)}>
           <AssignmentTurnedInIcon color="secondary" id="menu_dashboard_icons" />
         </IconButton>
         <IconButton onClick={() => history.push(`${path}/candidates`)}>

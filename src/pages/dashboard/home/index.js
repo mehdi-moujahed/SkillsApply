@@ -7,7 +7,7 @@ import {
   Tabs,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import PropTypes from "prop-types";
 import "./style.css";
@@ -15,6 +15,8 @@ import TestTab from "./testTab";
 import TestPassedTab from "./testPassedTab";
 import { useHistory, useRouteMatch } from "react-router";
 import ReactApexChart from "react-apexcharts";
+import { useDispatch, useSelector } from "react-redux";
+import { getCreatedTest } from "../../../store/action";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,6 +58,9 @@ export default function DashboardHome() {
   const classes = useStyles();
 
   const history = useHistory();
+
+  const dispatch = useDispatch();
+
   let { path } = useRouteMatch();
 
   const [mainTab, setmainTab] = useState("one");
@@ -134,6 +139,17 @@ export default function DashboardHome() {
       },
     },
   });
+
+  const availableTestsNbr = useSelector(
+    (state) => state.testReducer.paginationAllAvailableTests.totalItems
+  );
+  const createdTestsNbr = useSelector(
+    (state) => state.testReducer.pagination.allTestsCreated
+  );
+
+  useEffect(() => {
+    dispatch(getCreatedTest("getCreatedTests", 0, 3, "", 10, 10, "", -0, 5.1));
+  }, []);
 
   const handleChange = (event, newValue) => {
     setmainTab(newValue);
@@ -235,8 +251,8 @@ export default function DashboardHome() {
         >
           {[
             { label: "Candidats", number: 10 },
-            { label: "Tests Obtenus", number: 20 },
-            { label: "Tests Crées", number: 15 },
+            { label: "Tests Obtenus", number: availableTestsNbr },
+            { label: "Tests Crées", number: createdTestsNbr },
           ].map((item, index) => (
             <Box
               style={{

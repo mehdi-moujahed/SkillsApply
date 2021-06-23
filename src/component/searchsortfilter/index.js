@@ -42,6 +42,8 @@ export default function SearchSortFilter(props) {
     valueSlide,
     setValueSlide,
     onChange,
+    candidate,
+    width,
   } = props;
 
   const classes = useStyles();
@@ -57,7 +59,7 @@ export default function SearchSortFilter(props) {
   return (
     <div>
       <Box className="search_sort_container" boxShadow={20}>
-        <div>
+        <div style={{ width: width }}>
           <div className="search_sort_title">
             <img
               src="../search-icon.png"
@@ -100,26 +102,52 @@ export default function SearchSortFilter(props) {
               Trier et Filtrer
             </p>
           </div>
-          <div className="search_sort_title">
-            <p
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                paddingRight: 20,
-              }}
-            >
-              Séléctionner :
-            </p>
-            <Select
-              labelId="demo-simple-select-label"
-              className="filter_select"
-              value={timeFilter}
-              onChange={(event) => setTimeFilter(event.target.value)}
-            >
-              <MenuItem value={10}>Les plus récents</MenuItem>
-              <MenuItem value={20}>Les plus populaires</MenuItem>
-            </Select>
-          </div>
+          {!candidate ? (
+            <div className="search_sort_title">
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  paddingRight: 20,
+                }}
+              >
+                Séléctionner :
+              </p>
+              <Select
+                labelId="demo-simple-select-label"
+                className="filter_select"
+                value={timeFilter}
+                onChange={(event) => setTimeFilter(event.target.value)}
+              >
+                <MenuItem value={10}>Les plus récents</MenuItem>
+                <MenuItem value={20}>Les plus populaires</MenuItem>
+              </Select>
+            </div>
+          ) : (
+            <div className="search_sort_title">
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  paddingRight: 20,
+                }}
+              >
+                Diplôme :
+              </p>
+              <Select
+                labelId="demo-simple-select-label"
+                className="filter_select"
+                value={timeFilter}
+                onChange={(event) => setTimeFilter(event.target.value)}
+              >
+                <MenuItem value={50}>Tous les diplômes</MenuItem>
+                <MenuItem value={10}>Licence</MenuItem>
+                <MenuItem value={20}>Master</MenuItem>
+                <MenuItem value={30}>Ingénieur</MenuItem>
+                <MenuItem value={40}>Autre</MenuItem>
+              </Select>
+            </div>
+          )}
           <div style={{ display: "flex", alignItems: "center" }}>
             <p
               style={{
@@ -182,32 +210,36 @@ export default function SearchSortFilter(props) {
           ) : (
             <p></p>
           )}
-          <div className="search_sort_title">
-            <p
-              style={{
-                fontWeight: "bold",
-                fontSize: 20,
-                paddingRight: 20,
-              }}
-            >
-              Note :
-            </p>
-            <div className={classes.root}>
-              <Slider
-                className="dashboard_slider"
-                value={valueSlide}
-                onChange={handleChangeSlider}
-                onChangeCommitted={onChange}
-                valueLabelDisplay="auto"
-                aria-labelledby="range-slider"
-                getAriaValueText={valuetext}
-                marks
-                step={1}
-                min={0}
-                max={5}
-              />
+          {!candidate ? (
+            <div className="search_sort_title">
+              <p
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  paddingRight: 20,
+                }}
+              >
+                Note :
+              </p>
+              <div className={classes.root}>
+                <Slider
+                  className="dashboard_slider"
+                  value={valueSlide}
+                  onChange={handleChangeSlider}
+                  onChangeCommitted={onChange}
+                  valueLabelDisplay="auto"
+                  aria-labelledby="range-slider"
+                  getAriaValueText={valuetext}
+                  marks
+                  step={1}
+                  min={0}
+                  max={5}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="search_sort_title"></div>
+          )}
         </div>
       </Box>
     </div>
