@@ -26,4 +26,5 @@ export {
   getAllCandidates,
   deleteCandidate,
   setDeleteMSg,
+  updateCandidateAPI,
 } from "./candidate";

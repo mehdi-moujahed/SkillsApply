@@ -3,6 +3,7 @@ import {
   ADD_CANDIDATE_ERROR_MSG,
   ADD_CANDIDATE_SUCCESS_MSG,
   DELETE_CANDIDATE,
+  UPDATE_CANDIDATE,
 } from "../../action/actionType";
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
   addCandidateErrorMsg: "",
   pagination: [],
   deleteCandidateSuccesMsg: "",
+  updateCandidateSuccesMsg: "",
 };
 
 export const candidateReducer = (state = initialState, action) => {
@@ -40,6 +42,11 @@ export const candidateReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteCandidateSuccesMsg: action.payload,
+      };
+    case UPDATE_CANDIDATE:
+      return {
+        ...state,
+        updateCandidateSuccesMsg: action.payload,
       };
     default:
       return state;

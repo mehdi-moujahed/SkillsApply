@@ -21,6 +21,7 @@ export default function CustomBar(props) {
     width = "45vw",
     editable,
     onClickDelete,
+    onClickEdit,
     candidate,
     candidateEmail,
   } = props;
@@ -116,7 +117,7 @@ export default function CustomBar(props) {
               marginRight: 20,
             }}
           >
-            <IconButton>
+            <IconButton onClick={onClickEdit}>
               <EditIcon style={{ color: "white" }} />
             </IconButton>
           </div>

@@ -36,12 +36,14 @@ import {
   getAllCandidates,
   setAddingCandidateErrorMsg,
   setAddingCandidateSuccesMsg,
+  updateCandidateAPI,
 } from "../../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.css";
 import moment from "moment";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { setDeleteMSg } from "../../../store/action";
+import { setUpdateMsg } from "../../../store/action/candidate";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -94,8 +96,32 @@ export default function DashboardCandidates() {
     diploma: 10,
   });
 
+  const [drawerProfile, setDrawerProfile] = useState(false);
+
+  const [candidateName, setCandidateName] = useState("");
+
+  const [diploma, setDiploma] = useState(50);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const [nextPage, setNextPage] = useState(true);
+
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const [candidateID, setCandidateID] = useState("");
+
+  const [candidateIndex, setCandidateIndex] = useState(null);
+
   const candidateAddedSuccesfully = useSelector(
     (state) => state.candidateReducer.addCandidateSuccessMsg
+  );
+
+  const candidateModifiedSuccesfully = useSelector(
+    (state) => state.candidateReducer.updateCandidateSuccesMsg
   );
 
   const candidateAddedError = useSelector(
@@ -116,36 +142,31 @@ export default function DashboardCandidates() {
     (state) => state.candidateReducer.pagination.currentPage
   );
 
-  const handleChange = (prop) => (event) => {
+  const handleChangeFormRegister = (prop) => (event) => {
     setFormRegister({ ...formRegister, [prop]: event.target.value });
   };
 
   const dispatch = useDispatch();
 
-  const [drawerProfile, setDrawerProfile] = useState(false);
-
-  const [candidateName, setCandidateName] = useState("");
-
-  const [diploma, setDiploma] = useState(50);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [openModal, setOpenModal] = useState(false);
-
-  const [nextPage, setNextPage] = useState(true);
-
-  const [openAlert, setOpenAlert] = useState(false);
-
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-
-  const [candidateID, setCandidateID] = useState("");
-
   const handleClose = () => {
     setOpenModal(false);
+    setFormRegister({
+      ...formRegister,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      birthDate: new Date(),
+      diploma: 10,
+    });
+    setNextPage(true);
+    setCandidateIndex(null);
+    setCandidateID(null);
   };
 
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);
+    setCandidateID(null);
   };
 
   const handleDateChange = (date) => {
@@ -226,7 +247,10 @@ export default function DashboardCandidates() {
     if (candidateDeleted !== "") {
       dispatch(setDeleteMSg(""));
     }
-  }, [candidateDeleted]);
+    if (candidateModifiedSuccesfully !== "") {
+      dispatch(setUpdateMsg(""));
+    }
+  }, [candidateDeleted, candidateModifiedSuccesfully]);
 
   useEffect(() => {
     dispatch(
@@ -247,7 +271,36 @@ export default function DashboardCandidates() {
     diploma,
     selectedDate,
     candidateDeleted,
+    candidateModifiedSuccesfully,
   ]);
+
+  const addCandidate = () => {
+    dispatch(candidateRegister("candidateSignup", formRegister));
+    setOpenModal(false);
+    setFormRegister({
+      ...formRegister,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      birthDate: new Date(),
+      diploma: 10,
+    });
+  };
+
+  const updateCandidate = () => {
+    dispatch(updateCandidateAPI("updateCandidate", candidateID, formRegister));
+    setOpenModal(false);
+    setFormRegister({
+      ...formRegister,
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      birthDate: new Date(),
+      diploma: 10,
+    });
+  };
 
   const defaultProps = {
     bgcolor: "background.paper",
@@ -301,7 +354,7 @@ export default function DashboardCandidates() {
               id="outlined-multiline-static"
               variant="outlined"
               value={formRegister.lastName}
-              onChange={handleChange("lastName")}
+              onChange={handleChangeFormRegister("lastName")}
               style={{ width: 465, paddingTop: 10 }}
             />
           </div>
@@ -311,14 +364,14 @@ export default function DashboardCandidates() {
               id="outlined-multiline-static"
               variant="outlined"
               value={formRegister.firstName}
-              onChange={handleChange("firstName")}
+              onChange={handleChangeFormRegister("firstName")}
               style={{ width: 465, paddingTop: 10 }}
             />
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="h6">Email :</Typography>
             <TextField
-              onChange={handleChange("email")}
+              onChange={handleChangeFormRegister("email")}
               id="outlined-multiline-static"
               variant="outlined"
               value={formRegister.email}
@@ -353,7 +406,7 @@ export default function DashboardCandidates() {
               id="outlined-multiline-static"
               variant="outlined"
               value={formRegister?.phoneNumber}
-              onChange={handleChange("phoneNumber")}
+              onChange={handleChangeFormRegister("phoneNumber")}
               style={{ width: 465, paddingTop: 10 }}
             />
           </div>
@@ -381,7 +434,7 @@ export default function DashboardCandidates() {
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={formRegister?.diploma}
-                onChange={handleChange("diploma")}
+                onChange={handleChangeFormRegister("diploma")}
                 style={{ width: 465, height: 50 }}
               >
                 <MenuItem value={10}>Licence</MenuItem>
@@ -412,21 +465,9 @@ export default function DashboardCandidates() {
               style={{ marginBottom: 25 }}
               color="primary"
               id="modal_button"
-              onClick={() => {
-                dispatch(candidateRegister("candidateSignup", formRegister));
-                setOpenModal(false);
-                setFormRegister({
-                  ...formRegister,
-                  firstName: "",
-                  lastName: "",
-                  email: "",
-                  phoneNumber: "",
-                  birthDate: new Date(),
-                  diploma: 10,
-                });
-              }}
+              onClick={candidateIndex !== null ? updateCandidate : addCandidate}
             >
-              Terminer
+              {candidateIndex !== null ? "Modifier" : "Terminer"}
             </Button>
           </div>
         </div>
@@ -707,6 +748,20 @@ export default function DashboardCandidates() {
                 onClickDelete={() => {
                   setOpenDeleteModal(true);
                   setCandidateID(item.id);
+                }}
+                onClickEdit={() => {
+                  setOpenModal(true);
+                  setCandidateIndex(index);
+                  setCandidateID(item.id);
+                  setFormRegister({
+                    ...formRegister,
+                    firstName: candidates[index]?.firstName,
+                    lastName: candidates[index]?.lastName,
+                    email: candidates[index]?.email,
+                    phoneNumber: candidates[index]?.phoneNumber,
+                    birthDate: candidates[index]?.birthDate,
+                    diploma: candidates[index]?.diploma,
+                  });
                 }}
               ></CustomBar>
             ))}

@@ -3,6 +3,7 @@ import {
   ADD_CANDIDATE_SUCCESS_MSG,
   ADD_CANDIDATE_ERROR_MSG,
   DELETE_CANDIDATE,
+  UPDATE_CANDIDATE,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -21,6 +22,10 @@ export const setCandidates = (payload) => ({
 });
 export const setDeleteMSg = (payload) => ({
   type: DELETE_CANDIDATE,
+  payload,
+});
+export const setUpdateMsg = (payload) => ({
+  type: UPDATE_CANDIDATE,
   payload,
 });
 
@@ -55,6 +60,7 @@ export const getAllCandidates = (url, id, page, size, email, diploma, date) => {
       });
   };
 };
+
 export const deleteCandidate = (url, id) => {
   return (dispatch) => {
     axios
@@ -66,6 +72,21 @@ export const deleteCandidate = (url, id) => {
       })
       .catch(function (error) {
         console.log("erreur lors du supression de candidat", { error });
+      });
+  };
+};
+
+export const updateCandidateAPI = (url, id, form) => {
+  return (dispatch) => {
+    axios
+      .patch(`http://127.0.0.1:8080/users/${url}/${id}`, form)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setUpdateMsg(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur lors du modification de candidat", { error });
       });
   };
 };
