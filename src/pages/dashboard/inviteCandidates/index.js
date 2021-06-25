@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import CancelIcon from "@material-ui/icons/Cancel";
 import CloseIcon from "@material-ui/icons/Close";
 import {
-  Box,
   Typography,
-  withStyles,
   Button,
-  SwipeableDrawer,
   TextField,
   makeStyles,
   Modal,
@@ -17,8 +13,7 @@ import {
   IconButton,
   Collapse,
 } from "@material-ui/core";
-import { Alert, Rating } from "@material-ui/lab";
-import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
+import { Alert } from "@material-ui/lab";
 import Scrollbars from "react-custom-scrollbars";
 import CustomBar from "../../../component/custom-bar";
 import SearchSortFilter from "../../../component/searchsortfilter";
@@ -32,18 +27,18 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import {
   candidateRegister,
-  deleteCandidate,
   getAllCandidates,
+  inviteCandidate,
   setAddingCandidateErrorMsg,
   setAddingCandidateSuccesMsg,
   updateCandidateAPI,
+  setInvitationMailErrorMsg,
+  setInvitationMailSuccessMsg,
 } from "../../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.css";
 import moment from "moment";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { setDeleteMSg } from "../../../store/action";
-import { setUpdateMsg } from "../../../store/action/candidate";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -70,22 +65,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StyledRating = withStyles({
-  iconFilled: {
-    color: "#008288",
-  },
-  iconHover: {
-    color: "#008288",
-  },
-})(Rating);
-
-export default function DashboardCandidates() {
+export default function InviteCandidates() {
   const classes = useStyles();
 
   const [state, setState] = useState({
     right: false,
     candidatesNbr: 5,
   });
+
+  const location = useLocation();
+
+  const testID = new URLSearchParams(location.search).get("id");
 
   const [formRegister, setFormRegister] = useState({
     firstName: "",
@@ -95,8 +85,6 @@ export default function DashboardCandidates() {
     birthDate: new Date(),
     diploma: 10,
   });
-
-  const [drawerProfile, setDrawerProfile] = useState(false);
 
   const [candidateName, setCandidateName] = useState("");
 
@@ -110,7 +98,7 @@ export default function DashboardCandidates() {
 
   const [openAlert, setOpenAlert] = useState(false);
 
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openAlertMail, setOpenAlertMail] = useState(false);
 
   const [candidateID, setCandidateID] = useState("");
 
@@ -120,8 +108,11 @@ export default function DashboardCandidates() {
     (state) => state.candidateReducer.addCandidateSuccessMsg
   );
 
-  const candidateModifiedSuccesfully = useSelector(
-    (state) => state.candidateReducer.updateCandidateSuccesMsg
+  const invitationMailSendSuccesfully = useSelector(
+    (state) => state.candidateReducer.invitationMailSuccessMsg
+  );
+  const invitationMailSendError = useSelector(
+    (state) => state.candidateReducer.invitationMailErrorMsg
   );
 
   const candidateAddedError = useSelector(
@@ -132,10 +123,6 @@ export default function DashboardCandidates() {
 
   const totalPages = useSelector(
     (state) => state.candidateReducer.pagination.totalPages
-  );
-
-  const candidateDeleted = useSelector(
-    (state) => state.candidateReducer.deleteCandidateSuccesMsg
   );
 
   const currentPage = useSelector(
@@ -164,75 +151,9 @@ export default function DashboardCandidates() {
     setCandidateID(null);
   };
 
-  const handleCloseDeleteModal = () => {
-    setOpenDeleteModal(false);
-    setCandidateID(null);
-  };
-
   const handleDateChange = (date) => {
     setFormRegister({ ...formRegister, birthDate: date });
   };
-
-  const deleteModal = (
-    <div
-      className={classes.paper}
-      style={{
-        width: 600,
-        height: 350,
-      }}
-    >
-      <div className="modal_header" style={{ backgroundColor: "red" }}>
-        <DeleteIcon color="secondary" />
-        <Typography id="modal_title">Suppression Candidat</Typography>
-      </div>
-      <div style={{ display: "flex" }}>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Voulez-vous vraiment supprimer ce candidat ?
-        </Typography>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-around",
-          marginBottom: 20,
-        }}
-      >
-        <Button
-          variant="outlined"
-          style={{
-            fontWeight: "bold",
-            textTransform: "none",
-            width: 178,
-            height: 57,
-            borderRadius: 14,
-            borderColor: "red",
-            borderWidth: 1,
-          }}
-          onClick={() => setOpenDeleteModal(false)}
-        >
-          Annuler
-        </Button>
-        <Button
-          style={{
-            fontWeight: "bold",
-            textTransform: "none",
-            width: 178,
-            height: 57,
-            borderRadius: 14,
-            backgroundColor: "red",
-            color: "white",
-          }}
-          onClick={() => {
-            dispatch(deleteCandidate("deleteCandidate", candidateID));
-            handleCloseDeleteModal();
-          }}
-        >
-          Supprimer
-        </Button>
-      </div>
-    </div>
-  );
 
   useEffect(() => {
     if (candidateAddedSuccesfully !== "") {
@@ -241,16 +162,18 @@ export default function DashboardCandidates() {
     if (candidateAddedError !== "") {
       setOpenAlert(true);
     }
-  }, [candidateAddedSuccesfully, candidateAddedError]);
-
-  useEffect(() => {
-    if (candidateDeleted !== "") {
-      dispatch(setDeleteMSg(""));
+    if (invitationMailSendSuccesfully !== "") {
+      setOpenAlertMail(true);
     }
-    if (candidateModifiedSuccesfully !== "") {
-      dispatch(setUpdateMsg(""));
+    if (invitationMailSendError !== "") {
+      setOpenAlertMail(true);
     }
-  }, [candidateDeleted, candidateModifiedSuccesfully]);
+  }, [
+    candidateAddedSuccesfully,
+    candidateAddedError,
+    invitationMailSendSuccesfully,
+    invitationMailSendError,
+  ]);
 
   useEffect(() => {
     dispatch(
@@ -270,8 +193,6 @@ export default function DashboardCandidates() {
     candidateName,
     diploma,
     selectedDate,
-    candidateDeleted,
-    candidateModifiedSuccesfully,
   ]);
 
   const addCandidate = () => {
@@ -300,36 +221,6 @@ export default function DashboardCandidates() {
       birthDate: new Date(),
       diploma: 10,
     });
-  };
-
-  const defaultProps = {
-    bgcolor: "background.paper",
-    m: 1,
-    border: 4,
-  };
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
-  const toggleDrawerProfile = (open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setDrawerProfile(open);
   };
 
   const candidateModal = (
@@ -475,197 +366,6 @@ export default function DashboardCandidates() {
     </div>
   );
 
-  const candidateProfileHandler = () => {
-    setState({ ...state, right: false });
-    setDrawerProfile(true);
-  };
-
-  const testHistoryHandler = () => {
-    setDrawerProfile(false);
-    setState({ ...state, right: true });
-  };
-
-  const candidateDrawer = (anchor) => (
-    <div className="drawer_main_container">
-      <CancelIcon
-        onClick={toggleDrawer(anchor, false)}
-        id="cancelIcon_drawer"
-      />
-
-      <img src="../rectangle-drawer.png" id="rectangle-drawer" alt="" />
-      <div className="drawer_container" onKeyDown={toggleDrawer(anchor, false)}>
-        <div className="candidateDrawer_header">
-          <div className="candidateDrawer_name_container">
-            <img src="../hairstyle-logo.png" alt="hairStryle" />
-            <Typography variant="h5" id="candidateDrawer_name">
-              Mehdi Moujahed
-            </Typography>
-          </div>
-          <Typography id="betterThan_text">
-            Mieux que <br />
-            <Typography
-              color="primary"
-              variant="h6"
-              style={{ fontWeight: "bold" }}
-            >
-              97%
-            </Typography>
-            des développeurs
-          </Typography>
-        </div>
-        <div className="candidateDrawer_second_container">
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img src="../react-logo.png" alt="" />
-            <p id="candidateDrawer_technology">React JS</p>
-          </div>
-          <Box className="candidateDrawer_box" boxShadow={5}>
-            {[1, 2, 3, 4].map(() => (
-              <div className="candidateDrawer_box_container">
-                <Typography id="candidateDrawer_box_title" color="primary">
-                  Manipluer le DOM
-                </Typography>
-                <Box borderColor="transparent">
-                  <StyledRating
-                    readOnly
-                    name="customized-color"
-                    defaultValue={2}
-                    getLabelText={(value) =>
-                      `${value} Heart${value !== 1 ? "s" : ""}`
-                    }
-                    icon={<CircleIcon fontSize="inherit" />}
-                  />
-                </Box>
-                <Typography style={{ fontSize: 16, fontWeight: "900" }}>
-                  60/100
-                </Typography>
-              </div>
-            ))}
-          </Box>
-          <div className="candidateDrawer_score_container">
-            <div id="candidateDrawer_score">
-              <Typography id="candidateDrawer_score_font">
-                Note du candidat
-              </Typography>
-              <div className="candidateDrawer_score_value">
-                <Typography id="candidateDrawer_score_font" color="primary">
-                  280
-                </Typography>
-                <Typography id="candidateDrawer_score_font">/ 240</Typography>
-                <div id="candidate_score">
-                  <Typography color="secondary" id="candidate_score_value">
-                    70%
-                  </Typography>
-                </div>
-              </div>
-            </div>
-            <div id="candidateDrawer_score">
-              <Typography id="candidateDrawer_score_font">
-                Durée passée
-              </Typography>
-              <div id="test_duration_container">
-                <Typography color="primary" id="candidateDrawer_score_font">
-                  1h
-                </Typography>
-                <Typography id="candidateDrawer_score_font">/ 1h30</Typography>
-              </div>
-            </div>
-          </div>
-          <div className="candidateDrawer_button_container">
-            <Button variant="outlined" id="candidateDrawer_button">
-              Voir les réponses
-            </Button>
-            <Button
-              variant="outlined"
-              id="candidateDrawer_button"
-              onClick={candidateProfileHandler}
-            >
-              Profil du candidat
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const profileDrawer = (anchor) => (
-    <div className="drawer_main_container">
-      <CancelIcon onClick={toggleDrawerProfile(false)} id="cancelIcon_drawer" />
-
-      <img src="../rectangle-drawer.png" id="rectangle-drawer" alt="" />
-
-      <Scrollbars
-        className="profileDrawer_scrollbar"
-        renderTrackVertical={(props) => (
-          <div {...props} className="track-vertical" />
-        )}
-        renderThumbVertical={(props) => (
-          <div {...props} className="thumb-vertical" />
-        )}
-      >
-        <div
-          className="drawer_container"
-          onKeyDown={toggleDrawerProfile(false)}
-        >
-          <div id="profileDrawer_header">
-            <Box
-              display="flex"
-              justifyContent="center"
-              borderColor="#008288"
-              {...defaultProps}
-              id="profileDrawer_pic_box"
-            >
-              <img id="profileDrawer_pic" src="../me.jpg" alt="profile-icon" />
-            </Box>
-          </div>
-          <Box className="profileDrawer_candidate_box" boxShadow={5}>
-            <div className="profileDrawer_name_container">
-              <Typography variant="h5" id="profileDrawer_name_font">
-                Nom :
-              </Typography>
-              <Typography variant="h6" id="profileDrawer_lastName">
-                Moujahed
-              </Typography>
-            </div>
-            <div className="profileDrawer_name_container">
-              <Typography variant="h5" id="profileDrawer_name_font">
-                Prénom :
-              </Typography>
-              <Typography variant="h6" id="profileDrawer_lastName">
-                Mehdi
-              </Typography>
-            </div>
-            <div className="profileDrawer_name_container">
-              <Typography variant="h5" id="profileDrawer_name_font">
-                Adresse Mail :
-              </Typography>
-              <Typography variant="h6" id="profileDrawer_lastName">
-                moujahedmehdi@gmail.com
-              </Typography>
-            </div>
-          </Box>
-          <div className="profilDrawer_testHistory">
-            <Typography id="profilDrawer_testHistory_title">
-              Historique des tests
-            </Typography>
-
-            {[1, 2, 3, 4, 5, 6, 7].map(() => (
-              <CustomBar
-                testImg="../me.jpg"
-                testName="Mehdi Moujahed"
-                duration="1h 30min"
-                score="4/5"
-                width="100%"
-                buttonLabel="Plus de détails"
-                onClick={testHistoryHandler}
-                testBar={false}
-              ></CustomBar>
-            ))}
-          </div>
-        </div>
-      </Scrollbars>
-    </div>
-  );
-
   return (
     <div className="candidate_main_container">
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
@@ -690,6 +390,31 @@ export default function DashboardCandidates() {
             {candidateAddedSuccesfully !== ""
               ? candidateAddedSuccesfully
               : candidateAddedError}
+          </Alert>
+        </Collapse>
+        <Collapse in={openAlertMail}>
+          <Alert
+            severity={
+              invitationMailSendSuccesfully !== "" ? "success" : "error"
+            }
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpenAlertMail(false);
+                  dispatch(setInvitationMailSuccessMsg(""));
+                  dispatch(setInvitationMailErrorMsg(""));
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {invitationMailSendSuccesfully !== ""
+              ? invitationMailSendSuccesfully
+              : invitationMailSendError}
           </Alert>
         </Collapse>
         <div
@@ -739,30 +464,13 @@ export default function DashboardCandidates() {
             {candidates.map((item, index) => (
               <CustomBar
                 testName={item.firstName + " " + item.lastName}
-                buttonLabel="Plus de détails"
-                onClick={toggleDrawerProfile("right", true)}
+                buttonLabel="Inviter"
+                onClick={() => {
+                  dispatch(inviteCandidate("sendTestMail", item.email, testID));
+                }}
                 testBar={false}
-                editable
                 candidate
                 candidateEmail={item.email}
-                onClickDelete={() => {
-                  setOpenDeleteModal(true);
-                  setCandidateID(item.id);
-                }}
-                onClickEdit={() => {
-                  setOpenModal(true);
-                  setCandidateIndex(index);
-                  setCandidateID(item.id);
-                  setFormRegister({
-                    ...formRegister,
-                    firstName: candidates[index]?.firstName,
-                    lastName: candidates[index]?.lastName,
-                    email: candidates[index]?.email,
-                    phoneNumber: candidates[index]?.phoneNumber,
-                    birthDate: candidates[index]?.birthDate,
-                    diploma: candidates[index]?.diploma,
-                  });
-                }}
               ></CustomBar>
             ))}
           </div>
@@ -794,24 +502,6 @@ export default function DashboardCandidates() {
         />
       </div>
       <div className="candidate_search_container">
-        <div>
-          <SwipeableDrawer
-            anchor="right"
-            open={state["right"]}
-            onClose={toggleDrawer("right", false)}
-            onOpen={toggleDrawer("right", true)}
-          >
-            {candidateDrawer("right")}
-          </SwipeableDrawer>
-          <SwipeableDrawer
-            anchor="right"
-            open={drawerProfile}
-            onClose={toggleDrawerProfile(false)}
-            onOpen={toggleDrawerProfile(true)}
-          >
-            {profileDrawer("right")}
-          </SwipeableDrawer>
-        </div>
         <Button
           id="add_new_test"
           variant="outlined"
@@ -837,13 +527,6 @@ export default function DashboardCandidates() {
       <div className="modal">
         <Modal open={openModal} onClose={handleClose} className={classes.modal}>
           {candidateModal}
-        </Modal>
-        <Modal
-          open={openDeleteModal}
-          onClose={handleCloseDeleteModal}
-          className={classes.modal}
-        >
-          {deleteModal}
         </Modal>
       </div>
     </div>

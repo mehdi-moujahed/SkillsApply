@@ -3,6 +3,8 @@ import {
   ADD_CANDIDATE_ERROR_MSG,
   ADD_CANDIDATE_SUCCESS_MSG,
   DELETE_CANDIDATE,
+  INVITE_CANDIDATE,
+  INVITE_CANDIDATE_ERROR_MSG,
   UPDATE_CANDIDATE,
 } from "../../action/actionType";
 
@@ -13,6 +15,8 @@ const initialState = {
   pagination: [],
   deleteCandidateSuccesMsg: "",
   updateCandidateSuccesMsg: "",
+  invitationMailSuccessMsg: "",
+  invitationMailErrorMsg: "",
 };
 
 export const candidateReducer = (state = initialState, action) => {
@@ -47,6 +51,16 @@ export const candidateReducer = (state = initialState, action) => {
       return {
         ...state,
         updateCandidateSuccesMsg: action.payload,
+      };
+    case INVITE_CANDIDATE:
+      return {
+        ...state,
+        invitationMailSuccessMsg: action.payload,
+      };
+    case INVITE_CANDIDATE_ERROR_MSG:
+      return {
+        ...state,
+        invitationMailErrorMsg: action.payload,
       };
     default:
       return state;

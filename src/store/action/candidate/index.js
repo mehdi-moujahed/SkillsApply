@@ -4,6 +4,8 @@ import {
   ADD_CANDIDATE_ERROR_MSG,
   DELETE_CANDIDATE,
   UPDATE_CANDIDATE,
+  INVITE_CANDIDATE,
+  INVITE_CANDIDATE_ERROR_MSG,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -26,6 +28,15 @@ export const setDeleteMSg = (payload) => ({
 });
 export const setUpdateMsg = (payload) => ({
   type: UPDATE_CANDIDATE,
+  payload,
+});
+
+export const setInvitationMailSuccessMsg = (payload) => ({
+  type: INVITE_CANDIDATE,
+  payload,
+});
+export const setInvitationMailErrorMsg = (payload) => ({
+  type: INVITE_CANDIDATE_ERROR_MSG,
   payload,
 });
 
@@ -87,6 +98,21 @@ export const updateCandidateAPI = (url, id, form) => {
       })
       .catch(function (error) {
         console.log("erreur lors du modification de candidat", { error });
+      });
+  };
+};
+
+export const inviteCandidate = (url, email, testID) => {
+  return (dispatch) => {
+    axios
+      .post(`http://127.0.0.1:8080/manager/${url}/${email}?testID=${testID}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setInvitationMailSuccessMsg(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        dispatch(setInvitationMailErrorMsg(error.response.data.message));
       });
   };
 };

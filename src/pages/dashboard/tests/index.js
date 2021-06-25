@@ -121,6 +121,8 @@ export default function DashboardTests() {
     createdTestsNbr: 5,
     createdTestsAvailableNbr: 5,
     testAvailableIndex: 0,
+    idTestCreated: null,
+    idAvailableTest: null,
   });
 
   const [mainTab, setmainTab] = useState("one");
@@ -411,8 +413,20 @@ export default function DashboardTests() {
           </div>
         </div>
         <div>
-          <Button id="assign_test_button" variant="outlined">
-            Attribuer à un candidat
+          <Button
+            id="assign_test_button"
+            variant="outlined"
+            onClick={() =>
+              history.push(
+                `${path.replace("/tests", "/inviteCandidates")}?id=${
+                  mainTab === "one"
+                    ? state?.idAvailableTest
+                    : state?.idTestCreated
+                }`
+              )
+            }
+          >
+            Inviter un candidat
           </Button>
         </div>
       </div>
@@ -500,6 +514,7 @@ export default function DashboardTests() {
                     ...state,
                     right: true,
                     testAvailableIndex: index,
+                    idAvailableTest: item.id,
                   });
                 }}
                 testBar
@@ -527,6 +542,7 @@ export default function DashboardTests() {
                     ...state,
                     right: true,
                     testIndex: index,
+                    idTestCreated: item.id,
                   });
                   console.log("testindex", state.testIndex);
                 }}

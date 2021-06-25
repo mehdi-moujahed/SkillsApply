@@ -10,6 +10,7 @@ import DashboardTestPassed from "./testPassed";
 import CreateTest from "./createTest";
 import QcmTest from "./createTest/qcmTest";
 import DashboardCandidates from "./candidates";
+import InviteCandidates from "./inviteCandidates";
 
 export default function Tests() {
   let { path, url } = useRouteMatch();
@@ -32,6 +33,8 @@ export default function Tests() {
         return "Candidats";
       case "/dashboard/qcmtest":
         return "Question Choix Multiple";
+      case "/dashboard/inviteCandidates":
+        return "Invitation Test";
     }
   };
 
@@ -53,6 +56,11 @@ export default function Tests() {
               exact
               path={`${path}/candidates`}
               component={DashboardCandidates}
+            />
+            <Route
+              exact
+              path={`${path}/inviteCandidates`}
+              component={InviteCandidates}
             />
             <Route exact path={`${path}/addtest`} component={CreateTest} />
             <Route path={`${path}/qcmtest`} component={QcmTest} />

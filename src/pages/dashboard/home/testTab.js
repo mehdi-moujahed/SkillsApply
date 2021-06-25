@@ -248,7 +248,7 @@ export default function TestTab(props) {
         </div>
         <div>
           <Button id="assign_test_button" variant="outlined">
-            Attribuer à un candidat
+            Inviter un candidat
           </Button>
         </div>
       </div>
@@ -293,7 +293,7 @@ export default function TestTab(props) {
           />
           <Tab
             value="three"
-            label="Les plus professionnel"
+            label="Les plus professionnels"
             {...a11yProps("three")}
             style={{
               textTransform: "none",

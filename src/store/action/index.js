@@ -27,4 +27,7 @@ export {
   deleteCandidate,
   setDeleteMSg,
   updateCandidateAPI,
+  inviteCandidate,
+  setInvitationMailErrorMsg,
+  setInvitationMailSuccessMsg,
 } from "./candidate";
