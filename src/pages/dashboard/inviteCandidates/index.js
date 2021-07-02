@@ -176,6 +176,13 @@ export default function InviteCandidates() {
   ]);
 
   useEffect(() => {
+    if (openAlert === false) {
+      dispatch(setInvitationMailSuccessMsg(""));
+      dispatch(setInvitationMailErrorMsg(""));
+    }
+  }, [openAlert]);
+
+  useEffect(() => {
     dispatch(
       getAllCandidates(
         "getAllCandidates",
@@ -404,8 +411,6 @@ export default function InviteCandidates() {
                 size="small"
                 onClick={() => {
                   setOpenAlertMail(false);
-                  dispatch(setInvitationMailSuccessMsg(""));
-                  dispatch(setInvitationMailErrorMsg(""));
                 }}
               >
                 <CloseIcon fontSize="inherit" />

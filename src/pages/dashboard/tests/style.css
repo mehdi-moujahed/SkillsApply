@@ -51,3 +51,11 @@
   justify-content: center;
   margin-top: 20px;
 }
+#drawerDescription_text {
+  font-size: 20px;
+  font-weight: bold;
+  /* overflow: scroll;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical; */
+}

@@ -12,6 +12,8 @@ import Dashboard from "./pages/dashboard";
 import ForgotPassword from "./pages/forgotPassword";
 import confirmRegister from "./pages/register/confirmRegister";
 import ResetPassword from "./pages/forgotPassword/confirmResetPassword";
+import PassingTest from "./pages/PassingTest";
+import TestExam from "./pages/testExam";
 function App() {
   return (
     <Router>
@@ -26,6 +28,8 @@ function App() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/regitrationConfirm/:id" component={confirmRegister} />
           <Route path="/forgotPassword" component={ForgotPassword} />
+          <Route exact path="/passingTest" component={PassingTest} />
+          <Route exact path="/testExam" component={TestExam} />
           <Route
             path="/confirmResetPassword/:token"
             component={ResetPassword}

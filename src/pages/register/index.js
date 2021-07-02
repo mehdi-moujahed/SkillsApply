@@ -24,7 +24,6 @@ import { Alert } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
 
 export default function Register(props) {
-
   const dispatch = useDispatch();
 
   const userAdded = useSelector((state) => state.todos.registerForm);
@@ -72,17 +71,6 @@ export default function Register(props) {
     if (showVerifPassword === "password") setShowVerifPassword("text");
     else setShowVerifPassword("password");
   }
-
-  // function checkPasswords(password, verifPassword) {
-  //   if (password === verifPassword) {
-  //     return true;
-  //   } else {
-  //     seterrorMsg(
-  //       "Les deux mot de passes que vous avez saisie ne sont pas identiques"
-  //     );
-  //     return false;
-  //   }
-  // }
 
   function handleClickNextPage() {
     setNextPage(true);
@@ -159,8 +147,6 @@ export default function Register(props) {
                   seterrorMsg(
                     "Les deux mot de passes que vous avez saisie ne sont pas identiques"
                   );
-
-                console.log("Redux ", userAdded);
               })}
             >
               <TextField
@@ -169,9 +155,6 @@ export default function Register(props) {
                 variant="filled"
                 style={{ width: "22vw", marginBottom: 50 }}
                 type="text"
-                // onChange={(event) =>
-                //   dispatch(abc({ societe: event.target.value }))
-                // }
                 {...register("companyName", {
                   required: "nom de la société est obligatoire",
                 })}
@@ -482,7 +465,7 @@ export default function Register(props) {
         </div>
       </div>
       <div className="register_main_container">
-        <img src="../logo.png" id="register_logo" alt=""/>
+        <img src="../logo.png" id="register_logo" alt="" />
       </div>
     </div>
   );

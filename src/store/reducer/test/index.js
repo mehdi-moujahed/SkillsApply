@@ -11,6 +11,11 @@ import {
   SET_NEW_AVAILABLE_TEST,
   SET_BEST_AVAILABLE_TEST,
   SET_POPULAR_AVAILABLE_TEST,
+  SET_TEST_EXAM,
+  SET_QUESTIONS_EXAM,
+  SET_RESULT,
+  UPDATE_RESULT,
+  DELETE_RESULT,
 } from "../../action/actionType";
 
 const initialState = {
@@ -26,6 +31,9 @@ const initialState = {
   bestAvailableTests: [],
   popularAvailableTests: [],
   paginationAllAvailableTests: [],
+  testToPass: [],
+  examQuestions: [],
+  result: [],
 };
 
 export const testReducer = (state = initialState, action) => {
@@ -112,6 +120,44 @@ export const testReducer = (state = initialState, action) => {
       return {
         ...state,
         popularAvailableTests: action.payload.availableTests,
+      };
+    case SET_TEST_EXAM:
+      return {
+        ...state,
+        testToPass: action.payload,
+      };
+    case SET_QUESTIONS_EXAM:
+      return {
+        ...state,
+        examQuestions: [...state.examQuestions, ...action.payload],
+      };
+    case SET_RESULT:
+      return {
+        ...state,
+        result: [...state.result, action.payload],
+      };
+    case UPDATE_RESULT:
+      return {
+        ...state,
+        result: state.result.map((item, index) =>
+          index === action.index
+            ? { ...item, answerId: [...item.answerId, action.payload] }
+            : item
+        ),
+      };
+    case DELETE_RESULT:
+      return {
+        ...state,
+        result: state.result.map((item, index) =>
+          index === action.index
+            ? {
+                ...item,
+                answerId: item.answerId.filter(
+                  (obj) => obj !== action.payload && obj
+                ),
+              }
+            : item
+        ),
       };
     default:
       return state;

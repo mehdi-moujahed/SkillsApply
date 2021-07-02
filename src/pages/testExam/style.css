@@ -1,0 +1,48 @@
+#question_box {
+  height: 50vh;
+  width: 70vw;
+  background-color: white;
+  margin-top: 90px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+}
+#question_box_title {
+  font-weight: bold;
+  font-size: 17px;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+
+#box_question_seperator {
+  height: 3px;
+  background-color: #d8d8d8;
+  width: 100%;
+}
+#question_box_text {
+  background-color: rgb(242, 243, 247);
+  height: 80px;
+  margin-left: 15px;
+  margin-right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.candidate_register {
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f3f7;
+  height: 65vh;
+  width: 47vw;
+  align-items: center;
+  border-radius: 15px;
+  justify-content: space-evenly;
+}
+#candidate_register_button {
+  background-color: #008288;
+  color: white;
+  width: 150px;
+  border-radius: 10px;
+  text-transform: capitalize;
+}

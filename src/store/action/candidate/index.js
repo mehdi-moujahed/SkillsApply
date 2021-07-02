@@ -6,6 +6,9 @@ import {
   UPDATE_CANDIDATE,
   INVITE_CANDIDATE,
   INVITE_CANDIDATE_ERROR_MSG,
+  GET_CANDIDATE,
+  SET_CANDIDATE_PASSWORD,
+  SET_CANDIDATE_PASSWORD_ERROR,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -35,8 +38,24 @@ export const setInvitationMailSuccessMsg = (payload) => ({
   type: INVITE_CANDIDATE,
   payload,
 });
+
 export const setInvitationMailErrorMsg = (payload) => ({
   type: INVITE_CANDIDATE_ERROR_MSG,
+  payload,
+});
+
+export const getCandidate = (payload) => ({
+  type: GET_CANDIDATE,
+  payload,
+});
+
+export const setCandidatePassword = (payload) => ({
+  type: SET_CANDIDATE_PASSWORD,
+  payload,
+});
+
+export const setCandidatePasswordError = (payload) => ({
+  type: SET_CANDIDATE_PASSWORD_ERROR,
   payload,
 });
 
@@ -51,6 +70,21 @@ export const candidateRegister = (url, form) => {
       })
       .catch(function (error) {
         dispatch(setAddingCandidateErrorMsg(error.response.data.message));
+      });
+  };
+};
+
+export const getCandidateById = (url, id) => {
+  return (dispatch) => {
+    axios
+      .get(`http://127.0.0.1:8080/manager/${url}/${id}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(getCandidate(response.data));
+        }
+      })
+      .catch(function (error) {
+        console.log({ error });
       });
   };
 };
@@ -98,6 +132,21 @@ export const updateCandidateAPI = (url, id, form) => {
       })
       .catch(function (error) {
         console.log("erreur lors du modification de candidat", { error });
+      });
+  };
+};
+
+export const setCandidatePasswordAPI = (url, id, form) => {
+  return (dispatch) => {
+    axios
+      .patch(`http://127.0.0.1:8080/users/${url}/${id}`, form)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setCandidatePassword(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        dispatch(setCandidatePasswordError(error.message));
       });
   };
 };

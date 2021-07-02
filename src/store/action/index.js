@@ -17,6 +17,11 @@ export {
   getAvailablleTest,
   getRecentAvailableTests,
   getProfessionalAvailableTests,
+  getTestToPassAPI,
+  getQuestionsTest,
+  setResults,
+  updateResult,
+  deleteResult,
 } from "./test";
 
 export {
@@ -30,4 +35,8 @@ export {
   inviteCandidate,
   setInvitationMailErrorMsg,
   setInvitationMailSuccessMsg,
+  getCandidateById,
+  setCandidatePasswordAPI,
+  setCandidatePassword,
+  setCandidatePasswordError,
 } from "./candidate";

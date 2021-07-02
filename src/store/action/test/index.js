@@ -10,6 +10,11 @@ import {
   SET_NEW_AVAILABLE_TEST,
   SET_BEST_AVAILABLE_TEST,
   SET_POPULAR_AVAILABLE_TEST,
+  SET_TEST_EXAM,
+  SET_QUESTIONS_EXAM,
+  SET_RESULT,
+  UPDATE_RESULT,
+  DELETE_RESULT,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -26,6 +31,23 @@ export const editQuestion = (payload, index) => ({
 
 export const setCreatedTests = (payload) => ({
   type: ADD_CREATED_TESTS,
+  payload,
+});
+
+export const deleteResult = (index, payload) => ({
+  type: DELETE_RESULT,
+  payload,
+  index,
+});
+
+export const updateResult = (index, payload) => ({
+  type: UPDATE_RESULT,
+  payload,
+  index,
+});
+
+export const setResults = (payload) => ({
+  type: SET_RESULT,
   payload,
 });
 
@@ -56,6 +78,16 @@ export const setAddingTestSuccesMsg = (payload) => ({
 
 export const setAddingTestErrorMsg = (payload) => ({
   type: ADD_TEST_ERROR_MSG,
+  payload,
+});
+
+export const setTestToPass = (payload) => ({
+  type: SET_TEST_EXAM,
+  payload,
+});
+
+export const setQuestionsExam = (payload) => ({
+  type: SET_QUESTIONS_EXAM,
   payload,
 });
 
@@ -174,6 +206,36 @@ export const getProfessionalAvailableTests = (
       .then(function (response) {
         if (response.status === 200) {
           dispatch(setProfessionalAvailablesTests(response.data));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur", { error });
+      });
+  };
+};
+
+export const getTestToPassAPI = (url, testID) => {
+  return (dispatch) => {
+    axios
+      .get(`http://127.0.0.1:8080/manager/${url}/${testID}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setTestToPass(response.data));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur", { error });
+      });
+  };
+};
+
+export const getQuestionsTest = (url, questionID) => {
+  return (dispatch) => {
+    axios
+      .get(`http://127.0.0.1:8080/manager/${url}/${questionID}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(setQuestionsExam(response.data));
         }
       })
       .catch(function (error) {

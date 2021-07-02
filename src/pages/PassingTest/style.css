@@ -1,0 +1,17 @@
+.passingTest_main_container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.passingTest_header {
+  background-image: linear-gradient(to right, #008288, #151515);
+  height: 95px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+}
+.passingTest_vertical_bar {
+  background-image: linear-gradient(to bottom, #008288, #151515);
+  height: 100vh;
+  width: 160px;
+}

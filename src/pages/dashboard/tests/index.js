@@ -135,6 +135,17 @@ export default function DashboardTests() {
     setOpenDeleteModal(false);
   };
 
+  const displaylevel = (level) => {
+    switch (level) {
+      case 10:
+        return "Débutant";
+      case 20:
+        return "Intermédiare";
+      case 30:
+        return "Professionnel";
+    }
+  };
+
   useEffect(() => {
     dispatch(
       getAvailablleTest(
@@ -319,6 +330,7 @@ export default function DashboardTests() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          width: "100%",
         }}
         role="presentation"
         onKeyDown={toggleDrawer(anchor, false)}
@@ -335,12 +347,13 @@ export default function DashboardTests() {
           style={{
             display: "flex",
             flexDirection: "column",
+            alignSelf: "flex-start",
           }}
         >
           <p style={{ fontSize: 30, fontWeight: "bold", marginBottom: 0 }}>
             Description :
           </p>
-          <p style={{ fontSize: 20, fontWeight: "bold" }}>
+          <p id="drawerDescription_text">
             {mainTab === "one"
               ? availableTests[state.testAvailableIndex]?.description
               : testsCreated[state.testIndex]?.description}
@@ -353,9 +366,31 @@ export default function DashboardTests() {
           <p style={{ fontSize: 30, fontWeight: "bold" }}>Information :</p>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             {[
-              { img: "../score-logo.png", imgLabel: "4 Etapes" },
-              { img: "../question-logo.png", imgLabel: "30 Excercices" },
-              { img: "../trophy-logo.png", imgLabel: "3 Niveaux" },
+              {
+                img: "../score-logo.png",
+                imgLabel:
+                  mainTab === "one"
+                    ? availableTests[state.testAvailableIndex]?.score + " score"
+                    : testsCreated[state.testIndex]?.score + " score",
+              },
+              {
+                img: "../question-logo.png",
+                imgLabel:
+                  mainTab === "one"
+                    ? availableTests[state.testAvailableIndex]?.questionsID
+                        .length + " Questions"
+                    : testsCreated[state.testIndex]?.questionsID.length +
+                      " Questions",
+              },
+              {
+                img: "../trophy-logo.png",
+                imgLabel:
+                  mainTab === "one"
+                    ? displaylevel(
+                        availableTests[state.testAvailableIndex]?.level
+                      )
+                    : displaylevel(testsCreated[state.testIndex]?.level),
+              },
             ].map((item) => (
               <Box
                 boxShadow={10}
@@ -393,7 +428,7 @@ export default function DashboardTests() {
               <WatchLaterIcon />
               <Typography style={{ marginTop: 5, marginLeft: 5 }}>
                 {mainTab === "one"
-                  ? availableTests[state.testAvailableIndex]?.duration
+                  ? availableTests[state.testAvailableIndex]?.duration + " min"
                   : testsCreated[state.testIndex]?.duration + " min"}
               </Typography>
             </div>
