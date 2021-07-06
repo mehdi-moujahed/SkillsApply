@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import {
+  addResultAPI,
   deleteResult,
   getQuestionsTest,
   setCandidatePassword,
@@ -31,6 +32,7 @@ import { VisibilityOff } from "@material-ui/icons";
 import { useForm } from "react-hook-form";
 import { Alert } from "@material-ui/lab";
 import CloseIcon from "@material-ui/icons/Close";
+import { updateTestRate } from "../../store/action";
 
 export default function TestExam() {
   const location = useLocation();
@@ -88,6 +90,7 @@ export default function TestExam() {
   const candidatePassowrdUpdated = useSelector(
     (state) => state.candidateReducer.candidatePassowrd
   );
+
   const candidatePassowrdErrorMsg = useSelector(
     (state) => state.candidateReducer.candidatePasswordError
   );
@@ -95,16 +98,31 @@ export default function TestExam() {
   const questionId = useSelector(
     (state) => state.testReducer.testToPass?.questionsID[idQuestion - 1]
   );
+
   const totalQuestions = useSelector(
     (state) => state.testReducer.testToPass?.questionsID.length
+  );
+
+  const testId = useSelector((state) => state.testReducer.testToPass?.id);
+
+  const managerId = useSelector(
+    (state) => state.testReducer.testToPass?.managerID
+  );
+
+  const candidateId = useSelector(
+    (state) => state.candidateReducer.candidateTest?.id
   );
 
   const result = useSelector((state) => state.testReducer.result);
 
   useEffect(() => {
     dispatch(getQuestionsTest("getQuestion", questionId));
-    dispatch(setResults({ questionId, answerId: [] }));
+    dispatch(setResults({ questionId, answersId: [] }));
   }, [idQuestion]);
+
+  useEffect(() => {
+    if (value !== 0) dispatch(updateTestRate("rateTest", testId, value));
+  }, [value]);
 
   useEffect(() => {
     if (candidatePassowrdUpdated !== "") {
@@ -116,7 +134,7 @@ export default function TestExam() {
   }, [candidatePassowrdUpdated, candidatePassowrdErrorMsg]);
 
   const handleChangeAnswers = (id) => {
-    result[idQuestion - 1].answerId.some((obj) => id === obj)
+    result[idQuestion - 1].answersId.some((obj) => id === obj)
       ? dispatch(deleteResult(idQuestion - 1, id))
       : dispatch(updateResult(idQuestion - 1, id));
   };
@@ -282,7 +300,7 @@ export default function TestExam() {
                   pattern: {
                     value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
                     message:
-                      "with at least a symbol, upper and lower case letters and a number ",
+                      "le mot de passe doit contenir au moins une lettre majiscule et miniscule et une nombre ",
                   },
                   maxLength: {
                     value: 16,
@@ -466,6 +484,15 @@ export default function TestExam() {
                 history.push(`/testExam?id=${parseInt(idQuestion) + 1}`);
               } else {
                 setOpenModal(true);
+                dispatch(
+                  addResultAPI(
+                    "addResultTest",
+                    managerId,
+                    testId,
+                    candidateId,
+                    result
+                  )
+                );
               }
             }}
           >
@@ -510,7 +537,7 @@ export default function TestExam() {
                       <Checkbox
                         checked={
                           result.length >= idQuestion &&
-                          result[idQuestion - 1].answerId.some(
+                          result[idQuestion - 1].answersId.some(
                             (obj) => item.id === obj
                           )
                         }

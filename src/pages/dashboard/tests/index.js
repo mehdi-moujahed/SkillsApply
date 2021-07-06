@@ -6,8 +6,6 @@ import {
   AppBar,
   Box,
   Button,
-  FormControl,
-  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -16,20 +14,27 @@ import {
   Tabs,
   Typography,
   makeStyles,
+  Collapse,
+  IconButton,
 } from "@material-ui/core";
 import "./style.css";
 import Scrollbars from "react-custom-scrollbars";
+import CloseIcon from "@material-ui/icons/Close";
 import CancelIcon from "@material-ui/icons/Cancel";
 import PropTypes from "prop-types";
 import CustomBar from "../../../component/custom-bar";
-import { TabPanel } from "@material-ui/lab";
+import { Alert, TabPanel } from "@material-ui/lab";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { useHistory, useRouteMatch } from "react-router";
 import { getAvailablleTest, getCreatedTest } from "../../../store/action";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import Pagination from "@material-ui/lab/Pagination";
-import { setAvailablesTests } from "../../../store/action/test";
+import {
+  deleteCreatedTest,
+  deleteTestErrorMsg,
+  deleteTestSuccessMsg,
+} from "../../../store/action/test";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
@@ -100,6 +105,10 @@ export default function DashboardTests() {
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
+  const [mainTab, setmainTab] = useState("one");
+
+  const [openAlert, setOpenAlert] = useState(false);
+
   const totalPagesTestsCreated = useSelector(
     (state) => state.testReducer.pagination.totalPages
   );
@@ -115,6 +124,10 @@ export default function DashboardTests() {
     (state) => state.testReducer.availableTestsPagination.currentPage
   );
 
+  const testDeleted = useSelector(
+    (state) => state.testReducer.deleteTestSuccessMsg
+  );
+
   const [state, setState] = useState({
     right: false,
     testIndex: 0,
@@ -124,8 +137,6 @@ export default function DashboardTests() {
     idTestCreated: null,
     idAvailableTest: null,
   });
-
-  const [mainTab, setmainTab] = useState("one");
 
   const handleChange = (event, newValue) => {
     setmainTab(newValue);
@@ -143,6 +154,8 @@ export default function DashboardTests() {
         return "Intermédiare";
       case 30:
         return "Professionnel";
+      default:
+        return null;
     }
   };
 
@@ -163,19 +176,21 @@ export default function DashboardTests() {
         valueSlideAvailable[1] + 0.1
       )
     );
-    dispatch(
-      getCreatedTest(
-        "getCreatedTests",
-        0,
-        state.createdTestsNbr,
-        testName,
-        timeFilter,
-        parseFloat(testLevel),
-        moment(selectedDate).add(1, "days").format("yyyy-MM-DD").toString(),
-        valueSlide[0] - 0.1,
-        valueSlide[1] + 0.1
-      )
-    );
+    if (testDeleted !== null) {
+      dispatch(
+        getCreatedTest(
+          "getCreatedTests",
+          0,
+          state.createdTestsNbr,
+          testName,
+          timeFilter,
+          parseFloat(testLevel),
+          moment(selectedDate).add(1, "days").format("yyyy-MM-DD").toString(),
+          valueSlide[0] - 0.1,
+          valueSlide[1] + 0.1
+        )
+      );
+    }
   }, [
     state.createdTestsNbr,
     testName,
@@ -189,7 +204,14 @@ export default function DashboardTests() {
     testLevelAvailable,
     selectedDateAvailable,
     valueSlideAvailable,
+    testDeleted,
   ]);
+
+  useEffect(() => {
+    if (testDeleted !== "") {
+      setOpenAlert(true);
+    }
+  }, [testDeleted]);
 
   const deleteModal = (
     <div
@@ -242,9 +264,8 @@ export default function DashboardTests() {
             color: "white",
           }}
           onClick={() => {
-            // dispatch(deleteQuestion(selectedItem));
-            // setSelectedItem(0);
-            // handleCloseDeleteModal();
+            dispatch(deleteCreatedTest("deleteTestById", state.idTestCreated));
+            setOpenDeleteModal(false);
           }}
         >
           Supprimer
@@ -441,8 +462,8 @@ export default function DashboardTests() {
               <StarIcon />
               <Typography style={{ marginTop: 5 }}>
                 {mainTab === "one"
-                  ? availableTests[state.testAvailableIndex]?.rate
-                  : testsCreated[state.testIndex]?.rate}
+                  ? availableTests[state.testAvailableIndex]?.rate.toFixed(1)
+                  : testsCreated[state.testIndex]?.rate.toFixed(1)}
               </Typography>
             </div>
           </div>
@@ -476,6 +497,29 @@ export default function DashboardTests() {
       }}
     >
       <div className="tests_main_container">
+        <Collapse in={openAlert}>
+          <Alert
+            severity={testDeleted !== "" ? "success" : "error"}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpenAlert(false);
+                  dispatch(deleteTestSuccessMsg(""));
+                  dispatch(deleteTestErrorMsg(""));
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {testDeleted !== ""
+              ? testDeleted
+              : "Erreur lors du suppression du test"}
+          </Alert>
+        </Collapse>
         <AppBar position="static" id="tab_appBar" className="tabAppBar">
           <Tabs
             value={mainTab}
@@ -542,7 +586,7 @@ export default function DashboardTests() {
               <CustomBar
                 testName={item.name}
                 duration={item.duration + " min"}
-                score={item.rate}
+                score={item.rate.toFixed(1)}
                 buttonLabel="Afficher le test"
                 onClick={() => {
                   setState({
@@ -570,7 +614,7 @@ export default function DashboardTests() {
               <CustomBar
                 testName={item.name}
                 duration={item.duration + " min"}
-                score={item.rate}
+                score={item.rate.toFixed(1)}
                 buttonLabel="Afficher le test"
                 onClick={() => {
                   setState({
@@ -583,7 +627,13 @@ export default function DashboardTests() {
                 }}
                 testBar
                 editable
-                onClickDelete={() => setOpenDeleteModal(true)}
+                onClickDelete={() => {
+                  setState({
+                    ...state,
+                    idTestCreated: item.id,
+                  });
+                  setOpenDeleteModal(true);
+                }}
               ></CustomBar>
             ))
           ) : (

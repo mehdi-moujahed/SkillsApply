@@ -98,6 +98,17 @@ export default function TestTab(props) {
     );
   }, []);
 
+  const displaylevel = (level) => {
+    switch (level) {
+      case 10:
+        return "Débutant";
+      case 20:
+        return "Intermédiare";
+      case 30:
+        return "Professionnel";
+    }
+  };
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -140,6 +151,7 @@ export default function TestTab(props) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          width: "100%",
         }}
         role="presentation"
         onKeyDown={toggleDrawer(anchor, false)}
@@ -158,6 +170,7 @@ export default function TestTab(props) {
           style={{
             display: "flex",
             flexDirection: "column",
+            alignSelf: "flex-start",
           }}
         >
           <p style={{ fontSize: 30, fontWeight: "bold", marginBottom: 0 }}>
@@ -179,9 +192,46 @@ export default function TestTab(props) {
           <p style={{ fontSize: 30, fontWeight: "bold" }}>Information :</p>
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             {[
-              { img: "../score-logo.png", imgLabel: "4 Etapes" },
-              { img: "../question-logo.png", imgLabel: "30 Excercices" },
-              { img: "../trophy-logo.png", imgLabel: "3 Niveaux" },
+              {
+                img: "../score-logo.png",
+                imgLabel:
+                  testTab === "one"
+                    ? newAvailableTests[state.newtestAvailableIndex]?.score +
+                      " score"
+                    : testTab === "two"
+                    ? bestAvailableTests[state.besttestAvailableIndex]?.score +
+                      " score"
+                    : popularAvailableTests[state.populartestAvailableIndex]
+                        ?.score + " score",
+              },
+              {
+                img: "../question-logo.png",
+                imgLabel:
+                  testTab === "one"
+                    ? newAvailableTests[state.newtestAvailableIndex]
+                        ?.questionsID.length + " Questions"
+                    : testTab === "two"
+                    ? bestAvailableTests[state.besttestAvailableIndex]
+                        ?.questionsID.length + " Questions"
+                    : popularAvailableTests[state.populartestAvailableIndex]
+                        ?.questionsID.length + " Questions",
+              },
+              {
+                img: "../trophy-logo.png",
+                imgLabel:
+                  testTab === "one"
+                    ? displaylevel(
+                        newAvailableTests[state.newtestAvailableIndex]?.level
+                      )
+                    : testTab === "two"
+                    ? displaylevel(
+                        bestAvailableTests[state.besttestAvailableIndex]?.level
+                      )
+                    : displaylevel(
+                        popularAvailableTests[state.populartestAvailableIndex]
+                          ?.level
+                      ),
+              },
             ].map((item) => (
               <Box
                 boxShadow={10}

@@ -16,6 +16,8 @@ import {
   SET_RESULT,
   UPDATE_RESULT,
   DELETE_RESULT,
+  DELETE_TEST,
+  DELETE_TEST_ERROR,
 } from "../../action/actionType";
 
 const initialState = {
@@ -34,6 +36,8 @@ const initialState = {
   testToPass: [],
   examQuestions: [],
   result: [],
+  deleteTestSuccessMsg: "",
+  deleteTestErrorMsg: "",
 };
 
 export const testReducer = (state = initialState, action) => {
@@ -141,7 +145,7 @@ export const testReducer = (state = initialState, action) => {
         ...state,
         result: state.result.map((item, index) =>
           index === action.index
-            ? { ...item, answerId: [...item.answerId, action.payload] }
+            ? { ...item, answersId: [...item.answersId, action.payload] }
             : item
         ),
       };
@@ -152,12 +156,22 @@ export const testReducer = (state = initialState, action) => {
           index === action.index
             ? {
                 ...item,
-                answerId: item.answerId.filter(
+                answersId: item.answersId.filter(
                   (obj) => obj !== action.payload && obj
                 ),
               }
             : item
         ),
+      };
+    case DELETE_TEST:
+      return {
+        ...state,
+        deleteTestSuccessMsg: action.payload,
+      };
+    case DELETE_TEST_ERROR:
+      return {
+        ...state,
+        deleteTestErrorMsg: action.payload,
       };
     default:
       return state;

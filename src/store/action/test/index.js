@@ -15,6 +15,10 @@ import {
   SET_RESULT,
   UPDATE_RESULT,
   DELETE_RESULT,
+  DELETE_TEST,
+  DELETE_TEST_ERROR,
+  RATE_TEST,
+  ADD_RESULT,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -31,6 +35,16 @@ export const editQuestion = (payload, index) => ({
 
 export const setCreatedTests = (payload) => ({
   type: ADD_CREATED_TESTS,
+  payload,
+});
+
+export const addResult = (payload) => ({
+  type: ADD_RESULT,
+  payload,
+});
+
+export const addTestRate = (payload) => ({
+  type: RATE_TEST,
   payload,
 });
 
@@ -95,6 +109,16 @@ export const clearTest = () => ({
   type: CLEAR_TESTS,
 });
 
+export const deleteTestSuccessMsg = (payload) => ({
+  type: DELETE_TEST,
+  payload,
+});
+
+export const deleteTestErrorMsg = (payload) => ({
+  type: DELETE_TEST_ERROR,
+  payload,
+});
+
 export const addTest = (url, form) => {
   return (dispatch) => {
     axios
@@ -112,6 +136,57 @@ export const addTest = (url, form) => {
       })
       .catch(function (error) {
         dispatch(setAddingTestErrorMsg(error.response.data.message));
+      });
+  };
+};
+
+export const addResultAPI = (url, managerId, testId, userId, result) => {
+  return (dispatch) => {
+    axios
+      .post(`http://127.0.0.1:8080/manager/${url}`, {
+        managerId: managerId,
+        testId: testId,
+        userId: userId,
+        result: result,
+      })
+      .then(function (response) {
+        if (response.status === 200) {
+          console.log("reponse", response);
+          dispatch(setResults(response.data));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur lors de l'ajout des résultats", { error });
+      });
+  };
+};
+
+export const updateTestRate = (url, id, rate) => {
+  return (dispatch) => {
+    axios
+      .patch(`http://127.0.0.1:8080/manager/${url}/${id}/${rate}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(addTestRate(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        console.log("erreur lors de l'ajout le note du test", { error });
+      });
+  };
+};
+
+export const deleteCreatedTest = (url, id) => {
+  return (dispatch) => {
+    axios
+      .delete(`http://127.0.0.1:8080/manager/${url}/${id}`)
+      .then(function (response) {
+        if (response.status === 200) {
+          dispatch(deleteTestSuccessMsg(response.data.message));
+        }
+      })
+      .catch(function (error) {
+        dispatch(deleteTestErrorMsg(error.response.data.message));
       });
   };
 };

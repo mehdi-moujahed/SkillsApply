@@ -16,6 +16,7 @@ import {
   Select,
   IconButton,
   Collapse,
+  Avatar,
 } from "@material-ui/core";
 import { Alert, Rating } from "@material-ui/lab";
 import CircleIcon from "@material-ui/icons/FiberManualRecordRounded";
@@ -589,7 +590,13 @@ export default function DashboardCandidates() {
 
   const profileDrawer = (anchor) => (
     <div className="drawer_main_container">
-      <CancelIcon onClick={toggleDrawerProfile(false)} id="cancelIcon_drawer" />
+      <CancelIcon
+        onClick={() => {
+          setDrawerProfile(false);
+          setCandidateIndex(null);
+        }}
+        id="cancelIcon_drawer"
+      />
 
       <img src="../rectangle-drawer.png" id="rectangle-drawer" alt="" />
 
@@ -604,7 +611,10 @@ export default function DashboardCandidates() {
       >
         <div
           className="drawer_container"
-          onKeyDown={toggleDrawerProfile(false)}
+          onKeyDown={() => {
+            setDrawerProfile(false);
+            setCandidateIndex(null);
+          }}
         >
           <div id="profileDrawer_header">
             <Box
@@ -614,7 +624,19 @@ export default function DashboardCandidates() {
               {...defaultProps}
               id="profileDrawer_pic_box"
             >
-              <img id="profileDrawer_pic" src="../me.jpg" alt="profile-icon" />
+              <Avatar
+                style={{
+                  height: 115,
+                  width: 115,
+                  borderRadius: 75,
+                  backgroundColor: "#262626",
+                  fontSize: 40,
+                }}
+              >
+                {candidates[candidateIndex]?.firstName
+                  .substring(0, 1)
+                  .toUpperCase()}
+              </Avatar>
             </Box>
           </div>
           <Box className="profileDrawer_candidate_box" boxShadow={5}>
@@ -623,7 +645,7 @@ export default function DashboardCandidates() {
                 Nom :
               </Typography>
               <Typography variant="h6" id="profileDrawer_lastName">
-                Moujahed
+                {candidates[candidateIndex]?.lastName}
               </Typography>
             </div>
             <div className="profileDrawer_name_container">
@@ -631,7 +653,7 @@ export default function DashboardCandidates() {
                 Prénom :
               </Typography>
               <Typography variant="h6" id="profileDrawer_lastName">
-                Mehdi
+                {candidates[candidateIndex]?.firstName}
               </Typography>
             </div>
             <div className="profileDrawer_name_container">
@@ -639,7 +661,7 @@ export default function DashboardCandidates() {
                 Adresse Mail :
               </Typography>
               <Typography variant="h6" id="profileDrawer_lastName">
-                moujahedmehdi@gmail.com
+                {candidates[candidateIndex]?.email}
               </Typography>
             </div>
           </Box>
@@ -652,12 +674,13 @@ export default function DashboardCandidates() {
               <CustomBar
                 testImg="../me.jpg"
                 testName="Mehdi Moujahed"
-                duration="1h 30min"
+                duration="30min"
                 score="4/5"
                 width="100%"
                 buttonLabel="Plus de détails"
                 onClick={testHistoryHandler}
                 testBar={false}
+                buttonStyle={{ width: "29%", marginLeft: 13, marginRight: 11 }}
               ></CustomBar>
             ))}
           </div>
@@ -736,35 +759,47 @@ export default function DashboardCandidates() {
           )}
         >
           <div className="tests_main_container">
-            {candidates.map((item, index) => (
-              <CustomBar
-                testName={item.firstName + " " + item.lastName}
-                buttonLabel="Plus de détails"
-                onClick={toggleDrawerProfile("right", true)}
-                testBar={false}
-                editable
-                candidate
-                candidateEmail={item.email}
-                onClickDelete={() => {
-                  setOpenDeleteModal(true);
-                  setCandidateID(item.id);
-                }}
-                onClickEdit={() => {
-                  setOpenModal(true);
-                  setCandidateIndex(index);
-                  setCandidateID(item.id);
-                  setFormRegister({
-                    ...formRegister,
-                    firstName: candidates[index]?.firstName,
-                    lastName: candidates[index]?.lastName,
-                    email: candidates[index]?.email,
-                    phoneNumber: candidates[index]?.phoneNumber,
-                    birthDate: candidates[index]?.birthDate,
-                    diploma: candidates[index]?.diploma,
-                  });
-                }}
-              ></CustomBar>
-            ))}
+            {candidates.length > 0 ? (
+              candidates.map((item, index) => (
+                <CustomBar
+                  testName={item.firstName + " " + item.lastName}
+                  buttonLabel="Plus de détails"
+                  onClick={() => {
+                    setCandidateIndex(index);
+                    setDrawerProfile(true);
+                  }}
+                  testBar={false}
+                  editable
+                  candidate
+                  candidateEmail={item.email}
+                  onClickDelete={() => {
+                    setOpenDeleteModal(true);
+                    setCandidateID(item.id);
+                  }}
+                  onClickEdit={() => {
+                    setOpenModal(true);
+                    setCandidateIndex(index);
+                    setCandidateID(item.id);
+                    setFormRegister({
+                      ...formRegister,
+                      firstName: candidates[index]?.firstName,
+                      lastName: candidates[index]?.lastName,
+                      email: candidates[index]?.email,
+                      phoneNumber: candidates[index]?.phoneNumber,
+                      birthDate: candidates[index]?.birthDate,
+                      diploma: candidates[index]?.diploma,
+                    });
+                  }}
+                ></CustomBar>
+              ))
+            ) : (
+              <div id="no_result_container">
+                <Typography color="primary" id="no_result_text">
+                  Aucun candidat disponible !
+                </Typography>
+                <img src="../empty-tests.png" alt="empty tests" />
+              </div>
+            )}
           </div>
         </Scrollbars>
         <Pagination
@@ -806,7 +841,10 @@ export default function DashboardCandidates() {
           <SwipeableDrawer
             anchor="right"
             open={drawerProfile}
-            onClose={toggleDrawerProfile(false)}
+            onClose={() => {
+              setDrawerProfile(false);
+              setCandidateIndex(null);
+            }}
             onOpen={toggleDrawerProfile(true)}
           >
             {profileDrawer("right")}

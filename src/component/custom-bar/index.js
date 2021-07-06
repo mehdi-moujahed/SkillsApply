@@ -24,6 +24,7 @@ export default function CustomBar(props) {
     onClickEdit,
     candidate,
     candidateEmail,
+    buttonStyle,
   } = props;
 
   const defaultProps = {
@@ -32,12 +33,11 @@ export default function CustomBar(props) {
     border: 2,
   };
   return (
-    <div style={{ maxWidth: width }} className="tests_container">
+    <div style={{ width: width }} className="tests_container">
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          width: "50%%",
         }}
       >
         <Box
@@ -55,7 +55,7 @@ export default function CustomBar(props) {
               backgroundColor: "#262626",
             }}
           >
-            H
+            {testName.substring(0, 1).toUpperCase()}
           </Avatar>
         </Box>
 
@@ -140,7 +140,12 @@ export default function CustomBar(props) {
       ) : (
         ""
       )}
-      <Button variant="outlined" id="show_test_button" onClick={onClick}>
+      <Button
+        variant="outlined"
+        id="show_test_button"
+        style={buttonStyle}
+        onClick={onClick}
+      >
         {buttonLabel}
       </Button>
     </div>

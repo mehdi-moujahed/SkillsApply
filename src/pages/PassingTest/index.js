@@ -28,6 +28,8 @@ export default function PassingTest() {
 
   const idCandidate = new URLSearchParams(location.search).get("candidateID");
 
+  const managerId = new URLSearchParams(location.search).get("managerID");
+
   const test = useSelector((state) => state.testReducer.testToPass);
 
   const handleChange = (event) => {
@@ -159,7 +161,7 @@ export default function PassingTest() {
             onClick={() => {
               if (checkBox) {
                 setCheckBoxErrorMsg(false);
-                history.push("/testExam?id=1");
+                history.push(`/testExam?id=1`);
               } else setCheckBoxErrorMsg(true);
             }}
           >

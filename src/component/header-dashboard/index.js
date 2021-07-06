@@ -4,31 +4,34 @@ import { IconButton, Typography } from "@material-ui/core";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import { IconFlagFR } from "material-ui-flags";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import moment from "moment";
+
 export default function DashboardHeader(props) {
   const { title } = props;
+
   return (
     <div>
       <div className="dashboard_header">
         <Typography variant="h4" color="secondary" id="dashboard_header_title">
           {title}
         </Typography>
-        <img src="./avatar.png" id="avatar_dashboard" alt=""/>
+        <img src="./avatar.png" id="avatar_dashboard" alt="" />
         <div className="date_time_header">
           <div className="date_time_header_container">
-            <img src="./calendar-logo.png" id="dashboard_header_logos" alt=""/>
+            <img src="./calendar-logo.png" id="dashboard_header_logos" alt="" />
             <Typography variant="subtitle2" color="secondary">
-              Ven. 26 fév. 2021
+              {moment().format("dddd DD.MM.yyyy")}
             </Typography>
           </div>
           <div className="header_time_container">
-            <img src="./clock-logo.png" id="dashboard_header_logos" alt=""/>
+            <img src="./clock-logo.png" id="dashboard_header_logos" alt="" />
             <Typography variant="subtitle2" color="secondary">
-              14:27:35
+              {moment().format("HH:mm:ss")}
             </Typography>
           </div>
         </div>
         <div className="pic_language_container">
-          <img src="profile-picture.png" id="profile_pic_header" alt=""/>
+          <img src="profile-picture.png" id="profile_pic_header" alt="" />
           <NotificationsNoneOutlinedIcon color="secondary" id="notif_logo" />
           <IconButton>
             <IconFlagFR id="flag" />

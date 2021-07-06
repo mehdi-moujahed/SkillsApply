@@ -22,6 +22,10 @@ export {
   setResults,
   updateResult,
   deleteResult,
+  deleteCreatedTest,
+  deleteTestSuccessMsg,
+  updateTestRate,
+  addResultAPI,
 } from "./test";
 
 export {
