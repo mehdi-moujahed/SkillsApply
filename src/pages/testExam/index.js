@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import {
+  addAnswertext,
   addResultAPI,
   deleteResult,
   getQuestionsTest,
@@ -58,6 +59,8 @@ export default function TestExam() {
   const [showPassword, setShowPassword] = useState("password");
 
   const [showVerifPassword, setShowVerifPassword] = useState("password");
+
+  const [answer, setAnswer] = useState("");
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -139,7 +142,7 @@ export default function TestExam() {
       : dispatch(updateResult(idQuestion - 1, id));
   };
 
-  const question = useSelector((state) => state.testReducer.examQuestions);
+  const question = useSelector((state) => state.testReducer?.examQuestions);
 
   const modalRate = (
     <div
@@ -516,7 +519,9 @@ export default function TestExam() {
           <div id="box_question_seperator"></div>
           <div style={{ margin: 15 }}>
             <Typography variant="subtitle1">
-              Choisissez la ou les bonnes réponses
+              {question[idQuestion - 1]?.questionType == 10
+                ? "Choisissez la ou les bonnes réponses"
+                : ""}
             </Typography>
           </div>
           <div id="question_box_text">
@@ -528,29 +533,50 @@ export default function TestExam() {
                 question[idQuestion - 1]?.question + "?"}
             </Typography>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", margin: 20 }}>
-            {question.length >= idQuestion &&
-              question[idQuestion - 1].answers.map((item, index) => (
-                <FormControl required component="fieldset">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={
-                          result.length >= idQuestion &&
-                          result[idQuestion - 1].answersId.some(
-                            (obj) => item.id === obj
-                          )
-                        }
-                        onChange={() => handleChangeAnswers(item.id)}
-                        color="primary"
-                        name={item.answer}
-                      />
-                    }
-                    label={item.answer}
-                  />
-                </FormControl>
-              ))}
-          </div>
+          {question[idQuestion - 1]?.questionType == 10 ? (
+            <div
+              style={{ display: "flex", flexDirection: "column", margin: 20 }}
+            >
+              {question.length >= idQuestion &&
+                question[idQuestion - 1].answers.map((item, index) => (
+                  <FormControl required component="fieldset">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={
+                            result.length >= idQuestion &&
+                            result[idQuestion - 1].answersId.some(
+                              (obj) => item.id === obj
+                            )
+                          }
+                          onChange={() => handleChangeAnswers(item.id)}
+                          color="primary"
+                          name={item.answer}
+                        />
+                      }
+                      label={item.answer}
+                    />
+                  </FormControl>
+                ))}
+            </div>
+          ) : (
+            <div
+              style={{ display: "flex", flexDirection: "column", margin: 20 }}
+            >
+              <Typography variant="subtitle1" style={{ marginBottom: 15 }}>
+                Saisir votre réponse :
+              </Typography>
+
+              <TextField
+                variant="filled"
+                rows={4}
+                multiline
+                onChange={(event) =>
+                  dispatch(addAnswertext(idQuestion - 1, event.target.value))
+                }
+              ></TextField>
+            </div>
+          )}
         </Box>
       </div>
       <div

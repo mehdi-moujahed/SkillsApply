@@ -1,0 +1,24 @@
+.main_container_contact {
+  background-image: url("../../assets/svg/header-contact.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  flex: 1;
+  height: 25vh;
+  justify-content: space-between;
+  flex-direction: column;
+}
+#contact_title {
+  margin-bottom: 50px;
+  align-self: flex-start;
+}
+#contact_button {
+  background-color: #008288;
+  color: white;
+  text-transform: capitalize;
+  width: 200px;
+  font-size: 17px;
+  border-radius: 30px;
+  height: 40px;
+}

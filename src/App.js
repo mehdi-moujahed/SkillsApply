@@ -14,6 +14,7 @@ import confirmRegister from "./pages/register/confirmRegister";
 import ResetPassword from "./pages/forgotPassword/confirmResetPassword";
 import PassingTest from "./pages/PassingTest";
 import TestExam from "./pages/testExam";
+import Contact from "./pages/contact";
 function App() {
   return (
     <Router>
@@ -30,6 +31,7 @@ function App() {
           <Route path="/forgotPassword" component={ForgotPassword} />
           <Route exact path="/passingTest" component={PassingTest} />
           <Route exact path="/testExam" component={TestExam} />
+          <Route exact path="/contact" component={Contact} />
           <Route
             path="/confirmResetPassword/:token"
             component={ResetPassword}

@@ -26,6 +26,7 @@ export {
   deleteTestSuccessMsg,
   updateTestRate,
   addResultAPI,
+  addAnswertext,
 } from "./test";
 
 export {

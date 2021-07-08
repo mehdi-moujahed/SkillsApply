@@ -71,3 +71,5 @@ export const DELETE_TEST_ERROR = "DELETE_TEST_ERROR";
 export const RATE_TEST = "RATE_TEST";
 
 export const ADD_RESULT = "ADD_RESULT";
+
+export const ADD_ANSWER_TEXT = "ADD_ANSWER_TEXT";

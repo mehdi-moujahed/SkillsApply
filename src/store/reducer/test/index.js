@@ -18,6 +18,7 @@ import {
   DELETE_RESULT,
   DELETE_TEST,
   DELETE_TEST_ERROR,
+  ADD_ANSWER_TEXT,
 } from "../../action/actionType";
 
 const initialState = {
@@ -172,6 +173,13 @@ export const testReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteTestErrorMsg: action.payload,
+      };
+    case ADD_ANSWER_TEXT:
+      return {
+        ...state,
+        result: state.result.map((item, index) =>
+          index === action.index ? { ...item, answer: action.payload } : item
+        ),
       };
     default:
       return state;

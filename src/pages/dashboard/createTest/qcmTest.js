@@ -87,17 +87,27 @@ export default function QcmTest(props) {
         level: questionToEdit.level,
       });
     } else {
-      setState({
-        addAnswer: [
-          { answer: "", status: true },
-          { answer: "", status: false },
-        ],
-        questionType: 10,
-        question: "",
-        points: 0,
-        duration: 0,
-        level: 10,
-      });
+      if (isQcm)
+        setState({
+          addAnswer: [
+            { answer: "", status: true },
+            { answer: "", status: false },
+          ],
+          questionType: 10,
+          question: "",
+          points: 0,
+          duration: 0,
+          level: 10,
+        });
+      else
+        setState({
+          addAnswer: [{ answer: "", status: true }],
+          questionType: 20,
+          question: "",
+          points: 0,
+          duration: 0,
+          level: 10,
+        });
     }
   }, []);
   const handleChange = (event, index) => {
@@ -284,11 +294,20 @@ export default function QcmTest(props) {
             </Typography>
             <TextField
               id="outlined-multiline-static"
-              // label="Multiline"
               multiline
               rows={10}
               variant="outlined"
               className="qcm_qeustion"
+              value={
+                state?.addAnswer?.length > 0 && state?.addAnswer[0]?.answer
+              }
+              onChange={(event) => {
+                setState({
+                  ...state,
+                  addAnswer: [{ answer: event.target.value, status: true }],
+                });
+                console.log(state.addAnswer);
+              }}
             />
           </div>
         )}

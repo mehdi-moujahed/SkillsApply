@@ -19,6 +19,7 @@ import {
   DELETE_TEST_ERROR,
   RATE_TEST,
   ADD_RESULT,
+  ADD_ANSWER_TEXT,
 } from "../actionType";
 
 const axios = require("axios").default;
@@ -63,6 +64,12 @@ export const updateResult = (index, payload) => ({
 export const setResults = (payload) => ({
   type: SET_RESULT,
   payload,
+});
+
+export const addAnswertext = (index, payload) => ({
+  type: ADD_ANSWER_TEXT,
+  payload,
+  index,
 });
 
 export const setAvailablesTests = (payload) => ({
